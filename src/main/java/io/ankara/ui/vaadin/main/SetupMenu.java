@@ -4,8 +4,10 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;
+import io.ankara.domain.User;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.Authentication;
 import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.annotation.PostConstruct;
@@ -24,11 +26,17 @@ public class SetupMenu extends CustomComponent {
     @Inject
     private VaadinSecurity vaadinSecurity;
 
+    @Inject
+    private Authentication authentication;
+
     @PostConstruct
-    private void build(){
+    private void build() {
         MenuBar menu = new MenuBar();
         menu.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
-        MenuBar.MenuItem settings = menu.addItem("User", null);
+
+        User user = (User) authentication.getPrincipal();
+
+        MenuBar.MenuItem settings = menu.addItem(user.getFullName(), null);
 
         settings.addItem("Settings", null);
         settings.addSeparator();

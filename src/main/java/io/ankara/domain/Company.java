@@ -9,10 +9,11 @@ import javax.persistence.Version;
  * @author Boniface Chacha
  * @email boniface.chacha@niafikra.com
  * @email bonifacechacha@gmail.com
- * @date 8/11/16 10:50 AM
+ * @date 8/11/16 10:51 AM
  */
 @Entity
-public class Client {
+public class Company {
+
     @Id
     private Long id;
 
@@ -22,8 +23,12 @@ public class Client {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String email;
+    private String registration;
+
+    private String VAT;
+
+    @Column(columnDefinition = "longtext")
+    private String paymentInformation;
 
     @Column(columnDefinition = "longtext not null")
     private String address;

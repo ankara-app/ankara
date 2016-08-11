@@ -1,18 +1,15 @@
 package io.ankara.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 /**
  * @author Boniface Chacha
  * @email boniface.chacha@niafikra.com
  * @email bonifacechacha@gmail.com
- * @date 8/11/16 10:50 AM
+ * @date 8/11/16 5:39 PM
  */
 @Entity
-public class Client {
+public class ItemType {
     @Id
     private Long id;
 
@@ -22,13 +19,10 @@ public class Client {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String email;
-
-    @Column(columnDefinition = "longtext not null")
-    private String address;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Company company;
 
     @Column(columnDefinition = "longtext not null")
     private String description;
-
 }
