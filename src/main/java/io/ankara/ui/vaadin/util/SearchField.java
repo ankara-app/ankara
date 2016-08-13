@@ -15,6 +15,7 @@ public class SearchField extends TextField {
     public SearchField() {
         setInputPrompt("Search ...");
         addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+        addStyleName(ValoTheme.TEXTFIELD_BORDERLESS);
         setIcon(FontAwesome.SEARCH);
     }
 }

@@ -12,7 +12,7 @@ import javax.persistence.Version;
  * @date 8/11/16 10:50 AM
  */
 @Entity
-public class Client {
+public class Customer {
     @Id
     private Long id;
 

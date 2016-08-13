@@ -1,9 +1,8 @@
-package io.ankara.ui.vaadin.main.view.invoice;
+package io.ankara.ui.vaadin.main.view.cost.invoice;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 
@@ -23,7 +22,7 @@ public class InvoiceView extends CustomComponent implements View {
     @Inject
     private InvoiceHeader invoiceHeader;
     @Inject
-    private InvoiceTable invoiceTable;
+    private InvoiceGrid invoiceGrid;
 
     @PostConstruct
     private void build(){
@@ -35,12 +34,12 @@ public class InvoiceView extends CustomComponent implements View {
 
         invoiceHeader.setWidth("50%");
         content.addComponent(invoiceHeader);
-        content.setComponentAlignment(invoiceHeader, Alignment.MIDDLE_RIGHT);
 
-        invoiceTable.setSizeFull();
-        content.addComponent(invoiceTable);
-        content.setExpandRatio(invoiceTable,1);
+        invoiceGrid.setSizeFull();
+        content.addComponent(invoiceGrid);
+        content.setExpandRatio(invoiceGrid,1);
     }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 

@@ -2,10 +2,7 @@ package io.ankara.ui.vaadin.main;
 
 import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -25,6 +22,9 @@ public class MainHeader extends CustomComponent {
     @Inject
     private SetupMenu setupMenu;
 
+    @Inject
+    private MainMenu mainMenu;
+
     @PostConstruct
     private void build(){
 
@@ -38,6 +38,10 @@ public class MainHeader extends CustomComponent {
 
         content.addComponent(logo);
         content.setComponentAlignment(logo, Alignment.BOTTOM_LEFT);
+
+        content.addComponent(mainMenu);
+        content.setComponentAlignment(mainMenu,Alignment.BOTTOM_LEFT);
+        content.setExpandRatio(mainMenu,1);
 
         content.addComponent(setupMenu);
         content.setComponentAlignment(setupMenu,Alignment.BOTTOM_RIGHT);

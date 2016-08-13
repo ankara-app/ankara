@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.main.view.estimate;
+package io.ankara.ui.vaadin.main.view.cost.estimate;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
  */
 @SpringView(name =EstimateView.VIEW_NAME)
 public class EstimateView extends CustomComponent implements View {
-    public static final String VIEW_NAME = "EstimateView";
+    public static final String VIEW_NAME = "Estimate";
 
     @PostConstruct
     private void build(){

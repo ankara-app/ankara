@@ -42,9 +42,6 @@ public class MainScreen extends CustomComponent {
     @Inject
     private MainHeader mainHeader;
 
-    @Inject
-    private MainMenu mainMenu;
-
     @PostConstruct
     private void build(){
         setSizeFull();
@@ -59,9 +56,9 @@ public class MainScreen extends CustomComponent {
         content.setWidth("80%");
 
         content.addComponent(mainHeader);
-        content.addComponent(mainMenu);
 
         VerticalLayout viewContainer = new VerticalLayout();
+        viewContainer.setWidth("100%");
         viewContainer.setSizeFull();
         content.addComponent(viewContainer);
         content.setExpandRatio(viewContainer,1);
