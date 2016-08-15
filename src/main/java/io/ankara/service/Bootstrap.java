@@ -32,16 +32,15 @@ public class Bootstrap implements InitializingBean {
 
         createSystemUser();
 
-        LOG.info("...Bootstrapping completed");
+        LOG.info("Bootstrapping completed");
     }
 
     private void createSystemUser() {
         try {
-            userService.loadUserByUsername("ankara");
+            userService.loadUserByUsername("bonifacechacha@gmail.com");
         } catch (UsernameNotFoundException e) {
-            LOG.info("... creating system user");
-            userService.create(new User("ankara", "ankara", "Ankara",true, false));
-            userService.create(new User("admin", "admin", "Ankara Admin",true, false));
+            LOG.info("... initialise users");
+            userService.create(new User("bonifacechacha@gmail.com", "ankara", "Boniface Chacha",true, false));
         }
     }
 }

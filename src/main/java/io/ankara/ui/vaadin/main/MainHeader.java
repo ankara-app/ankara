@@ -1,8 +1,9 @@
 package io.ankara.ui.vaadin.main;
 
-import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -32,12 +33,12 @@ public class MainHeader extends CustomComponent {
         content.setWidth("100%");
         setCompositionRoot(content);
 
-        Image logo = new Image(null,new ThemeResource("img/logo.png"));
-        logo.setWidth("64px");
-        logo.setHeight("64px");
-
-        content.addComponent(logo);
-        content.setComponentAlignment(logo, Alignment.BOTTOM_LEFT);
+//        Image logo = new Image(null,new ThemeResource("img/logo.png"));
+//        logo.setWidth("64px");
+//        logo.setHeight("64px");
+//
+//        content.addComponent(logo);
+//        content.setComponentAlignment(logo, Alignment.BOTTOM_LEFT);
 
         content.addComponent(mainMenu);
         content.setComponentAlignment(mainMenu,Alignment.BOTTOM_LEFT);

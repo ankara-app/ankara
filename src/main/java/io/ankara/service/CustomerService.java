@@ -1,7 +1,9 @@
 package io.ankara.service;
 
+import io.ankara.domain.Company;
 import io.ankara.domain.Customer;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,4 +14,8 @@ import java.util.List;
  */
 public interface CustomerService {
     List<Customer> getCurrentUserCustomers();
+
+    Collection<Customer> getCustomers(Company company);
+
+    boolean save(Customer customer);
 }

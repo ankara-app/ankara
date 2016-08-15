@@ -1,6 +1,11 @@
 package io.ankara.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -13,6 +18,7 @@ import java.math.BigDecimal;
 public class Item {
 
     @Id
+    @GeneratedValue
     private Long id;
 
     @Version
@@ -20,20 +26,35 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull
     private Cost cost;
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull
     private ItemType type;
 
     @Column(columnDefinition = "longtext not null")
+    @NotBlank
     private String description;
 
     @Column(nullable = false)
+    @NotNull
     private Integer quantity;
 
     @Column(precision = 48, scale = 2,nullable = false)
+    @NotNull
     private BigDecimal price;
+
+    public Item() {
+    }
+
+    public Item(Cost cost, ItemType type) {
+        this.cost = cost;
+        this.type = type;
+        quantity = 1;
+        price = BigDecimal.ZERO;
+    }
 
     public Long getId() {
         return id;
@@ -81,5 +102,31 @@ public class Item {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        return new EqualsBuilder()
+                .append(id, item.id)
+                .append(cost, item.cost)
+                .append(type, item.type)
+                .append(description, item.description)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(cost)
+                .append(type)
+                .append(description)
+                .toHashCode();
     }
 }

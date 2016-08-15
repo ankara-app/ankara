@@ -21,6 +21,7 @@ import org.vaadin.spring.security.util.SuccessfulLoginEvent;
  */
 @SpringUI
 @Theme("ankara")
+//@Widgetset("AppWidgetset")
 public class AnkaraUI extends UI {
 
     @Autowired

@@ -2,46 +2,35 @@ package io.ankara.ui.vaadin.main.view.cost.invoice;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.VerticalLayout;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import io.ankara.domain.Invoice;
+import org.vaadin.spring.events.annotation.EventBusListenerMethod;
+import org.vaadin.spring.events.annotation.EventBusListenerTopic;
 
 /**
  * @author Boniface Chacha
  * @email boniface.chacha@niafikra.com
  * @email bonifacechacha@gmail.com
- * @date 8/11/16 2:33 AM
+ * @date 8/13/16 7:09 PM
  */
-@SpringView(name =InvoiceView.VIEW_NAME)
-public class InvoiceView extends CustomComponent implements View {
-    public static final String VIEW_NAME = "";
+@UIScope
+@SpringComponent
+public class InvoiceView extends CustomComponent implements View{
+    public static final String VIEW_NAME = "Invoice";
+    public static final String TOPIC_SHOW = "Show Invoice";
 
-    @Inject
-    private InvoiceHeader invoiceHeader;
-    @Inject
-    private InvoiceGrid invoiceGrid;
 
-    @PostConstruct
-    private void build(){
-        setSizeFull();
-        VerticalLayout content = new VerticalLayout();
-        content.setSizeFull();
-        content.setSpacing(true);
-        setCompositionRoot(content);
-
-        invoiceHeader.setWidth("50%");
-        content.addComponent(invoiceHeader);
-
-        invoiceGrid.setSizeFull();
-        content.addComponent(invoiceGrid);
-        content.setExpandRatio(invoiceGrid,1);
-    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+
+    }
+
+    @EventBusListenerTopic(topic = InvoiceView.TOPIC_SHOW)
+    @EventBusListenerMethod
+    private void showInvoice(Invoice invoice){
 
     }
 }

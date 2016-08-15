@@ -64,8 +64,11 @@ public class LoginScreen extends CustomComponent {
     private void initLayout() {
         FormLayout loginForm = new FormLayout();
         loginForm.setSizeUndefined();
+        loginForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         userName = new TextField("Username");
+        userName.setWidth("300px");
         passwordField = new PasswordField("Password");
+        passwordField.setWidth("300px");
         login = new Button("Login");
         loginForm.addComponent(userName);
         loginForm.addComponent(passwordField);

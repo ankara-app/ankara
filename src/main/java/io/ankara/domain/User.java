@@ -1,9 +1,16 @@
 package io.ankara.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Version;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -18,28 +25,25 @@ import java.util.Collections;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @Email
+    private String email;
 
     @Version
     private Integer version;
 
-    @OneToOne
-    private Profile profile;
-
     @Column(nullable = false)
+    @NotBlank
     private String password;
 
-    @Column(nullable = false,unique = true)
-    private String email;
-
+    @Column(nullable = false)
+    @NotBlank
     private String fullName;
 
     private boolean locked;
 
     private boolean enabled;
 
-    public User(String email, String password, String fullName,  boolean enabled,boolean locked) {
+    public User(String email, String password, String fullName, boolean enabled, boolean locked) {
         this.email = email;
         this.password = password;
         this.fullName = fullName;
@@ -48,26 +52,10 @@ public class User implements UserDetails {
     }
 
     public User(String username, String password) {
-        this(username, password,username,false,false);
+        this(username, password, username, false, false);
     }
 
     public User() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
     }
 
     @Override
@@ -136,5 +124,30 @@ public class User implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return new EqualsBuilder()
+                .append(email, user.email)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(email)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getFullName() + " | " + getEmail();
     }
 }

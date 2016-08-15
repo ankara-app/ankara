@@ -10,5 +10,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @date 8/11/16 6:26 PM
  */
 public interface UserService extends UserDetailsService {
-    User create(User user);
+    boolean create(User user);
+
+    boolean save(User user);
+
+    User getCurrentUser();
+
+    boolean changePassword(User user, String password);
 }

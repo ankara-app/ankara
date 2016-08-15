@@ -1,9 +1,15 @@
 package io.ankara.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Boniface Chacha
@@ -12,43 +18,57 @@ import java.util.Date;
  * @date 8/11/16 10:46 AM
  */
 
+//TODO CUSTOMER AND COMPANY DETAILS AT THE TIME OF CREATION SHOULD BE SAVE ON THE COST
+//TODO SO THAT IF THE CUSTOMER DETAILS OR COMPANY DETAILS CHANGES THE INVOICE REMAINS AS IT WAS CREATED
+    //TODO DURING CREATION THE FORM SHOULD ALLOW USER TO SELECT THE CUSTOMER AND COMPANY WHICH WILL INTURN FILL THEIR INFORMATION ON
+    //TODO THE COST. BUT AFTER A CERTAIN STATE SAY SUBMITTED/SENT TO CUSTOMER STATE OF COST/INVOICE THE FORM SHOULD NO LONGER ALLOW EDITING BY SELCTING CUSTOMER OR COMPANY
+    //TODO INSTEAD IT SHOULD ONLY ALLOW EDITING THE ACTUAL DETAILS OF THE COST AS THEY WERE OBTAINED FROM THE CUSTOMER AND COMPANY
+
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Cost implements Serializable{
+public class Cost implements Serializable {
 
     @Id
+    @GeneratedValue
     private Long id;
 
     @Version
     private Integer version;
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
+    @NotBlank
     private String code;
 
     @Column(nullable = false)
+    @NotBlank
     private String currency;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date timeCreated;
+    @NotNull
+    private Date timeCreated = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date lastTimeUpdated;
+    @NotNull
+    private Date lastTimeUpdated = new Date();
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull
     private Company company;
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull
     private User creator;
 
     @Column(columnDefinition = "longtext not null")
+    @NotBlank
     private String subject;
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull
     private Customer customer;
 
     @Column(precision = 48, scale = 2)
@@ -58,10 +78,29 @@ public class Cost implements Serializable{
     private BigDecimal discount;
 
     @Column(columnDefinition = "longtext not null")
+    @NotBlank
     private String notes;
 
     @Column(columnDefinition = "longtext not null")
+    @NotBlank
     private String terms;
+
+    private String template;
+
+    @ManyToOne
+    private Status status;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> items;
+
+    public Cost() {
+    }
+
+    public Cost(User creator) {
+        this.creator = creator;
+        this.tax = new BigDecimal("0.0");
+        this.discount = new BigDecimal("0.0");
+    }
 
     public Long getId() {
         return id;
@@ -165,5 +204,70 @@ public class Cost implements Serializable{
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cost cost = (Cost) o;
+
+        return new EqualsBuilder()
+                .append(id, cost.id)
+                .append(code, cost.code)
+                .append(currency, cost.currency)
+                .append(company, cost.company)
+                .append(creator, cost.creator)
+                .append(subject, cost.subject)
+                .append(customer, cost.customer)
+                .append(tax, cost.tax)
+                .append(discount, cost.discount)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(code)
+                .append(currency)
+                .append(company)
+                .append(creator)
+                .append(subject)
+                .append(customer)
+                .append(tax)
+                .append(discount)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getCompany() + " : " + getSubject();
     }
 }

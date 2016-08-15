@@ -23,6 +23,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -68,7 +69,7 @@ public class MainScreen extends CustomComponent {
 
         Navigator navigator = new Navigator(UI.getCurrent(), viewContainer);
         navigator.addProvider(springViewProvider);
-        navigator.navigateTo(navigator.getState());
+        navigator.navigateTo(InvoicesView.VIEW_NAME);
     }
 
 }

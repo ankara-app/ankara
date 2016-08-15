@@ -5,9 +5,11 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.User;
+import io.ankara.service.UserService;
+import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.main.view.setting.SettingView;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.core.Authentication;
 import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.annotation.PostConstruct;
@@ -27,22 +29,33 @@ public class SetupMenu extends CustomComponent {
     private VaadinSecurity vaadinSecurity;
 
     @Inject
-    private Authentication authentication;
+    private UserService userService;
+
+    @Inject
+    private AnkaraUI ankaraUI;
+
+    private MenuBar.MenuItem settings;
 
     @PostConstruct
     private void build() {
         MenuBar menu = new MenuBar();
         menu.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
 
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser();
 
-        MenuBar.MenuItem settings = menu.addItem(user.getFullName(), null);
+        settings = menu.addItem(user.getFullName(), null);
 
-        settings.addItem("Settings", null);
+        settings.addItem("Settings", new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                ankaraUI.getNavigator().navigateTo(SettingView.VIEW_NAME);
+            }
+        });
         settings.addSeparator();
         settings.addItem("Logout", selectedItem -> vaadinSecurity.logout());
 
         setCompositionRoot(menu);
         setWidth("100px");
     }
+
 }
