@@ -45,10 +45,10 @@ public class MainScreen extends CustomComponent {
 
     @PostConstruct
     private void build(){
-        setSizeFull();
+//        setSizeFull();
 
         VerticalLayout root =new VerticalLayout();
-        root.setSizeFull();
+//        root.setSizeFull();
         setCompositionRoot(root);
 
         VerticalLayout content = new VerticalLayout();
@@ -60,7 +60,7 @@ public class MainScreen extends CustomComponent {
 
         VerticalLayout viewContainer = new VerticalLayout();
         viewContainer.setWidth("100%");
-        viewContainer.setSizeFull();
+//        viewContainer.setSizeFull();
         content.addComponent(viewContainer);
         content.setExpandRatio(viewContainer,1);
 

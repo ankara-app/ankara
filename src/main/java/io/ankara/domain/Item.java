@@ -46,6 +46,8 @@ public class Item {
     @NotNull
     private BigDecimal price;
 
+    private boolean taxable;
+
     public Item() {
     }
 
@@ -54,6 +56,11 @@ public class Item {
         this.type = type;
         quantity = 1;
         price = BigDecimal.ZERO;
+        taxable = true;
+    }
+
+    public BigDecimal getAmount(){
+        return price.multiply(new BigDecimal(quantity));
     }
 
     public Long getId() {
@@ -128,5 +135,13 @@ public class Item {
                 .append(type)
                 .append(description)
                 .toHashCode();
+    }
+
+    public boolean isTaxable() {
+        return taxable;
+    }
+
+    public void setTaxable(boolean taxable) {
+        this.taxable = taxable;
     }
 }
