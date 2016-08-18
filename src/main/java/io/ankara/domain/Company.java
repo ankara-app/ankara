@@ -24,7 +24,7 @@ public class Company {
     @Version
     private Integer version;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     @NotBlank
     private String name;
 
@@ -166,7 +166,6 @@ public class Company {
                 .append(name, company.name)
                 .append(registration, company.registration)
                 .append(VAT, company.VAT)
-                .append(users, company.users)
                 .isEquals();
     }
 
@@ -177,7 +176,6 @@ public class Company {
                 .append(name)
                 .append(registration)
                 .append(VAT)
-                .append(users)
                 .toHashCode();
     }
 

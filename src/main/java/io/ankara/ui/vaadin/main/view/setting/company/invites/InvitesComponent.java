@@ -1,6 +1,7 @@
 package io.ankara.ui.vaadin.main.view.setting.company.invites;
 
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Grid;
 import io.ankara.domain.Invite;
@@ -21,5 +22,6 @@ public class InvitesComponent extends Grid {
         setSizeFull();
         setContainerDataSource(new BeanItemContainer<Invite>(Invite.class));
         setColumns("timeCreated","origin","company");
+        setHeightMode(HeightMode.ROW);
     }
 }

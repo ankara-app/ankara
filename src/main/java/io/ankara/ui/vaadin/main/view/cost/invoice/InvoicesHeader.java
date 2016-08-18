@@ -8,6 +8,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Invoice;
+import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.AnkaraUI;
 import io.ankara.ui.vaadin.util.SearchField;
@@ -30,7 +31,7 @@ public class InvoicesHeader extends CustomComponent {
     private EventBus.UIEventBus eventBus;
 
     @Inject
-    private UserService userService;
+    private InvoiceService invoiceService;
 
     @Inject
     private AnkaraUI ankaraUI;
@@ -44,7 +45,7 @@ public class InvoicesHeader extends CustomComponent {
         createButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         createButton.addClickListener(event -> {
             ankaraUI.getNavigator().navigateTo(InvoiceFormView.VIEW_NAME);
-            eventBus.publish(InvoiceFormView.TOPIC_CREATE,this,new Invoice(userService.getCurrentUser()));
+            eventBus.publish(InvoiceFormView.TOPIC_CREATE,this,invoiceService.newInvoice());
         });
         content.addComponent(createButton);
 

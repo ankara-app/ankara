@@ -9,6 +9,7 @@ package io.ankara;
 public  class Topics {
 
     public static final String TOPIC_USER_CHANGE = "User Change";
+    public static final String TOPIC_COST_CALCULATE_SUMMARIES = "Calculate cost summary";
 
     private Topics(){}
 }
