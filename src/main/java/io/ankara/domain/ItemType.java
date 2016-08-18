@@ -31,7 +31,8 @@ public class ItemType {
     @NotNull
     private Company company;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String description;
 

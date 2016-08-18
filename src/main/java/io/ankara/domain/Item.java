@@ -34,7 +34,8 @@ public class Item {
     @NotNull
     private ItemType type;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String description;
 

@@ -32,14 +32,17 @@ public class Company {
 
     private String VAT;
 
-    @Column(columnDefinition = "longtext")
+    @Lob
+    @Column(nullable = false)
     private String paymentInformation;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String address;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String description;
 
@@ -49,11 +52,13 @@ public class Company {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String notes;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String terms;
 

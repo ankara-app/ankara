@@ -32,11 +32,13 @@ public class Customer {
     @NotBlank
     private String email;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String address;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String description;
 

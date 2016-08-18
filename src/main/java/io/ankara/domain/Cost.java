@@ -62,7 +62,8 @@ public class Cost implements Serializable {
     @NotNull
     private User creator;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String subject;
 
@@ -77,11 +78,13 @@ public class Cost implements Serializable {
     @Column(precision = 48, scale = 2)
     private BigDecimal discount;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String notes;
 
-    @Column(columnDefinition = "longtext not null")
+    @Lob
+    @Column(nullable = false)
     @NotBlank
     private String terms;
 
