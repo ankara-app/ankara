@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Boniface Chacha
@@ -25,12 +26,12 @@ public class CompanyServiceBean implements CompanyService {
     private UserService userService;
 
     @Override
-    public Collection<Company> getCurrentUserCompanies() {
+    public List<Company> getCurrentUserCompanies() {
         return getCompanies(userService.getCurrentUser());
     }
 
     @Override
-    public Collection<Company> getCompanies(User user) {
+    public List<Company> getCompanies(User user) {
         return companyRepository.findByUsers(user);
     }
 

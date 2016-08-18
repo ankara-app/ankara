@@ -38,9 +38,6 @@ public class InvoiceFormView extends CostFormView {
     private DateField dueDate;
 
 
-    @Inject
-    private EventBus.UIEventBus eventBus;
-
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
@@ -75,15 +72,5 @@ public class InvoiceFormView extends CostFormView {
         dates.setMargin(new MarginInfo(true,false,false,false));
         costDetailsLayout.addComponents(purchaseOrder,dates);
         return costDetailsLayout;
-    }
-
-    @PostConstruct
-    protected void init() {
-        eventBus.subscribe(this);
-    }
-
-    @PreDestroy
-    protected void destroy() {
-        eventBus.unsubscribe(this);
     }
 }
