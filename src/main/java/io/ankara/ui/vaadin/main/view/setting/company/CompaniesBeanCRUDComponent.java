@@ -40,7 +40,7 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent {
         super.build(Company.class);
         grid.setColumns("registration", "name", "VAT", "paymentInformation", "address");
         grid.setHeightMode(HeightMode.ROW);
-        grid.setHeightByRows(grid.getContainerDataSource().size());
+        grid.setHeightByRows(grid.getContainerDataSource().size()+1);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent {
     @Override
     public void reload() {
         super.reload();
-        grid.setHeightByRows(grid.getContainerDataSource().size());
+        grid.setHeightByRows(grid.getContainerDataSource().size()+1);
     }
 
     @Override
