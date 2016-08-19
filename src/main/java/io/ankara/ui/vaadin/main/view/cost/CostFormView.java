@@ -69,7 +69,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
 
     protected TextArea terms;
 
-    protected Label amountDiscounted,amountTaxed, amountDue;
+    protected Label amountDiscounted, amountTaxed, amountDue;
 
     @Inject
     protected CompanyService companyService;
@@ -156,7 +156,12 @@ public abstract class CostFormView extends VerticalLayout implements View {
         save.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-
+                if (fieldGroup.isValid() && itemsTable.ensureItemsValidity()) {
+                    Cost cost = (Cost) fieldGroup.getItemDataSource().getBean();
+                    cost.setItems(itemsTable.getItems());
+                    doSave(cost);
+                } else
+                    Notification.show("Enter required details correctly", "Items which are not required should be removed", Notification.Type.WARNING_MESSAGE);
             }
         });
 
@@ -170,6 +175,8 @@ public abstract class CostFormView extends VerticalLayout implements View {
 
         return footer;
     }
+
+    protected abstract void doSave(Cost cost);
 
     private HorizontalLayout createSummaryLayout() {
         tax = new TextField();
@@ -206,7 +213,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
         amountDue = new Label();
         amountDue.setCaption("Amount Due");
 
-        FormLayout summaryForm = new FormLayout(amountTaxed,amountDiscounted, amountDue);
+        FormLayout summaryForm = new FormLayout(amountTaxed, amountDiscounted, amountDue);
         summaryForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
         HorizontalLayout summaryLay = new HorizontalLayout(manipulationForm, summaryForm);
@@ -235,16 +242,16 @@ public abstract class CostFormView extends VerticalLayout implements View {
         return Arrays.asList("TZS", "USD", "EUR");
     }
 
-    protected FormLayout createSubjectForm() {
-        subject = new TextArea();
+    protected Layout createSubjectForm() {
+        subject = new TextArea("Subject");
         subject.setInputPrompt("Enter subject ...");
-        subject.setRows(3);
+        subject.setRows(2);
         subject.setWidth("100%");
         subject.setNullRepresentation("");
 
-        FormLayout subjectLayout = new FormLayout(subject);
-        subjectLayout.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        VerticalLayout subjectLayout = new VerticalLayout(subject);
         subjectLayout.setWidth("100%");
+        subjectLayout.setMargin(true);
         return subjectLayout;
     }
 
@@ -289,9 +296,9 @@ public abstract class CostFormView extends VerticalLayout implements View {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 String currency = (String) event.getProperty().getValue();
-                amountTaxed.setCaption(createMoneyCapation("Tax",currency));
-                amountDiscounted.setCaption(createMoneyCapation("Discount",currency));
-                amountDue.setCaption(createMoneyCapation("Amount Due",currency));
+                amountTaxed.setCaption(createMoneyCapation("Tax", currency));
+                amountDiscounted.setCaption(createMoneyCapation("Discount", currency));
+                amountDue.setCaption(createMoneyCapation("Amount Due", currency));
             }
         });
 
@@ -302,7 +309,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
     }
 
     private String createMoneyCapation(String caption, String currency) {
-        return caption+" ("+currency+")";
+        return caption + " (" + currency + ")";
     }
 
     protected HorizontalLayout createTermsForm() {

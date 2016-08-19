@@ -37,6 +37,8 @@ public class CustomerForm extends FormLayout {
 
     private BeanFieldGroup fieldGroup;
 
+    private Window subWindow;
+
     @PostConstruct
     private void build() {
 
@@ -72,6 +74,8 @@ public class CustomerForm extends FormLayout {
                 Customer customer = (Customer) fieldGroup.getItemDataSource().getBean();
                 if (customerService.save(customer)) {
                     Notification.show("Customer information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    if(subWindow != null)
+                        subWindow.close();
                 }
             } catch (FieldGroup.CommitException e) {
                 Notification.show("Enter customer information correctly", Notification.Type.WARNING_MESSAGE);
@@ -83,5 +87,10 @@ public class CustomerForm extends FormLayout {
 
     public void edit(Customer customer) {
         fieldGroup = BeanFieldGroup.bindFieldsBuffered(customer, this);
+    }
+
+
+    public void setSubWindow(Window subWindow) {
+        this.subWindow = subWindow;
     }
 }

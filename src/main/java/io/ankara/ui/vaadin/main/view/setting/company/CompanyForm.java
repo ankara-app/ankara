@@ -45,6 +45,8 @@ public class CompanyForm extends FormLayout {
 
     private BeanFieldGroup fieldGroup;
 
+    private Window subWindow;
+
     @PostConstruct
     private void build() {
 
@@ -79,14 +81,14 @@ public class CompanyForm extends FormLayout {
         description.setWidth("100%");
         description.setRows(4);
 
-        notes = new TextArea();
+        notes = new TextArea("Notes");
         notes.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
         notes.setInputPrompt("Specify other notes ...");
         notes.setRows(6);
         notes.setWidth("100%");
         notes.setNullRepresentation("");
 
-        terms = new TextArea();
+        terms = new TextArea("Terms");
         terms.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
         terms.setInputPrompt("Specify terms ...");
         terms.setRows(6);
@@ -105,6 +107,8 @@ public class CompanyForm extends FormLayout {
                     Company company = (Company) fieldGroup.getItemDataSource().getBean();
                     if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
                         Notification.show("Company information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                        if(subWindow != null)
+                            subWindow.close();
                     }
                 } catch (FieldGroup.CommitException e) {
                     Notification.show("Enter company information correctly", Notification.Type.WARNING_MESSAGE);
@@ -117,6 +121,9 @@ public class CompanyForm extends FormLayout {
 
     public void edit(Company company) {
         fieldGroup = BeanFieldGroup.bindFieldsBuffered(company, this);
+    }
 
+    public void setSubWindow(Window subWindow) {
+        this.subWindow = subWindow;
     }
 }

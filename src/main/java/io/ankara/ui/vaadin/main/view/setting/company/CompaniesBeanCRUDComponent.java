@@ -58,6 +58,7 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent {
     protected Component getCreateComponent() {
         popUpWindow.setCaption("Create new company");
         companyForm.edit(new Company());
+        companyForm.setSubWindow(popUpWindow);
         companyForm.setWidth("60%");
 
 

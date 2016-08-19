@@ -33,6 +33,8 @@ public class ItemTypeForm extends FormLayout {
 
     private BeanFieldGroup fieldGroup;
 
+    private Window subWindow;
+
     @PostConstruct
     private void build() {
 
@@ -59,6 +61,8 @@ public class ItemTypeForm extends FormLayout {
                 ItemType itemType = (ItemType) fieldGroup.getItemDataSource().getBean();
                 if (itemTypeService.save(itemType)) {
                     Notification.show("Item type information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    if(subWindow != null)
+                        subWindow.close();
                 }
             } catch (FieldGroup.CommitException e) {
                 Notification.show("Enter item type information correctly", Notification.Type.WARNING_MESSAGE);
@@ -70,5 +74,10 @@ public class ItemTypeForm extends FormLayout {
 
     public void edit(ItemType itemType) {
         fieldGroup = BeanFieldGroup.bindFieldsBuffered(itemType, this);
+    }
+
+
+    public void setSubWindow(Window subWindow) {
+        this.subWindow = subWindow;
     }
 }

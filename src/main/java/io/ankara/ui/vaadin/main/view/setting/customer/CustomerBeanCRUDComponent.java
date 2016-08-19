@@ -58,6 +58,7 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
     protected Component getCreateComponent() {
         popUpWindow.setCaption("Create new customer");
         customerForm.edit(new Customer(company));
+        customerForm.setSubWindow(popUpWindow);
 
         return holder;
     }
@@ -65,6 +66,7 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
     @Override
     protected Component getBeanComponent(Object bean) {
         customerForm.edit((Customer) bean);
+        customerForm.setSubWindow(popUpWindow);
         return holder;
     }
 

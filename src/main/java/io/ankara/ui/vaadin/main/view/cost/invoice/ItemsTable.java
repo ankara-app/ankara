@@ -16,6 +16,7 @@ import io.ankara.domain.Cost;
 import io.ankara.domain.Item;
 import io.ankara.domain.ItemType;
 import io.ankara.service.ItemTypeService;
+import org.springframework.util.CollectionUtils;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
@@ -181,6 +182,15 @@ public class ItemsTable extends Table {
     public void setCost(Cost cost) {
         this.cost = cost;
         reset();
+        
+        //if the cost has no items initialise 4 items to simplify user editing
+        if(CollectionUtils.isEmpty(cost.getItems())){
+            //add 4 initial cost items
+            addCostItem();
+            addCostItem();
+            addCostItem();
+            addCostItem();
+        }
     }
 
     public Cost getCost() {
@@ -222,7 +232,6 @@ public class ItemsTable extends Table {
     public boolean ensureItemsValidity(){
         for(BeanFieldGroup fieldGroup:itemsFieldGroup.values()){
             if(!fieldGroup.isValid()){
-                Notification.show("Enter item details correctly","Items which are not required should be removed", Notification.Type.WARNING_MESSAGE);
                 return false;
             }
         }

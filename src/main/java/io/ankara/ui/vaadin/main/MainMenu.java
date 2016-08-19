@@ -36,9 +36,11 @@ public class MainMenu extends CustomComponent {
         menuBar.addItem("Invoices", selectedItem -> {
             ankaraUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
         });
+
         menuBar.addItem("Estimates", selectedItem -> {
             ankaraUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
         });
+
         menuBar.addItem("Reports", selectedItem -> {
 
         });

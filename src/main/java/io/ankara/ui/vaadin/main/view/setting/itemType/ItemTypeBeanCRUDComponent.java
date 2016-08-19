@@ -58,6 +58,7 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
     protected Component getCreateComponent() {
         popUpWindow.setCaption("Create new item type");
         itemTypeForm.edit(new ItemType(company));
+        itemTypeForm.setSubWindow(popUpWindow);
 
         return holder;
     }
@@ -65,6 +66,7 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
     @Override
     protected Component getBeanComponent(Object bean) {
         itemTypeForm.edit((ItemType) bean);
+        itemTypeForm.setSubWindow(popUpWindow);
         return holder;
     }
 
