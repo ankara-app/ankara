@@ -63,7 +63,7 @@ public class InvoiceFormView extends CostFormView {
     protected FormLayout createCostDetailsForm() {
         FormLayout costDetailsLayout =  super.createCostDetailsForm();
 
-        purchaseOrder = new TextField();
+        purchaseOrder = new TextField("PO Number");
         purchaseOrder.setInputPrompt("Enter PO Number");
         purchaseOrder.setWidth("100%");
         purchaseOrder.setNullRepresentation("");

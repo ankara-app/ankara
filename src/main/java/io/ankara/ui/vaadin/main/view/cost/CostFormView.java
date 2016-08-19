@@ -256,7 +256,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
     }
 
     protected FormLayout createAssociatesForm() {
-        company = new ComboBox(null, getCompanyContainer());
+        company = new ComboBox("Company", getCompanyContainer());
         company.setInputPrompt("Select company ...");
         company.setWidth("100%");
         company.setNullSelectionAllowed(false);
@@ -271,7 +271,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
             itemsTable.reset();
         });
 
-        customer = new ComboBox();
+        customer = new ComboBox("Customer");
         customer.setInputPrompt("Select customer ...");
         customer.setWidth("100%");
         customer.setNullSelectionAllowed(false);
@@ -283,12 +283,12 @@ public abstract class CostFormView extends VerticalLayout implements View {
     }
 
     protected FormLayout createCostDetailsForm() {
-        code = new TextField();
+        code = new TextField("Reference");
         code.setInputPrompt("Enter reference ...");
         code.setWidth("100%");
         code.setNullRepresentation("");
 
-        currency = new ComboBox(null, getCurrencies());
+        currency = new ComboBox("Currency", getCurrencies());
         currency.setInputPrompt("Specify currency ...");
         currency.setWidth("100%");
         currency.setNullSelectionAllowed(false);
@@ -313,14 +313,14 @@ public abstract class CostFormView extends VerticalLayout implements View {
     }
 
     protected HorizontalLayout createTermsForm() {
-        notes = new TextArea();
+        notes = new TextArea("Notes");
         notes.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
         notes.setInputPrompt("Specify other notes ...");
         notes.setRows(6);
         notes.setWidth("100%");
         notes.setNullRepresentation("");
 
-        terms = new TextArea();
+        terms = new TextArea("Terms");
         terms.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
         terms.setInputPrompt("Specify terms ...");
         terms.setRows(6);
