@@ -35,9 +35,9 @@ public class SettingView extends VerticalLayout implements View{
 
     @PostConstruct
     private void build(){
-        setSizeFull();
+//        setSizeFull();
         TabSheet settingTabs = new TabSheet();
-        settingTabs.setSizeFull();
+//        settingTabs.setSizeFull();
 
         settingTabs.addTab(companiesSettingView,"Companies", FontAwesome.BUILDING);
         settingTabs.addTab(passwordChangeForm,"Password", FontAwesome.KEY);

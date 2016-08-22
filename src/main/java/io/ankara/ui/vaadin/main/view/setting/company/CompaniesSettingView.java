@@ -29,7 +29,7 @@ public class CompaniesSettingView extends VerticalLayout {
 
     @PostConstruct
     private void build() {
-        setSizeFull();
+//        setSizeFull();
         setMargin(true);
         setSpacing(true);
 

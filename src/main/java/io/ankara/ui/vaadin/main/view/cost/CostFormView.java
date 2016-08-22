@@ -12,7 +12,7 @@ import io.ankara.domain.Cost;
 import io.ankara.domain.Customer;
 import io.ankara.service.CompanyService;
 import io.ankara.service.CustomerService;
-import io.ankara.ui.vaadin.main.view.cost.invoice.ItemsTable;
+import io.ankara.ui.vaadin.main.view.cost.invoice.ItemsView;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -43,7 +43,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
     protected TextArea subject;
 
     @Inject
-    protected ItemsTable items;
+    protected ItemsView items;
 
     protected TextField tax;
 
@@ -70,7 +70,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
 
     @PostConstruct
     private void build() {
-        setSizeFull();
+//        setSizeFull();
         setSpacing(true);
         setMargin(true);
 
@@ -90,7 +90,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
         formLayout.addComponent(createTermsForm());
 
         Panel form = new Panel(formLayout);
-        form.setSizeFull();
+//        form.setSizeFull();
         addComponent(form);
         setExpandRatio(form, 1);
 
@@ -196,7 +196,7 @@ public abstract class CostFormView extends VerticalLayout implements View {
             customer.setContainerDataSource(getCustomerContainer(selectedCompany));
             terms.setValue(selectedCompany.getTerms());
             notes.setValue(selectedCompany.getNotes());
-            items.setCompany(selectedCompany);
+            items.getItemsTable().reset();
         });
 
         customer = new ComboBox();
