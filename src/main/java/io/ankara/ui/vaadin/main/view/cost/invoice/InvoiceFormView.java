@@ -1,15 +1,18 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
 
+import com.vaadin.data.Property;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
+import io.ankara.domain.Company;
+import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
+import io.ankara.service.InvoiceService;
+import io.ankara.ui.vaadin.AnkaraUI;
 import io.ankara.ui.vaadin.main.view.cost.CostFormView;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -27,6 +30,7 @@ import javax.inject.Inject;
  */
 @UIScope
 @SpringView(name = InvoiceFormView.VIEW_NAME)
+@SpringComponent
 public class InvoiceFormView extends CostFormView {
     public static final String VIEW_NAME = "InvoiceForm";
     public static final String TOPIC_CREATE = "Create Invoice";
@@ -37,9 +41,12 @@ public class InvoiceFormView extends CostFormView {
 
     private DateField dueDate;
 
+    @Inject
+    private InvoiceService invoiceService;
 
     @Inject
-    private EventBus.UIEventBus eventBus;
+    private AnkaraUI ankaraUI;
+
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -56,7 +63,7 @@ public class InvoiceFormView extends CostFormView {
     protected FormLayout createCostDetailsForm() {
         FormLayout costDetailsLayout =  super.createCostDetailsForm();
 
-        purchaseOrder = new TextField();
+        purchaseOrder = new TextField("PO Number");
         purchaseOrder.setInputPrompt("Enter PO Number");
         purchaseOrder.setWidth("100%");
         purchaseOrder.setNullRepresentation("");
@@ -77,13 +84,27 @@ public class InvoiceFormView extends CostFormView {
         return costDetailsLayout;
     }
 
-    @PostConstruct
-    protected void init() {
-        eventBus.subscribe(this);
+    @Override
+    protected void doSave(Cost cost) {
+        Invoice invoice = (Invoice) cost;
+        if(invoiceService.save(invoice)){
+            Notification.show("Invoice saved successfully", Notification.Type.TRAY_NOTIFICATION);
+            ankaraUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
+        }
     }
 
-    @PreDestroy
-    protected void destroy() {
-        eventBus.unsubscribe(this);
+    @Override
+    protected FormLayout createAssociatesForm() {
+        FormLayout layout = super.createAssociatesForm();
+
+        company.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                Company company = (Company) event.getProperty().getValue();
+                code.setValue(invoiceService.nextInvoiceNumber(company));
+            }
+        });
+
+        return layout;
     }
 }

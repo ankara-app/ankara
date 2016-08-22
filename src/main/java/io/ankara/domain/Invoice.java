@@ -31,8 +31,8 @@ public class Invoice extends Cost {
     public Invoice() {
     }
 
-    public Invoice(User creator) {
-        super(creator);
+    public Invoice(User creator, Company company, String currency, String code) {
+        super(creator, company, currency, code);
         issueDate = new Date();
         dueDate = new Date();
     }

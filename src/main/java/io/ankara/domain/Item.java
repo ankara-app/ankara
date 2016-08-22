@@ -54,9 +54,14 @@ public class Item {
     public Item(Cost cost, ItemType type) {
         this.cost = cost;
         this.type = type;
+
         quantity = 1;
         price = BigDecimal.ZERO;
         taxable = true;
+    }
+
+    public Item(Cost cost) {
+       this(cost,null);
     }
 
     public BigDecimal getAmount(){
@@ -143,5 +148,11 @@ public class Item {
 
     public void setTaxable(boolean taxable) {
         this.taxable = taxable;
+    }
+
+    public BigDecimal calculateTaxedAmount(BigDecimal taxPercentage) {
+        if(isTaxable())
+        return getAmount().add(getAmount().multiply(taxPercentage).divide(new BigDecimal("100")));
+        else return getAmount();
     }
 }

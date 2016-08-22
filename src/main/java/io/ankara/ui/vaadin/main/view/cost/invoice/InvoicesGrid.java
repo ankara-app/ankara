@@ -4,9 +4,13 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.UI;
 import io.ankara.domain.Invoice;
+import io.ankara.service.InvoiceService;
+import io.ankara.service.UserService;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 /**
  * @author Boniface Chacha
@@ -19,9 +23,26 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 public class InvoicesGrid extends Grid {
 
+    @Inject
+    private InvoiceService invoiceService;
+
+    @Inject
+    private UserService userService;
+
     @PostConstruct
     private void build(){
+        setSelectionMode(Grid.SelectionMode.NONE);
         setContainerDataSource(new BeanItemContainer<>(Invoice.class));
         setColumns("code", "timeCreated", "company", "customer","creator","subject");
+
+        addItemClickListener(event -> {
+            Invoice invoice = (Invoice) event.getItemId();
+
+        });
+    }
+
+    public void reload() {
+        BeanItemContainer container = (BeanItemContainer) getContainerDataSource();
+        container.addAll(invoiceService.getInvoices(userService.getCurrentUser()));
     }
 }

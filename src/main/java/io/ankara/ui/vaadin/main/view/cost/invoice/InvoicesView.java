@@ -45,6 +45,6 @@ public class InvoicesView extends CustomComponent implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        invoicesGrid.reload();
     }
 }

@@ -1,0 +1,6 @@
+---
+applications:
+- name: ankara
+  memory: 1G
+  random-route: true
+  path: build/libs/ankara.war
