@@ -4,6 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.ui.vaadin.main.view.setting.account.PasswordChangeForm;
@@ -19,7 +20,7 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/14/16 1:33 PM
  */
-
+@UIScope
 @SpringView(name = SettingView.VIEW_NAME)
 public class SettingView extends VerticalLayout implements View{
     public static final String VIEW_NAME = "Settings";

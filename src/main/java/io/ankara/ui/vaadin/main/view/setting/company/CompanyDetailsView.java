@@ -2,14 +2,13 @@ package io.ankara.ui.vaadin.main.view.setting.company;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.domain.Company;
 import io.ankara.ui.vaadin.main.view.setting.customer.CustomerBeanCRUDComponent;
 import io.ankara.ui.vaadin.main.view.setting.itemType.ItemTypeBeanCRUDComponent;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -20,8 +19,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/15/16 8:53 AM
  */
+@UIScope
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CompanyDetailsView extends VerticalLayout {
 
     @Inject

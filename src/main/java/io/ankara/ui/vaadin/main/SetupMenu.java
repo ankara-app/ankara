@@ -1,6 +1,7 @@
 package io.ankara.ui.vaadin.main;
 
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;
@@ -8,8 +9,6 @@ import io.ankara.domain.User;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.AnkaraUI;
 import io.ankara.ui.vaadin.main.view.setting.SettingView;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.annotation.PostConstruct;
@@ -21,8 +20,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/11/16 1:54 AM
  */
+@UIScope
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SetupMenu extends CustomComponent {
 
     @Inject
@@ -55,7 +54,7 @@ public class SetupMenu extends CustomComponent {
         settings.addItem("Logout", selectedItem -> vaadinSecurity.logout());
 
         setCompositionRoot(menu);
-        setWidth("100px");
+//        setWidth("100px");
     }
 
 }

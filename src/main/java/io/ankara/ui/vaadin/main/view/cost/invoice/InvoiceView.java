@@ -3,9 +3,11 @@ package io.ankara.ui.vaadin.main.view.cost.invoice;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.CustomComponent;
 import io.ankara.domain.Invoice;
+import io.ankara.ui.vaadin.Templates;
+import io.ankara.ui.vaadin.main.view.cost.CostView;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.events.annotation.EventBusListenerTopic;
 
@@ -16,12 +18,16 @@ import org.vaadin.spring.events.annotation.EventBusListenerTopic;
  * @date 8/13/16 7:09 PM
  */
 @UIScope
+@SpringView(name = InvoiceView.VIEW_NAME)
 @SpringComponent
-public class InvoiceView extends CustomComponent implements View{
+public class InvoiceView extends CostView implements View{
+
     public static final String VIEW_NAME = "Invoice";
     public static final String TOPIC_SHOW = "Show Invoice";
 
-
+    public InvoiceView() {
+        super(Templates.INVOICE);
+    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -31,6 +37,6 @@ public class InvoiceView extends CustomComponent implements View{
     @EventBusListenerTopic(topic = InvoiceView.TOPIC_SHOW)
     @EventBusListenerMethod
     private void showInvoice(Invoice invoice){
-
+        setCost(invoice);
     }
 }

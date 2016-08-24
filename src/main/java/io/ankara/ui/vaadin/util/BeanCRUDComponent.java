@@ -28,8 +28,8 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         popUpWindow.setModal(true);
         popUpWindow.center();
         popUpWindow.setDraggable(true);
-        popUpWindow.setWidth("60%");
-        popUpWindow.setHeight("60%");
+        popUpWindow.setWidth("70%");
+        popUpWindow.setHeight("90%");
         popUpWindow.addCloseListener(new Window.CloseListener() {
             @Override
             public void windowClose(Window.CloseEvent e) {

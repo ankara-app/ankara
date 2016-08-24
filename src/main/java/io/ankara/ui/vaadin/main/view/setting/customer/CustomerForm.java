@@ -4,12 +4,11 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Customer;
 import io.ankara.service.CustomerService;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -20,8 +19,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/15/16 9:18 AM
  */
+@UIScope
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CustomerForm extends FormLayout {
 
     @Inject

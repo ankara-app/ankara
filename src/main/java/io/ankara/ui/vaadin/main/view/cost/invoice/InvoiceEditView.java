@@ -13,13 +13,10 @@ import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.ui.vaadin.AnkaraUI;
-import io.ankara.ui.vaadin.main.view.cost.CostFormView;
-import org.vaadin.spring.events.EventBus;
+import io.ankara.ui.vaadin.main.view.cost.CostEditView;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.events.annotation.EventBusListenerTopic;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 /**
@@ -29,9 +26,9 @@ import javax.inject.Inject;
  * @date 8/11/16 7:59 PM
  */
 @UIScope
-@SpringView(name = InvoiceFormView.VIEW_NAME)
+@SpringView(name = InvoiceEditView.VIEW_NAME)
 @SpringComponent
-public class InvoiceFormView extends CostFormView {
+public class InvoiceEditView extends CostEditView {
     public static final String VIEW_NAME = "InvoiceForm";
     public static final String TOPIC_CREATE = "Create Invoice";
 

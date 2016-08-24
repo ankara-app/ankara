@@ -2,6 +2,7 @@ package io.ankara.ui.vaadin.main.view.setting.account;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.User;
@@ -19,9 +20,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/14/16 2:59 PM
  */
-
+@UIScope
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PasswordChangeForm extends FormLayout {
 
     private PasswordField passwordField;

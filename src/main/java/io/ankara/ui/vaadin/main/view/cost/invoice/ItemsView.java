@@ -3,10 +3,10 @@ package io.ankara.ui.vaadin.main.view.cost.invoice;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import io.ankara.domain.Cost;
-import io.ankara.service.ItemTypeService;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -30,7 +30,7 @@ public class ItemsView extends VerticalLayout {
 
         addComponent(itemsTable);
 
-        Button addItem = new Button(FontAwesome.PLUS_CIRCLE);
+        Button addItem = new Button("Add Item", FontAwesome.PLUS_CIRCLE);
         addItem.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         addComponent(addItem);
         setComponentAlignment(addItem, Alignment.BOTTOM_RIGHT);

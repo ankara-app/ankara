@@ -1,6 +1,7 @@
 package io.ankara.ui.vaadin.main.view.setting.customer;
 
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
@@ -8,8 +9,6 @@ import io.ankara.domain.Company;
 import io.ankara.domain.Customer;
 import io.ankara.service.CustomerService;
 import io.ankara.ui.vaadin.util.BeanCRUDComponent;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -21,8 +20,8 @@ import java.util.Collection;
  * @email bonifacechacha@gmail.com
  * @date 8/15/16 9:13 AM
  */
+@UIScope
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
 
     @Inject

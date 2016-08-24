@@ -43,7 +43,7 @@ import java.util.Collection;
 //TODO INSTEAD IT SHOULD ONLY ALLOW EDITING THE ACTUAL DETAILS OF THE COST AS THEY WERE OBTAINED FROM THE CUSTOMER AND COMPANY
 
 @SpringComponent
-public abstract class CostFormView extends VerticalLayout implements View {
+public abstract class CostEditView extends VerticalLayout implements View {
 
     protected TextField code;
 

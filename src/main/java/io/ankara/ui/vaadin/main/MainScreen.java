@@ -16,6 +16,7 @@
 package io.ankara.ui.vaadin.main;
 
 import com.vaadin.navigator.Navigator;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -45,21 +46,22 @@ public class MainScreen extends CustomComponent {
 
     @PostConstruct
     private void build(){
-//        setSizeFull();
+        setWidth("100%");
 
         VerticalLayout root =new VerticalLayout();
-//        root.setSizeFull();
+        root.setWidth("100%");
         setCompositionRoot(root);
 
         VerticalLayout content = new VerticalLayout();
         content.setSpacing(true);
-        content.setHeight("100%");
-        content.setWidth("80%");
+//        content.setHeight("100%");
+        content.setWidth("90%");
 
         content.addComponent(mainHeader);
 
         VerticalLayout viewContainer = new VerticalLayout();
-        viewContainer.setWidth("100%");
+        viewContainer.setMargin(new MarginInfo(false,true,false,true));
+//        viewContainer.setWidth("100%");
 //        viewContainer.setSizeFull();
         content.addComponent(viewContainer);
         content.setExpandRatio(viewContainer,1);

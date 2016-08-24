@@ -7,9 +7,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
-import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.AnkaraUI;
 import io.ankara.ui.vaadin.util.SearchField;
 import org.vaadin.spring.events.EventBus;
@@ -44,8 +42,8 @@ public class InvoicesHeader extends CustomComponent {
         Button createButton = new Button("Create Invoice", FontAwesome.PLUS_CIRCLE);
         createButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         createButton.addClickListener(event -> {
-            ankaraUI.getNavigator().navigateTo(InvoiceFormView.VIEW_NAME);
-            eventBus.publish(InvoiceFormView.TOPIC_CREATE,this,invoiceService.newInvoice());
+            ankaraUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
+            eventBus.publish(InvoiceEditView.TOPIC_CREATE,this,invoiceService.newInvoice());
         });
         content.addComponent(createButton);
 

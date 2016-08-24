@@ -1,0 +1,22 @@
+.left-vertical-line{
+    border-left: 1px solid #ddd;
+}
+
+.top5 { margin-top:5px; }
+.top7 { margin-top:7px; }
+.top10 { margin-top:10px; }
+.top15 { margin-top:15px; }
+
+.logo{
+    width: 200px;
+}
+
+.caption{
+    color: grey;
+    font-weight: 300;
+}
+
+.subject{
+    font-weight: 600;
+    font-size: 16px;
+}

@@ -20,8 +20,7 @@ import org.vaadin.spring.security.util.SuccessfulLoginEvent;
  * @date 8/10/16 9:43 PM
  */
 @SpringUI
-@Theme("ankara")
-//@Widgetset("AppWidgetset")
+@Theme(AnkaraTheme.THEME)
 public class AnkaraUI extends UI {
 
     @Autowired

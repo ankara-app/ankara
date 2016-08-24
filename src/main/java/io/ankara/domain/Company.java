@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +33,9 @@ public class Company {
 
     private String VAT;
 
+    @Column(precision = 48, scale = 2)
+    private BigDecimal tax;
+
     @Column(columnDefinition = "longtext")
     private String paymentInformation;
 
@@ -56,6 +60,10 @@ public class Company {
     @Column(columnDefinition = "longtext not null")
     @NotBlank
     private String terms;
+
+    public Company() {
+        tax = new BigDecimal("0.00");
+    }
 
     public Long getId() {
         return id;
@@ -151,6 +159,14 @@ public class Company {
 
     public void setTerms(String terms) {
         this.terms = terms;
+    }
+
+    public BigDecimal getTax() {
+        return tax;
+    }
+
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
     }
 
     @Override

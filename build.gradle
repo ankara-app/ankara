@@ -1,16 +1,19 @@
 buildscript {
 	ext {
 		springBootVersion = '1.4.0.RELEASE'
+		groovyVersion = '2.4.7'
 	}
+
 	repositories {
 		mavenCentral()
 		jcenter()
 	}
+
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE"
 		classpath 'org.springframework:springloaded:1.2.0.RELEASE'
 	}
+
 }
 
 plugins {
@@ -21,6 +24,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: "groovy"
 
 jar {
 	baseName = 'ankara'
@@ -35,6 +39,9 @@ repositories {
 
 
 dependencies {
+	compile "org.codehaus.groovy:groovy:${groovyVersion}"
+	compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
+
 	compile("javax.inject:javax.inject:1")
 	compile 'org.apache.commons:commons-lang3:3.3'
 

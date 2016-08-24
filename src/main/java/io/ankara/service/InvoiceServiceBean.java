@@ -39,7 +39,10 @@ public class InvoiceServiceBean implements InvoiceService {
         //TODO CURRENCIES SHOULD BE IN SETTING AND CONFIGURABLE
         String currency = "TZS";
         String code = defaultCompany == null ? null : nextInvoiceNumber(defaultCompany);
-        return new Invoice(creator, defaultCompany, currency, code);
+        Invoice invoice =  new Invoice(creator, defaultCompany, currency, code);
+        invoice.setTax(defaultCompany.getTax());
+
+        return invoice;
     }
 
     public String nextInvoiceNumber(Company company) {

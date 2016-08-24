@@ -4,10 +4,11 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.UI;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
+import io.ankara.ui.vaadin.AnkaraUI;
+import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -29,6 +30,12 @@ public class InvoicesGrid extends Grid {
     @Inject
     private UserService userService;
 
+    @Inject
+    private AnkaraUI ankaraUI;
+
+    @Inject
+    private EventBus.UIEventBus eventBus;
+
     @PostConstruct
     private void build(){
         setSelectionMode(Grid.SelectionMode.NONE);
@@ -37,7 +44,8 @@ public class InvoicesGrid extends Grid {
 
         addItemClickListener(event -> {
             Invoice invoice = (Invoice) event.getItemId();
-
+            ankaraUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
+            eventBus.publish(InvoiceView.TOPIC_SHOW,this,invoice);
         });
     }
 
