@@ -16,6 +16,11 @@
     font-weight: 300;
 }
 
+
+.borderless td, .borderless th {
+    border: none !important;
+}
+
 .subject{
     font-weight: 600;
     font-size: 16px;
