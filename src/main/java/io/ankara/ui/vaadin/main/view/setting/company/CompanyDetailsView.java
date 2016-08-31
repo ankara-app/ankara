@@ -9,6 +9,7 @@ import com.vaadin.ui.VerticalLayout;
 import io.ankara.domain.Company;
 import io.ankara.ui.vaadin.main.view.setting.customer.CustomerBeanCRUDComponent;
 import io.ankara.ui.vaadin.main.view.setting.itemType.ItemTypeBeanCRUDComponent;
+import io.ankara.ui.vaadin.main.view.setting.tax.TaxBeanCRUDComponent;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -32,6 +33,9 @@ public class CompanyDetailsView extends VerticalLayout {
     @Inject
     private ItemTypeBeanCRUDComponent itemTypeBeanCRUDComponent;
 
+    @Inject
+    private TaxBeanCRUDComponent taxBeanCRUDComponent;
+
     @PostConstruct
     private void build() {
         setSizeFull();
@@ -42,7 +46,7 @@ public class CompanyDetailsView extends VerticalLayout {
         detailsMenu.addTab(companyForm, "Company",FontAwesome.BUILDING);
         detailsMenu.addTab(customerBeanCRUDComponent, "Customers", FontAwesome.USERS);
         detailsMenu.addTab(itemTypeBeanCRUDComponent, "Cost Items", FontAwesome.BOOKMARK);
-        detailsMenu.addTab(createStatusTab(), "Status", FontAwesome.STAR_HALF_O);
+        detailsMenu.addTab(taxBeanCRUDComponent, "Taxes", FontAwesome.CALCULATOR);
 
         addComponent(detailsMenu);
     }
@@ -55,5 +59,6 @@ public class CompanyDetailsView extends VerticalLayout {
         companyForm.edit(company);
         customerBeanCRUDComponent.setCompany(company);
         itemTypeBeanCRUDComponent.setCompany(company);
+        taxBeanCRUDComponent.setCompany(company);
     }
 }

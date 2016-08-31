@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Boniface Chacha
@@ -46,18 +48,21 @@ public class Item {
     @NotNull
     private BigDecimal price;
 
-    private boolean taxable;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    private List<AppliedTax> appliedTaxes;
 
     public Item() {
+        appliedTaxes = new LinkedList<>();
     }
 
     public Item(Cost cost, ItemType type) {
+        this();
         this.cost = cost;
         this.type = type;
 
         quantity = 1;
         price = BigDecimal.ZERO;
-        taxable = true;
     }
 
     public Item(Cost cost) {
@@ -142,17 +147,23 @@ public class Item {
                 .toHashCode();
     }
 
-    public boolean isTaxable() {
-        return taxable;
+
+
+    public List<AppliedTax> getAppliedTaxes() {
+        return appliedTaxes;
     }
 
-    public void setTaxable(boolean taxable) {
-        this.taxable = taxable;
+    public void setAppliedTaxes(List<AppliedTax> appliedTaxes) {
+        this.appliedTaxes = appliedTaxes;
     }
 
-    public BigDecimal calculateTaxedAmount(BigDecimal taxPercentage) {
-        if(isTaxable())
-        return getAmount().add(getAmount().multiply(taxPercentage).divide(new BigDecimal("100")));
-        else return getAmount();
+    public BigDecimal calculateTax() {
+        BigDecimal taxAmount = new BigDecimal("0.0");
+
+        for(AppliedTax appliedTax:appliedTaxes){
+            taxAmount = taxAmount.add(getAmount().multiply(appliedTax.getPercentage()).divide(new BigDecimal("100")));
+        }
+
+        return taxAmount;
     }
 }

@@ -61,6 +61,8 @@ dependencies {
 	compile 'org.vaadin.spring.addons:vaadin-spring-addon-simple-mvp:0.0.7.RELEASE'
 
 	compile 'com.vaadin:vaadin-themes:7.6.8'
+
+	compile 'org.vaadin.addon:confirmdialog:2.1.3'
 }
 
 dependencyManagement {

@@ -2,10 +2,12 @@ package io.ankara.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,9 +31,6 @@ public class Company {
     @NotBlank
     private String name;
 
-    @Column(precision = 48, scale = 2)
-    private BigDecimal tax;
-
     @Column(columnDefinition = "longtext")
     private String paymentInformation;
 
@@ -41,6 +40,7 @@ public class Company {
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
+    @Email
     private String email;
 
     @Column(columnDefinition = "longtext not null")
@@ -50,8 +50,7 @@ public class Company {
     @Column(columnDefinition = "longtext")
     private String fax;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String description;
 
     @Lob
@@ -60,16 +59,19 @@ public class Company {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String notes;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String terms;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    @NotNull
+    private Date timeCreated;
+
     public Company() {
-        tax = new BigDecimal("0.00");
+        timeCreated = new Date();
     }
 
     public Long getId() {
@@ -176,12 +178,12 @@ public class Company {
         this.terms = terms;
     }
 
-    public BigDecimal getTax() {
-        return tax;
+    public Date getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setTax(BigDecimal tax) {
-        this.tax = tax;
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
     @Override

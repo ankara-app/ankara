@@ -28,11 +28,11 @@ public class CompanyForm extends FormLayout {
 
     private TextField name;
 
-    private TextField registration;
+    private TextField email;
 
-    private TextField VAT;
+    private TextField phone;
 
-    private TextField tax;
+    private TextField fax;
 
     private TextArea paymentInformation;
 
@@ -59,17 +59,17 @@ public class CompanyForm extends FormLayout {
         name.setNullRepresentation("");
         name.setWidth("100%");
 
-        registration = new TextField("Registration Number");
-        registration.setNullRepresentation("");
-        registration.setWidth("100%");
+        email = new TextField("Email");
+        email.setNullRepresentation("");
+        email.setWidth("100%");
 
-        VAT = new TextField("VAT");
-        VAT.setNullRepresentation("");
-        VAT.setWidth("100%");
+        phone = new TextField("Phone");
+        phone.setNullRepresentation("");
+        phone.setWidth("100%");
 
-        tax = new TextField("VAT");
-        tax.setNullRepresentation("");
-        tax.setWidth("100%");
+        fax = new TextField("Fax");
+        fax.setNullRepresentation("");
+        fax.setWidth("100%");
 
         paymentInformation = new TextArea("Payment Information");
         paymentInformation.setNullRepresentation("");
@@ -120,7 +120,7 @@ public class CompanyForm extends FormLayout {
                 }
             }
         });
-        addComponents(name, registration, VAT, tax,paymentInformation, address, description,notes,terms, save);
+        addComponents(name, email, phone, fax,paymentInformation, address, description,notes,terms, save);
 
     }
 

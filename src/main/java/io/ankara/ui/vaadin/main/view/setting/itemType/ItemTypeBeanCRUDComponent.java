@@ -45,7 +45,13 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
         holder.setComponentAlignment(itemTypeForm, Alignment.MIDDLE_CENTER);
 
         super.build(ItemType.class);
-        grid.setColumns( "name", "description");
+        table.setVisibleColumns("name", "description","Remove");
+    }
+
+    @Override
+    protected void removeItem(Object itemID) {
+        ItemType itemType = (ItemType) itemID;
+        itemTypeService.delete(itemType);
     }
 
     @Override

@@ -40,7 +40,6 @@ public class InvoiceServiceBean implements InvoiceService {
         String currency = "TZS";
         String code = defaultCompany == null ? null : nextInvoiceNumber(defaultCompany);
         Invoice invoice =  new Invoice(creator, defaultCompany, currency, code);
-        invoice.setTax(defaultCompany.getTax());
 
         return invoice;
     }

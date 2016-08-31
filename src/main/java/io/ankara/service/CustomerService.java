@@ -19,4 +19,6 @@ public interface CustomerService {
     Collection<Customer> getCustomers(Company company);
 
     boolean save(Customer customer);
+
+    boolean delete(Customer customer);
 }

@@ -4,6 +4,7 @@ import io.ankara.domain.Company;
 import io.ankara.domain.ItemType;
 import io.ankara.repository.ItemTypeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,6 +22,7 @@ public class ItemTypeServiceBean implements ItemTypeService {
     private ItemTypeRepository itemTypeRepository;
 
     @Override
+    @Transactional
     public boolean save(ItemType itemType) {
         itemTypeRepository.save(itemType);
         return true;
@@ -35,4 +37,11 @@ public class ItemTypeServiceBean implements ItemTypeService {
     public ItemType getItemType(String name) {
         return itemTypeRepository.findByName(name);
     }
+
+    @Override
+    public boolean delete(ItemType itemType) {
+        itemTypeRepository.delete(itemType);
+        return true;
+    }
+
 }

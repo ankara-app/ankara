@@ -15,7 +15,7 @@ import java.util.Collection;
  */
 public abstract class BeanCRUDComponent extends VerticalLayout {
 
-    protected Grid grid;
+    protected Table table;
     protected BeanItemContainer container;
     protected Window popUpWindow;
     protected Button createButton;
@@ -48,21 +48,30 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         addComponent(header);
         setComponentAlignment(header, Alignment.TOP_RIGHT);
 
-        grid = new Grid();
-        grid.setSizeFull();
-        grid.setSelectionMode(Grid.SelectionMode.NONE);
+        table = new Table();
+        table.setSizeFull();;
         container = new BeanItemContainer(type,loadBeans());
-        grid.setContainerDataSource(container);
-        grid.addItemClickListener(event -> {
+        table.setContainerDataSource(container);
+        table.addItemClickListener(event -> {
             Object bean = event.getItemId();
             popUpWindow.setContent(getBeanComponent(bean));
             UI.getCurrent().addWindow(popUpWindow);
         });
 
-        addComponent(grid);
-        setExpandRatio(grid,1);
+        addComponent(table);
+        setExpandRatio(table,1);
+
+        new RemoveItemButtonGenerator(table,"Remove"){
+            @Override
+            protected void removeItem(Object itemID) {
+                BeanCRUDComponent.this.removeItem(itemID);
+                reload();
+            }
+        };
 
     }
+
+    protected abstract void removeItem(Object itemID);
 
     public void reload() {
         container.removeAllItems();
@@ -74,11 +83,12 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
 
     protected abstract Component getCreateComponent();
 
+    public Table getTable() {
+        return table;
+    }
+
     protected abstract Component getBeanComponent(Object bean);
 
-    public Grid getGrid() {
-        return grid;
-    }
 
     public BeanItemContainer getContainer() {
         return container;

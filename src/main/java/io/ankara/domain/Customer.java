@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @author Boniface Chacha
@@ -44,10 +45,17 @@ public class Customer {
     @NotNull
     private Company company;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    @NotNull
+    private Date timeCreated;
+
     public Customer() {
+        timeCreated = new Date();
     }
 
     public Customer(Company company) {
+        this();
         this.company = company;
     }
 

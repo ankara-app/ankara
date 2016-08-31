@@ -38,7 +38,14 @@ public class ItemType {
     }
 
     public ItemType(Company company) {
+        this(null,company,null);
+    }
+
+    public ItemType(String name, Company company, String description) {
+        this();
+        this.name = name;
         this.company = company;
+        this.description = description;
     }
 
     public Long getId() {

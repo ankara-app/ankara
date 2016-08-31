@@ -9,7 +9,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.ui.vaadin.main.view.setting.account.PasswordChangeForm;
 import io.ankara.ui.vaadin.main.view.setting.account.UserDetailsForm;
-import io.ankara.ui.vaadin.main.view.setting.company.CompaniesSettingView;
+import io.ankara.ui.vaadin.main.view.setting.company.CompaniesBeanCRUDComponent;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -32,13 +32,11 @@ public class SettingView extends VerticalLayout implements View{
     private UserDetailsForm userDetailsForm;
 
     @Inject
-    private CompaniesSettingView companiesSettingView;
+    private CompaniesBeanCRUDComponent companiesSettingView;
 
     @PostConstruct
     private void build(){
-//        setSizeFull();
         TabSheet settingTabs = new TabSheet();
-//        settingTabs.setSizeFull();
 
         settingTabs.addTab(companiesSettingView,"Companies", FontAwesome.BUILDING);
         settingTabs.addTab(passwordChangeForm,"Password", FontAwesome.KEY);

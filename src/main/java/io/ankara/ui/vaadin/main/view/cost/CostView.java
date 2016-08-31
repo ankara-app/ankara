@@ -78,7 +78,7 @@ public abstract class CostView extends CustomComponent {
             templateLabel.setValue(content.toString());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            Notification.show("Failed to render content", Notification.Type.ERROR_MESSAGE);
+            Notification.show("Failed to render content","Template "+template+" failed to be loaded.", Notification.Type.ERROR_MESSAGE);
             templateLabel.setValue(null);
         }
 

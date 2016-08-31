@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.main.view.setting.customer;
+package io.ankara.ui.vaadin.main.view.setting.tax;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -6,8 +6,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.domain.Company;
-import io.ankara.domain.Customer;
-import io.ankara.service.CustomerService;
+import io.ankara.domain.Tax;
+import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.util.BeanCRUDComponent;
 
 import javax.annotation.PostConstruct;
@@ -18,17 +18,17 @@ import java.util.Collection;
  * @author Boniface Chacha
  * @email boniface.chacha@niafikra.com
  * @email bonifacechacha@gmail.com
- * @date 8/15/16 9:13 AM
+ * @date 8/31/16 7:18 PM
  */
 @UIScope
 @SpringComponent
-public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
+public class TaxBeanCRUDComponent extends BeanCRUDComponent{
 
     @Inject
-    private CustomerService customerService;
+    private TaxService taxService;
 
     @Inject
-    private CustomerForm customerForm;
+    private TaxForm taxForm;
 
     private VerticalLayout holder;
 
@@ -37,41 +37,41 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
     @PostConstruct
     protected void build() {
         setSizeFull();
-        customerForm.setWidth("60%");
+        taxForm.setWidth("60%");
 
-        holder = new VerticalLayout(customerForm);
+        holder = new VerticalLayout(taxForm);
         holder.setSizeFull();
         holder.setMargin(true);
-        holder.setComponentAlignment(customerForm, Alignment.MIDDLE_CENTER);
+        holder.setComponentAlignment(taxForm, Alignment.MIDDLE_CENTER);
 
-        super.build(Customer.class);
-        table.setVisibleColumns("name", "email", "address", "description","Remove");
+        super.build(Tax.class);
+        table.setVisibleColumns("name", "percentage", "description","Remove");
     }
 
     @Override
     protected void removeItem(Object itemID) {
-        Customer customer = (Customer) itemID;
-        customerService.delete(customer);
+        Tax tax = (Tax) itemID;
+        taxService.delete(tax);
     }
 
     @Override
     protected Collection loadBeans() {
-        return customerService.getCustomers(company);
+        return taxService.getTaxes(company);
     }
 
     @Override
     protected Component getCreateComponent() {
-        popUpWindow.setCaption("Create new customer");
-        customerForm.edit(new Customer(company));
-        customerForm.setSubWindow(popUpWindow);
+        popUpWindow.setCaption("Create new tax");
+        taxForm.edit(new Tax(company));
+        taxForm.setSubWindow(popUpWindow);
 
         return holder;
     }
 
     @Override
     protected Component getBeanComponent(Object bean) {
-        customerForm.edit((Customer) bean);
-        customerForm.setSubWindow(popUpWindow);
+        taxForm.edit((Tax) bean);
+        taxForm.setSubWindow(popUpWindow);
         return holder;
     }
 

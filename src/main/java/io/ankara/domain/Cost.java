@@ -74,24 +74,21 @@ public class Cost implements Serializable {
     @Column(precision = 48, scale = 2)
     private BigDecimal discountPercentage;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String notes;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String terms;
 
     private String template;
 
-    @ManyToOne
-    private Status status;
+    /**
+     * Is the cost still a draft or already submitted
+     */
+    private boolean submitted;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Item> items;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-    private List<AppliedTax> appliedTaxes;
 
     public Cost() {
     }
@@ -214,12 +211,12 @@ public class Cost implements Serializable {
         this.template = template;
     }
 
-    public Status getStatus() {
-        return status;
+    public boolean isSubmitted() {
+        return submitted;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
     }
 
     public List<Item> getItems() {
@@ -228,14 +225,6 @@ public class Cost implements Serializable {
 
     public void setItems(List<Item> items) {
         this.items = items;
-    }
-
-    public List<AppliedTax> getAppliedTaxes() {
-        return appliedTaxes;
-    }
-
-    public void setAppliedTaxes(List<AppliedTax> appliedTaxes) {
-        this.appliedTaxes = appliedTaxes;
     }
 
     public BigDecimal getDiscountAmount(){

@@ -1,6 +1,5 @@
 package io.ankara.ui.vaadin.main.view.setting.company;
 
-import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
@@ -37,20 +36,19 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent {
     protected void build() {
         setSizeFull();
         super.build(Company.class);
-        grid.setColumns("registration", "name", "VAT", "paymentInformation", "address");
-        grid.setHeightMode(HeightMode.ROW);
-        grid.setHeightByRows(grid.getContainerDataSource().size()+1);
+
+        table.setVisibleColumns("name", "email", "phone", "fax", "address","Remove");
+    }
+
+    @Override
+    protected void removeItem(Object itemID) {
+        Company company = (Company) itemID;
+        companyService.delete(company);
     }
 
     @Override
     protected Collection loadBeans() {
         return companyService.getCurrentUserCompanies();
-    }
-
-    @Override
-    public void reload() {
-        super.reload();
-        grid.setHeightByRows(grid.getContainerDataSource().size()+1);
     }
 
     @Override
@@ -62,7 +60,6 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent {
 
 
         VerticalLayout holder = new VerticalLayout(companyForm);
-//        holder.setSizeFull();
         holder.setMargin(true);
         holder.setComponentAlignment(companyForm, Alignment.MIDDLE_CENTER);
         return holder;

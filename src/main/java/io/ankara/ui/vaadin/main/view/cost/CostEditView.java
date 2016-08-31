@@ -102,9 +102,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
         for (Item item : itemsTable.getItems()) {
             subtotal = subtotal.add(item.getAmount());
-
-            if (item.isTaxable())
-                totalTax = totalTax.add(NumberUtils.calculateTax(item.getAmount(), taxPercentage));
+                totalTax = totalTax.add(item.calculateTax());
         }
 
         taxedTotal = subtotal.add(totalTax);

@@ -36,6 +36,20 @@ public class Tax {
     @NotNull
     private BigDecimal percentage;
 
+    public Tax() {
+    }
+
+    public Tax(String name, Company company, BigDecimal percentage, String description) {
+        this.name = name;
+        this.company = company;
+        this.percentage = percentage;
+        this.description = description;
+    }
+
+    public Tax(Company company) {
+        this(null,company,null,null);
+    }
+
     public Long getId() {
         return id;
     }

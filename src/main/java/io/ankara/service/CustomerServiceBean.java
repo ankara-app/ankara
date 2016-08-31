@@ -47,4 +47,10 @@ public class CustomerServiceBean implements CustomerService {
         customerRepository.save(customer);
         return true;
     }
+
+    @Override
+    public boolean delete(Customer customer) {
+        customerRepository.delete(customer);
+        return true;
+    }
 }
