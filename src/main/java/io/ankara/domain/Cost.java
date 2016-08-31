@@ -72,10 +72,7 @@ public class Cost implements Serializable {
     private Customer customer;
 
     @Column(precision = 48, scale = 2)
-    private BigDecimal tax;
-
-    @Column(precision = 48, scale = 2)
-    private BigDecimal discount;
+    private BigDecimal discountPercentage;
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
@@ -90,8 +87,11 @@ public class Cost implements Serializable {
     @ManyToOne
     private Status status;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Item> items;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    private List<AppliedTax> appliedTaxes;
 
     public Cost() {
     }
@@ -102,8 +102,7 @@ public class Cost implements Serializable {
         this.currency = currency;
         this.code = code;
 
-        this.tax = new BigDecimal("0.0");
-        this.discount = new BigDecimal("0.0");
+        this.discountPercentage = new BigDecimal("0.0");
 
         if(company!=null){
             terms = company.getTerms();
@@ -175,20 +174,12 @@ public class Cost implements Serializable {
         this.customer = customer;
     }
 
-    public BigDecimal getTax() {
-        return tax;
+    public BigDecimal getDiscountPercentage() {
+        return discountPercentage;
     }
 
-    public void setTax(BigDecimal tax) {
-        this.tax = tax;
-    }
-
-    public BigDecimal getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(BigDecimal discount) {
-        this.discount = discount;
+    public void setDiscountPercentage(BigDecimal discountPercentage) {
+        this.discountPercentage = discountPercentage;
     }
 
     public String getNotes() {
@@ -239,6 +230,26 @@ public class Cost implements Serializable {
         this.items = items;
     }
 
+    public List<AppliedTax> getAppliedTaxes() {
+        return appliedTaxes;
+    }
+
+    public void setAppliedTaxes(List<AppliedTax> appliedTaxes) {
+        this.appliedTaxes = appliedTaxes;
+    }
+
+    public BigDecimal getDiscountAmount(){
+        return BigDecimal.ONE;
+    }
+
+    public BigDecimal getSubtotal(){
+        return BigDecimal.ONE;
+    }
+
+    public BigDecimal getAmountDue(){
+        return BigDecimal.ONE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -255,8 +266,7 @@ public class Cost implements Serializable {
                 .append(creator, cost.creator)
                 .append(subject, cost.subject)
                 .append(customer, cost.customer)
-                .append(tax, cost.tax)
-                .append(discount, cost.discount)
+                .append(discountPercentage, cost.discountPercentage)
                 .isEquals();
     }
 
@@ -270,8 +280,7 @@ public class Cost implements Serializable {
                 .append(creator)
                 .append(subject)
                 .append(customer)
-                .append(tax)
-                .append(discount)
+                .append(discountPercentage)
                 .toHashCode();
     }
 

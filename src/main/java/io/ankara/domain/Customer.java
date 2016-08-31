@@ -27,17 +27,17 @@ public class Customer {
     @NotBlank
     private String name;
 
-    @Column(nullable = false)
     @Email
-    @NotBlank
     private String email;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    private String phone;
+
+    private String fax;
+
+    @Column(columnDefinition = "longtext")
     private String address;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String description;
 
     @ManyToOne
@@ -73,6 +73,22 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 
     public String getAddress() {

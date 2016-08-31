@@ -29,10 +29,6 @@ public class Company {
     @NotBlank
     private String name;
 
-    private String registration;
-
-    private String VAT;
-
     @Column(precision = 48, scale = 2)
     private BigDecimal tax;
 
@@ -42,6 +38,17 @@ public class Company {
     @Column(columnDefinition = "longtext not null")
     @NotBlank
     private String address;
+
+    @Column(columnDefinition = "longtext not null")
+    @NotBlank
+    private String email;
+
+    @Column(columnDefinition = "longtext not null")
+    @NotBlank
+    private String phone;
+
+    @Column(columnDefinition = "longtext")
+    private String fax;
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
@@ -89,28 +96,36 @@ public class Company {
         this.name = name;
     }
 
-    public String getRegistration() {
-        return registration;
-    }
-
-    public void setRegistration(String registration) {
-        this.registration = registration;
-    }
-
-    public String getVAT() {
-        return VAT;
-    }
-
-    public void setVAT(String VAT) {
-        this.VAT = VAT;
-    }
-
     public String getPaymentInformation() {
         return paymentInformation;
     }
 
     public void setPaymentInformation(String paymentInformation) {
         this.paymentInformation = paymentInformation;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 
     public String getAddress() {
@@ -180,8 +195,6 @@ public class Company {
         return new EqualsBuilder()
                 .append(id, company.id)
                 .append(name, company.name)
-                .append(registration, company.registration)
-                .append(VAT, company.VAT)
                 .isEquals();
     }
 
@@ -190,8 +203,6 @@ public class Company {
         return new HashCodeBuilder(17, 37)
                 .append(id)
                 .append(name)
-                .append(registration)
-                .append(VAT)
                 .toHashCode();
     }
 

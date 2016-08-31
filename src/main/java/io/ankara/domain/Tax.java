@@ -6,15 +6,13 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
- * @author Boniface Chacha
- * @email boniface.chacha@niafikra.com
- * @email bonifacechacha@gmail.com
- * @date 8/11/16 5:39 PM
+ * Created by bonifacechacha on 8/31/16.
  */
 @Entity
-public class ItemType {
+public class Tax {
     @Id
     @GeneratedValue
     private Long id;
@@ -34,12 +32,9 @@ public class ItemType {
     @Column(columnDefinition = "longtext")
     private String description;
 
-    public ItemType() {
-    }
-
-    public ItemType(Company company) {
-        this.company = company;
-    }
+    @Column(precision = 48, scale = 2,nullable = false)
+    @NotNull
+    private BigDecimal percentage;
 
     public Long getId() {
         return id;
@@ -73,18 +68,27 @@ public class ItemType {
         this.description = description;
     }
 
+    public BigDecimal getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(BigDecimal percentage) {
+        this.percentage = percentage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        ItemType itemType = (ItemType) o;
+        Tax tax = (Tax) o;
 
         return new EqualsBuilder()
-                .append(id, itemType.id)
-                .append(name, itemType.name)
-                .append(company, itemType.company)
+                .append(id, tax.id)
+                .append(name, tax.name)
+                .append(company, tax.company)
+                .append(percentage, tax.percentage)
                 .isEquals();
     }
 
@@ -94,11 +98,7 @@ public class ItemType {
                 .append(id)
                 .append(name)
                 .append(company)
+                .append(percentage)
                 .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return getName();
     }
 }
