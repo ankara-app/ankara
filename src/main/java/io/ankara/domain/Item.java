@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Boniface Chacha
@@ -121,6 +122,17 @@ public class Item {
         this.price = price;
     }
 
+    public void loadTaxes(Set<Tax> taxes){
+        if(cost == null)
+            throw new IllegalStateException("Associated cost for the item is not specified");
+
+        LinkedList appliedTaxes = new LinkedList();
+        for(Tax tax:taxes){
+            appliedTaxes.add(new AppliedTax(cost,tax));
+        }
+        setAppliedTaxes(appliedTaxes);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -146,7 +158,6 @@ public class Item {
                 .append(description)
                 .toHashCode();
     }
-
 
 
     public List<AppliedTax> getAppliedTaxes() {

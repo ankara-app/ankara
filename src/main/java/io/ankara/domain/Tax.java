@@ -115,4 +115,9 @@ public class Tax {
                 .append(percentage)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append(getName()).append(" (").append(percentage).append(" %)").toString();
+    }
 }

@@ -2,7 +2,6 @@ package io.ankara.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -33,6 +32,19 @@ public class AppliedTax {
     @Column(precision = 48, scale = 2,nullable = false)
     @NotNull
     private BigDecimal percentage;
+
+    public AppliedTax() {
+    }
+
+    public AppliedTax( Cost cost, Tax tax, BigDecimal percentage) {
+        this.tax = tax;
+        this.cost = cost;
+        this.percentage = percentage;
+    }
+
+    public AppliedTax(Cost cost, Tax tax) {
+        this(cost,tax,tax.getPercentage());
+    }
 
     public Long getId() {
         return id;

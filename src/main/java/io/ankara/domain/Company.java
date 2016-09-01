@@ -70,6 +70,9 @@ public class Company {
     @NotNull
     private Date timeCreated;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
+    private Set<Tax> taxes;
+
     public Company() {
         timeCreated = new Date();
     }
@@ -184,6 +187,14 @@ public class Company {
 
     public void setTimeCreated(Date timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    public Set<Tax> getTaxes() {
+        return taxes;
+    }
+
+    public void setTaxes(Set<Tax> taxes) {
+        this.taxes = taxes;
     }
 
     @Override

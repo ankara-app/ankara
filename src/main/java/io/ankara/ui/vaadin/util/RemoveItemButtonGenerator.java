@@ -12,7 +12,7 @@ public abstract class RemoveItemButtonGenerator implements Table.ColumnGenerator
 
     public RemoveItemButtonGenerator(Table table,String columnName) {
         table.addGeneratedColumn(columnName, this);
-        table.setColumnWidth(columnName,50);
+        table.setColumnWidth(columnName,100);
     }
 
     @Override
