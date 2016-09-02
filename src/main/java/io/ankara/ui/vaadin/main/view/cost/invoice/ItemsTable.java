@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
+import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroupFieldFactory;
@@ -15,6 +16,7 @@ import io.ankara.domain.*;
 import io.ankara.service.ItemTypeService;
 import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.util.AppliedTaxesConverter;
+import io.ankara.ui.vaadin.util.RemoveItemButtonGenerator;
 import org.springframework.util.CollectionUtils;
 import org.vaadin.spring.events.EventBus;
 
@@ -49,47 +51,31 @@ public class ItemsTable extends Table {
 
     private Map<Integer, BeanFieldGroup<Item>> itemsFieldGroup = new IdentityHashMap<>();
 
+    private Integer recentItemID = 0;
+
     @PostConstruct
     private void build() {
         setWidth("100%");
         addStyleName(ValoTheme.TABLE_NO_VERTICAL_LINES);
         setRowHeaderMode(RowHeaderMode.INDEX);
         setEditable(true);
-        setFooterVisible(true);
-        setColumnFooter("price","Subtotal");
-        reset();
 
         addContainerProperty("type", ComboBox.class, null);
         addContainerProperty("description", TextArea.class, null);
         addContainerProperty("quantity", TextField.class, null);
         addContainerProperty("price", TextField.class, null);
         addContainerProperty("amount", Label.class, null);
-        addContainerProperty("appliedTaxes", OptionGroup.class, null);
+        addContainerProperty("taxes", OptionGroup.class, null);
 
-        addGeneratedColumn("", new ColumnGenerator() {
+        new RemoveItemButtonGenerator(this, "") {
             @Override
-            public Object generateCell(Table source, Object itemId, Object columnId) {
-                Button removeButton =  new Button(FontAwesome.REMOVE);
-                removeButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-                removeButton.addClickListener(new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(Button.ClickEvent event) {
-                        ItemsTable.this.removeItem(itemId);
-                    }
-                });
-                return removeButton;
+            protected void removeItem(Object itemID) {
+                ItemsTable.this.removeItem(itemID);
+                itemsFieldGroup.remove(itemID);
+                eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, itemID);
             }
-        });
+        };
 
-    }
-
-    @Override
-    public boolean removeItem(Object itemId) {
-        if(super.removeItem(itemId)){
-            itemsFieldGroup.remove(itemId);
-            eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, itemId);
-            return true;
-        }else return false;
     }
 
     public void addCostItem() {
@@ -99,12 +85,9 @@ public class ItemsTable extends Table {
             return;
         }
 
-        addItem(getRow(getRowIndex()), getRowIndex());
+        addItem(getRow(recentItemID), recentItemID++);
     }
 
-    private int getRowIndex() {
-        return itemsFieldGroup.size();
-    }
 
     private Object[] getRow(int rowIndex) {
 
@@ -114,7 +97,7 @@ public class ItemsTable extends Table {
         if (!types.isEmpty()) {
             ItemType defaultType = types.iterator().next();
             item.setType(defaultType);
-        }else
+        } else
             Notification.show("Selected company cost item types have been not configured", Notification.Type.WARNING_MESSAGE);
 
         BeanFieldGroup<Item> fieldGroup = new BeanFieldGroup<>(Item.class);
@@ -122,7 +105,7 @@ public class ItemsTable extends Table {
         fieldGroup.setFieldFactory(new ItemFieldFactory());
         fieldGroup.setItemDataSource(item);
 
-        itemsFieldGroup.put(rowIndex,fieldGroup);
+        itemsFieldGroup.put(rowIndex, fieldGroup);
 
         ComboBox selector = (ComboBox) fieldGroup.buildAndBind("type");
         TextArea description = (TextArea) fieldGroup.buildAndBind("description");
@@ -130,7 +113,7 @@ public class ItemsTable extends Table {
         TextField quantity = (TextField) fieldGroup.buildAndBind("quantity");
         TextField price = (TextField) fieldGroup.buildAndBind("price");
 
-        OptionGroup appliedTaxes = (OptionGroup) fieldGroup.buildAndBind("appliedTaxes");
+        OptionGroup appliedTaxes = (OptionGroup) fieldGroup.buildAndBind("taxes");
         appliedTaxes.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
@@ -144,14 +127,14 @@ public class ItemsTable extends Table {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 calculateAmount(amountLabel, quantity, price);
-                eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES,this,rowIndex);
+                eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, rowIndex);
             }
         });
 
         price.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                calculateAmount(amountLabel,quantity,price);
+                calculateAmount(amountLabel, quantity, price);
                 eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, rowIndex);
             }
         });
@@ -160,11 +143,11 @@ public class ItemsTable extends Table {
     }
 
     private void calculateAmount(Label amountLabel, TextField quantity, TextField price) {
-        try{
+        try {
             Integer qty = (Integer) quantity.getConvertedValue();
             BigDecimal prc = (BigDecimal) price.getConvertedValue();
             amountLabel.setValue(prc.multiply(BigDecimal.valueOf(qty)).toString());
-        }catch (Converter.ConversionException | NumberFormatException e){
+        } catch (Converter.ConversionException | NumberFormatException e) {
             Notification.show("Enter the item details correctly", Notification.Type.WARNING_MESSAGE);
         }
 
@@ -175,22 +158,23 @@ public class ItemsTable extends Table {
         removeAllItems();
         itemsFieldGroup.clear();
         setPageLength(0);
+        recentItemID = 0;
 
-        eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, getRowIndex());
-    }
-
-    public void setCost(Cost cost) {
-        this.cost = cost;
-        reset();
-        
-        //if the cost has no items initialise 4 items to simplify user editing
-        if(CollectionUtils.isEmpty(cost.getItems())){
+//if the cost has no items initialise 4 items to simplify user editing
+        if (cost!=null && CollectionUtils.isEmpty(cost.getItems())) {
             //add 4 initial cost items
             addCostItem();
             addCostItem();
             addCostItem();
             addCostItem();
         }
+
+        eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, 0);
+    }
+
+    public void setCost(Cost cost) {
+        this.cost = cost;
+        reset();
     }
 
     public Cost getCost() {
@@ -224,22 +208,22 @@ public class ItemsTable extends Table {
                 CheckBox taxable = new CheckBox();
                 taxable.setImmediate(true);
                 return taxable;
-            } else if(Collection.class.isAssignableFrom(dataType)){
+            } else if (Collection.class.isAssignableFrom(dataType)) {
                 OptionGroup taxSelector = new OptionGroup();
                 taxSelector.addItems(taxService.getTaxes(cost.getCompany()));
                 taxSelector.setMultiSelect(true);
                 taxSelector.setConverter(new AppliedTaxesConverter());
 
                 return taxSelector;
-            }else
+            } else
                 return createField(dataType, fieldType);
         }
 
     }
 
-    public boolean ensureItemsValidity(){
-        for(BeanFieldGroup fieldGroup:itemsFieldGroup.values()){
-            if(!fieldGroup.isValid()){
+    public boolean ensureItemsValidity() {
+        for (BeanFieldGroup fieldGroup : itemsFieldGroup.values()) {
+            if (!fieldGroup.isValid()) {
                 return false;
             }
         }
@@ -247,12 +231,12 @@ public class ItemsTable extends Table {
         return true;
     }
 
-    public List<Item> getItems(){
+    public List<Item> getItems() {
         LinkedList items = new LinkedList();
         //iterating with the row index to determine the order they were added and reserve it when saving to the database
 
-        for (int i = 0; i < itemsFieldGroup.size(); i++) {
-            items.add(itemsFieldGroup.get(i).getItemDataSource().getBean());
+        for (BeanFieldGroup fieldGroup : itemsFieldGroup.values()) {
+            items.add(fieldGroup.getItemDataSource().getBean());
         }
 
         return items;

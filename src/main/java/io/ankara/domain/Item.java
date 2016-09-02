@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -51,10 +52,10 @@ public class Item {
 
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-    private List<AppliedTax> appliedTaxes;
+    private List<AppliedTax> taxes;
 
     public Item() {
-        appliedTaxes = new LinkedList<>();
+        taxes = new LinkedList<>();
     }
 
     public Item(Cost cost, ItemType type) {
@@ -128,9 +129,9 @@ public class Item {
 
         LinkedList appliedTaxes = new LinkedList();
         for(Tax tax:taxes){
-            appliedTaxes.add(new AppliedTax(cost,tax));
+            appliedTaxes.add(new AppliedTax(tax));
         }
-        setAppliedTaxes(appliedTaxes);
+        setTaxes(appliedTaxes);
     }
 
     @Override
@@ -160,21 +161,32 @@ public class Item {
     }
 
 
-    public List<AppliedTax> getAppliedTaxes() {
-        return appliedTaxes;
+    public List<AppliedTax> getTaxes() {
+        return taxes;
     }
 
-    public void setAppliedTaxes(List<AppliedTax> appliedTaxes) {
-        this.appliedTaxes = appliedTaxes;
+    public void setTaxes(List<AppliedTax> taxes) {
+        this.taxes = taxes;
     }
 
     public BigDecimal calculateTax() {
         BigDecimal taxAmount = new BigDecimal("0.0");
 
-        for(AppliedTax appliedTax:appliedTaxes){
+        for(AppliedTax appliedTax: taxes){
             taxAmount = taxAmount.add(getAmount().multiply(appliedTax.getPercentage()).divide(new BigDecimal("100")));
         }
 
         return taxAmount;
+    }
+
+    public BigDecimal calculateTax(Tax tax) {
+        Optional<AppliedTax> appliedTax = getAppliedTax(tax);
+        if(!appliedTax.isPresent()) return BigDecimal.ZERO;
+
+        return getAmount().multiply(appliedTax.get().getPercentage()).divide(new BigDecimal("100"));
+    }
+
+    public Optional<AppliedTax> getAppliedTax(Tax tax) {
+        return getTaxes().stream().filter(appliedTax -> appliedTax.getTax().equals(tax)).findFirst();
     }
 }

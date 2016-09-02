@@ -22,11 +22,6 @@ public class AppliedTax {
     @ManyToOne
     @JoinColumn(nullable = false)
     @NotNull
-    private Cost cost;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    @NotNull
     private Tax tax;
 
     @Column(precision = 48, scale = 2,nullable = false)
@@ -36,14 +31,13 @@ public class AppliedTax {
     public AppliedTax() {
     }
 
-    public AppliedTax( Cost cost, Tax tax, BigDecimal percentage) {
+    public AppliedTax(Tax tax, BigDecimal percentage) {
         this.tax = tax;
-        this.cost = cost;
         this.percentage = percentage;
     }
 
-    public AppliedTax(Cost cost, Tax tax) {
-        this(cost,tax,tax.getPercentage());
+    public AppliedTax(Tax tax) {
+        this(tax,tax.getPercentage());
     }
 
     public Long getId() {
@@ -52,14 +46,6 @@ public class AppliedTax {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Cost getCost() {
-        return cost;
-    }
-
-    public void setCost(Cost cost) {
-        this.cost = cost;
     }
 
     public Tax getTax() {
@@ -88,7 +74,6 @@ public class AppliedTax {
 
         return new EqualsBuilder()
                 .append(id, that.id)
-                .append(cost, that.cost)
                 .append(tax, that.tax)
                 .append(percentage, that.percentage)
                 .isEquals();
@@ -98,7 +83,6 @@ public class AppliedTax {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(id)
-                .append(cost)
                 .append(tax)
                 .append(percentage)
                 .toHashCode();

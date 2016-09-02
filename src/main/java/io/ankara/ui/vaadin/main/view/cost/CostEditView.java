@@ -6,19 +6,17 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.Topics;
-import io.ankara.domain.Company;
-import io.ankara.domain.Cost;
-import io.ankara.domain.Customer;
-import io.ankara.domain.Item;
+import io.ankara.domain.*;
 import io.ankara.service.CompanyService;
 import io.ankara.service.CustomerService;
+import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.main.view.cost.invoice.ItemsTable;
 import io.ankara.ui.vaadin.main.view.cost.invoice.ItemsView;
-import io.ankara.ui.vaadin.util.NumberUtils;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.events.annotation.EventBusListenerTopic;
@@ -29,6 +27,8 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Boniface Chacha
@@ -61,16 +61,15 @@ public abstract class CostEditView extends VerticalLayout implements View {
     @Inject
     protected ItemsTable itemsTable;
 
-    protected TextField tax;
-
-    protected TextField discount;
+    protected TextField discountPercentage;
 
     protected TextArea notes;
 
     protected TextArea terms;
 
-    protected Label amountDiscounted, amountTaxed, amountDue;
+    protected Label amountSubtotal, amountDiscounted, amountDue;
 
+    protected Map<Tax, Label> taxes = new HashMap<>();
     @Inject
     protected CompanyService companyService;
 
@@ -78,11 +77,19 @@ public abstract class CostEditView extends VerticalLayout implements View {
     protected CustomerService customerService;
 
     @Inject
+    protected TaxService taxService;
+
+    @Inject
     protected EventBus.UIEventBus eventBus;
 
     private BeanFieldGroup fieldGroup;
 
+    private FormLayout summary;
+    private Cost cost;
+
     public void editCost(Cost cost) {
+        this.cost = cost;
+
         fieldGroup = BeanFieldGroup.bindFieldsUnbuffered(cost, this);
         itemsTable.setCost(cost);
     }
@@ -91,29 +98,20 @@ public abstract class CostEditView extends VerticalLayout implements View {
     @EventBusListenerMethod
     private void calculateSummaries(Integer rowIndex) {
 
-        BigDecimal discountPercentage = NumberUtils.getBigDecimal(discount.getValue());
-        BigDecimal taxPercentage = NumberUtils.getBigDecimal(tax.getValue());
+        loadCost();
 
-        BigDecimal subtotal = new BigDecimal("0.0");
-        BigDecimal totalTax = new BigDecimal("0.0");
-        BigDecimal taxedTotal;
-        BigDecimal discount;
-        BigDecimal dueAmount;
+        amountSubtotal.setValue(createMoneyCaption(cost.calculateSubtotal(),cost.getCurrency()));
+        amountDiscounted.setValue(createMoneyCaption(cost.calculateDiscount(),cost.getCurrency()));
 
-        for (Item item : itemsTable.getItems()) {
-            subtotal = subtotal.add(item.getAmount());
-                totalTax = totalTax.add(item.calculateTax());
+        for (Tax tax : taxes.keySet()) {
+            taxes.get(tax).setValue(createMoneyCaption(cost.calculateTax(tax),cost.getCurrency()));
         }
 
-        taxedTotal = subtotal.add(totalTax);
-        discount = NumberUtils.calculateDiscount(taxedTotal, discountPercentage);
-        dueAmount = taxedTotal.subtract(discount);
+        amountDue.setValue(createMoneyCaption(cost.calculateAmountDue(),cost.getCurrency()));
+    }
 
-        itemsTable.setColumnFooter("amount", subtotal.toString());
-        amountDiscounted.setValue(discount.toString());
-        amountTaxed.setValue(totalTax.toString());
-        amountDue.setValue(dueAmount.toString());
-
+    private String createMoneyCaption(BigDecimal money, String currency) {
+        return money.toString()+" "+currency;
     }
 
     @PostConstruct
@@ -131,7 +129,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
         formLayout.addComponent(itemsView);
 //        formLayout.setExpandRatio(itemsView, 1);
 
-        Component summary = createSummaryLayout();
+        summary = createSummaryLayout();
         formLayout.addComponent(summary);
         formLayout.setComponentAlignment(summary, Alignment.MIDDLE_RIGHT);
 
@@ -155,8 +153,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 if (fieldGroup.isValid() && itemsTable.ensureItemsValidity()) {
-                    Cost cost = (Cost) fieldGroup.getItemDataSource().getBean();
-                    cost.setItems(itemsTable.getItems());
+                    loadCost();
                     doSave(cost);
                 } else
                     Notification.show("Enter required details correctly", "Items which are not required should be removed", Notification.Type.WARNING_MESSAGE);
@@ -174,48 +171,29 @@ public abstract class CostEditView extends VerticalLayout implements View {
         return footer;
     }
 
+    public void loadCost() {
+        cost.setItems(itemsTable.getItems());
+    }
+
+
     protected abstract void doSave(Cost cost);
 
-    private HorizontalLayout createSummaryLayout() {
-        tax = new TextField();
-        tax.setInputPrompt("Specify tax (Optional) ...");
-        tax.setWidth("200px");
-        tax.setNullRepresentation("");
-        tax.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                calculateSummaries(null);
-            }
-        });
+    private FormLayout createSummaryLayout() {
 
-        discount = new TextField();
-        discount.setInputPrompt("Specify discount (Optional) ...");
-        discount.setWidth("200px");
-        discount.setNullRepresentation("");
-        discount.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                calculateSummaries(null);
-            }
-        });
-
-        FormLayout manipulationForm = new FormLayout(tax, discount);
-        manipulationForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        amountSubtotal = new Label();
+        amountSubtotal.setCaption("Subtotal");
 
         amountDiscounted = new Label();
         amountDiscounted.setCaption("Discount");
 
-        amountTaxed = new Label();
-        amountTaxed.setCaption("Tax");
-
         amountDue = new Label();
         amountDue.setCaption("Amount Due");
 
-        FormLayout summaryForm = new FormLayout(amountTaxed, amountDiscounted, amountDue);
+        FormLayout summaryForm = new FormLayout(amountSubtotal, amountDiscounted, amountDue);
+        summaryForm.setWidth("400px");
         summaryForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
-        HorizontalLayout summaryLay = new HorizontalLayout(manipulationForm, summaryForm);
-        return summaryLay;
+        return summaryForm;
     }
 
     private HorizontalLayout createBasicsLayout() {
@@ -249,7 +227,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
         VerticalLayout subjectLayout = new VerticalLayout(subject);
         subjectLayout.setWidth("100%");
-        subjectLayout.setMargin(true);
+        subjectLayout.setMargin(new MarginInfo(false, true, true, true));
         return subjectLayout;
     }
 
@@ -266,7 +244,11 @@ public abstract class CostEditView extends VerticalLayout implements View {
             customer.setContainerDataSource(getCustomerContainer(selectedCompany));
             terms.setValue(selectedCompany.getTerms());
             notes.setValue(selectedCompany.getNotes());
+
+            rebuildTaxLabels();
             itemsTable.reset();
+
+
         });
 
         customer = new ComboBox("Customer");
@@ -274,10 +256,37 @@ public abstract class CostEditView extends VerticalLayout implements View {
         customer.setWidth("100%");
         customer.setNullSelectionAllowed(false);
 
-        FormLayout associateForm = new FormLayout(company, customer);
+        discountPercentage = new TextField("Discount");
+        discountPercentage.setInputPrompt("Specify discount percentage (Optional) ...");
+        discountPercentage.setWidth("100%");
+        discountPercentage.setNullRepresentation("");
+        discountPercentage.addValueChangeListener((Property.ValueChangeListener) event -> calculateSummaries(null));
+
+        FormLayout associateForm = new FormLayout(company, customer, discountPercentage);
         associateForm.setWidth("100%");
         associateForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         return associateForm;
+    }
+
+    private void rebuildTaxLabels() {
+        loadCost();
+
+        taxes.values().forEach(label -> summary.removeComponent(label));
+
+        Collection<Tax> companyTaxes = taxService.getTaxes(cost.getCompany());
+
+        companyTaxes.forEach(tax -> {
+            Label taxLabel = new Label();
+            taxLabel.setCaption(createTaxCaption(tax));
+
+            taxes.put(tax,taxLabel);
+
+            summary.addComponent(taxLabel,2);
+        });
+    }
+
+    public static String createTaxCaption(Tax tax) {
+        return tax.getName()+" ("+tax.getPercentage()+"%)";
     }
 
     protected FormLayout createCostDetailsForm() {
@@ -290,24 +299,14 @@ public abstract class CostEditView extends VerticalLayout implements View {
         currency.setInputPrompt("Specify currency ...");
         currency.setWidth("100%");
         currency.setNullSelectionAllowed(false);
-        currency.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                String currency = (String) event.getProperty().getValue();
-                amountTaxed.setCaption(createMoneyCapation("Tax", currency));
-                amountDiscounted.setCaption(createMoneyCapation("Discount", currency));
-                amountDue.setCaption(createMoneyCapation("Amount Due", currency));
-            }
+        currency.addValueChangeListener((Property.ValueChangeListener) event -> {
+            calculateSummaries(null);
         });
 
         FormLayout basicsForm = new FormLayout(code, currency);
         basicsForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         basicsForm.setWidth("100%");
         return basicsForm;
-    }
-
-    private String createMoneyCapation(String caption, String currency) {
-        return caption + " (" + currency + ")";
     }
 
     protected HorizontalLayout createTermsForm() {
@@ -359,12 +358,8 @@ public abstract class CostEditView extends VerticalLayout implements View {
         return itemsTable;
     }
 
-    public TextField getTax() {
-        return tax;
-    }
-
-    public TextField getDiscount() {
-        return discount;
+    public TextField getDiscountPercentage() {
+        return discountPercentage;
     }
 
     public TextArea getNotes() {

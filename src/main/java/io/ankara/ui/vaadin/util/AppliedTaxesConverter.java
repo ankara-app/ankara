@@ -20,7 +20,7 @@ public class AppliedTaxesConverter implements Converter {
         Collection<AppliedTax> appliedTaxes = new LinkedList<>();
 
         for(Tax tax:taxes){
-            appliedTaxes.add(new AppliedTax(null,tax));
+            appliedTaxes.add(new AppliedTax(tax));
         }
 
         return appliedTaxes;

@@ -9,7 +9,12 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @author Boniface Chacha
@@ -87,7 +92,7 @@ public class Cost implements Serializable {
      */
     private boolean submitted;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Item> items;
 
     public Cost() {
@@ -101,7 +106,7 @@ public class Cost implements Serializable {
 
         this.discountPercentage = new BigDecimal("0.0");
 
-        if(company!=null){
+        if (company != null) {
             terms = company.getTerms();
             notes = company.getNotes();
         }
@@ -227,15 +232,15 @@ public class Cost implements Serializable {
         this.items = items;
     }
 
-    public BigDecimal getDiscountAmount(){
+    public BigDecimal getDiscountAmount() {
         return BigDecimal.ONE;
     }
 
-    public BigDecimal getSubtotal(){
+    public BigDecimal getSubtotal() {
         return BigDecimal.ONE;
     }
 
-    public BigDecimal getAmountDue(){
+    public BigDecimal getAmountDue() {
         return BigDecimal.ONE;
     }
 
@@ -276,5 +281,54 @@ public class Cost implements Serializable {
     @Override
     public String toString() {
         return getCompany() + " : " + getSubject();
+    }
+
+    public BigDecimal calculateSubtotal() {
+        BigDecimal subtotal = new BigDecimal("0.0");
+
+        for (Item item : getItems()) {
+            subtotal = subtotal.add(item.getAmount());
+        }
+
+        return subtotal;
+    }
+
+    public BigDecimal calculateDiscount() {
+        return calculateTaxedTotal().multiply(discountPercentage).divide(new BigDecimal("100"));
+    }
+
+    public BigDecimal calculateTax(Tax tax) {
+        BigDecimal total = new BigDecimal("0.0");
+
+        for(Item item:getItems()){
+            total = total.add(item.calculateTax(tax));
+        }
+        return total;
+    }
+
+    public BigDecimal calculateAmountDue() {
+        return calculateTaxedTotal().subtract(calculateDiscount());
+    }
+
+    public BigDecimal calculateTax() {
+        BigDecimal total = new BigDecimal("0.0");
+        for(Tax tax:getTaxes()){
+            total = total.add(calculateTax(tax));
+        }
+        return total;
+    }
+
+    public Set<Tax> getTaxes() {
+        HashSet<Tax> taxes = new HashSet<>();
+
+        for(Item item:items){
+            taxes.addAll(item.getTaxes().stream().map(appliedTax -> appliedTax.getTax()).collect(Collectors.toSet()));
+        }
+
+        return taxes;
+    }
+
+    public BigDecimal calculateTaxedTotal() {
+        return calculateSubtotal().add(calculateTax());
     }
 }

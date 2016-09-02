@@ -73,11 +73,7 @@ public class InvoiceEditView extends CostEditView {
         dueDate.setDescription("Specify invoice due date");
         dueDate.setWidth("100%");
 
-        HorizontalLayout dates = new HorizontalLayout(issueDate,dueDate);
-        dates.setWidth("100%");
-        dates.setSpacing(true);
-        dates.setMargin(new MarginInfo(true,false,false,false));
-        costDetailsLayout.addComponents(purchaseOrder,dates);
+        costDetailsLayout.addComponents(purchaseOrder,issueDate,dueDate);
         return costDetailsLayout;
     }
 
