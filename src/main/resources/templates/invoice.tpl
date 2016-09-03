@@ -182,9 +182,10 @@ div(class: "container-fluid") {
                     }
                 }
                 tbody {
+                    int index = 0;
                     cost.items.each { item ->
                         tr {
-                            th(scope: "row", class: "text-right", "1")
+                            th(scope: "row", class: "text-right", ++index)
                             td() { span(item.type.name) }
                             td() { span(item.description) }
                             td(class: "text-right") { span(item.quantity) }
@@ -205,7 +206,7 @@ div(class: "container-fluid") {
                         span(" Subtotal")
                     }
                     td(class: "text-right") {
-                        span(cost.subtotal)
+                        span(cost.calculateSubtotal())
                     }
                 }
 
@@ -213,10 +214,10 @@ div(class: "container-fluid") {
 
                     tr {
                         td(width: "50%", class: "caption text-right") {
-                            span("Discount($cost.discountPercentage %)")
+                            span("Discount(${cost.discountPercentage} %)")
                         }
                         td(class: "text-right") {
-                            span("$cost.discountAmount")
+                            span(cost.calculateDiscount())
                         }
                     }
 
@@ -235,7 +236,7 @@ div(class: "container-fluid") {
                         strong("Amount Due")
                     }
                     td(class: "text-right") {
-                        strong(cost.amountDue)
+                        strong(cost.calculateAmountDue())
                     }
                 }
             }

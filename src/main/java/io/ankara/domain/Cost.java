@@ -12,8 +12,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -230,18 +228,6 @@ public class Cost implements Serializable {
 
     public void setItems(List<Item> items) {
         this.items = items;
-    }
-
-    public BigDecimal getDiscountAmount() {
-        return BigDecimal.ONE;
-    }
-
-    public BigDecimal getSubtotal() {
-        return BigDecimal.ONE;
-    }
-
-    public BigDecimal getAmountDue() {
-        return BigDecimal.ONE;
     }
 
     @Override
