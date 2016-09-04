@@ -43,7 +43,7 @@ public class InvoicesHeader extends CustomComponent {
         createButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         createButton.addClickListener(event -> {
             ankaraUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
-            eventBus.publish(InvoiceEditView.TOPIC_CREATE,this,invoiceService.newInvoice());
+            eventBus.publish(InvoiceEditView.TOPIC_EDIT,this,invoiceService.newInvoice());
         });
         content.addComponent(createButton);
 

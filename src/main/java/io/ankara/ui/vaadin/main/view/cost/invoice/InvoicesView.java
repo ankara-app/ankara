@@ -25,7 +25,7 @@ public class InvoicesView extends CustomComponent implements View {
     private InvoicesHeader invoicesHeader;
 
     @Inject
-    private InvoicesGrid invoicesGrid;
+    private InvoicesTable invoicesTable;
 
     @PostConstruct
     private void build(){
@@ -38,13 +38,13 @@ public class InvoicesView extends CustomComponent implements View {
         invoicesHeader.setWidth("50%");
         content.addComponent(invoicesHeader);
 
-        invoicesGrid.setSizeFull();
-        content.addComponent(invoicesGrid);
-        content.setExpandRatio(invoicesGrid,1);
+        invoicesTable.setSizeFull();
+        content.addComponent(invoicesTable);
+        content.setExpandRatio(invoicesTable,1);
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        invoicesGrid.reload();
+        invoicesTable.reload();
     }
 }

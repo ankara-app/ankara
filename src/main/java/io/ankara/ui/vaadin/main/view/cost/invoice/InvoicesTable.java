@@ -4,6 +4,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Table;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 
 @UIScope
 @SpringComponent
-public class InvoicesGrid extends Grid {
+public class InvoicesTable extends Table {
 
     @Inject
     private InvoiceService invoiceService;
@@ -38,9 +39,8 @@ public class InvoicesGrid extends Grid {
 
     @PostConstruct
     private void build(){
-        setSelectionMode(Grid.SelectionMode.NONE);
         setContainerDataSource(new BeanItemContainer<>(Invoice.class));
-        setColumns("code", "timeCreated", "company", "customer","creator","subject");
+        setVisibleColumns("code", "timeCreated", "company", "customer","creator","subject");
 
         addItemClickListener(event -> {
             Invoice invoice = (Invoice) event.getItemId();

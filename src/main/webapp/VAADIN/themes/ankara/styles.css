@@ -2247,6 +2247,62 @@ div.v-layout.v-horizontal.v-widget {
  * @group valo-menu
  */
 
+@media print {
+	body * {
+		visibility: hidden;
+	}
+	.printSection, .printSection * {
+		visibility: visible;
+		top: 0px;
+		left: 0px;
+	}
+	@page {
+        margin: 0.5cm;
+    }
+}
+
+.left-vertical-line {
+	border-left: 1px solid #ddd;
+}
+
+.top5 {
+	margin-top: 5px;
+}
+
+.top7 {
+	margin-top: 7px;
+}
+
+.top10 {
+	margin-top: 10px;
+}
+
+.top15 {
+	margin-top: 15px;
+}
+
+.caption {
+	color: grey;
+	font-weight: 300;
+}
+
+.borderless td, .borderless th {
+	border: none !important;
+}
+
+.subject {
+	font-weight: 600;
+	font-size: 16px;
+}
+
+.pre {
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
+}
+
 .ankara.v-app, .ankara.v-app-loading {
 	font: 400 14px/1.55 Helvetica, Arial, "lucida grande", tahoma, verdana, arial, sans-serif;
 	color: #37404E;
@@ -13628,4 +13684,8 @@ div.v-layout.v-horizontal.v-widget {
 	display: inline-block;
 	width: 15px;
 	overflow: hidden;
+}
+
+.text-right {
+	text-align: right;
 }

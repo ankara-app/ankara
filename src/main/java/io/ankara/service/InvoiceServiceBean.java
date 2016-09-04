@@ -67,4 +67,15 @@ public class InvoiceServiceBean implements InvoiceService {
 
         return invoiceRepository.findAllByCompanyInOrderByTimeCreatedDesc(companies);
     }
+
+    @Override
+    public Invoice getInvoice(Long id) {
+        return invoiceRepository.findOne(id);
+    }
+
+    @Override
+    public boolean delete(Invoice invoice) {
+        invoiceRepository.delete(invoice);
+        return true;
+    }
 }

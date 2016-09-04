@@ -1,5 +1,7 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
+import com.google.gwt.thirdparty.guava.common.collect.BiMap;
+import com.google.gwt.thirdparty.guava.common.collect.HashBiMap;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -23,7 +25,10 @@ import org.vaadin.spring.events.EventBus;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 /**
@@ -49,7 +54,7 @@ public class ItemsTable extends Table {
 
     private Cost cost;
 
-    private Map<Integer, BeanFieldGroup<Item>> itemsFieldGroup = new IdentityHashMap<>();
+    private BiMap<Integer, BeanFieldGroup<Item>> itemsFieldGroup = HashBiMap.create();
 
     private Integer recentItemID = 0;
 
@@ -78,26 +83,19 @@ public class ItemsTable extends Table {
 
     }
 
-    public void addCostItem() {
-        Company company = cost.getCompany();
-        if (company == null) {
-            Notification.show("Select the company first", Notification.Type.WARNING_MESSAGE);
+    public void addCostItem(Item item) {
+        if (item.getCost().getCompany() == null) {
+            Notification.show("Specify company for the cost first", Notification.Type.WARNING_MESSAGE);
             return;
         }
-
-        addItem(getRow(recentItemID), recentItemID++);
+        addItem(getRow(recentItemID,item), recentItemID++);
     }
 
 
-    private Object[] getRow(int rowIndex) {
-
-        Item item = new Item(cost);
+    private Object[] getRow(int rowIndex, Item item) {
 
         List<ItemType> types = itemTypeService.getItemTypes(cost.getCompany());
-        if (!types.isEmpty()) {
-            ItemType defaultType = types.iterator().next();
-            item.setType(defaultType);
-        } else
+        if (types.isEmpty())
             Notification.show("Selected company cost item types have been not configured", Notification.Type.WARNING_MESSAGE);
 
         BeanFieldGroup<Item> fieldGroup = new BeanFieldGroup<>(Item.class);
@@ -122,11 +120,13 @@ public class ItemsTable extends Table {
         });
 
         Label amountLabel = new Label();
+        amountLabel.setValue(item.getAmount().setScale(2,RoundingMode.HALF_DOWN).toString());
+        amountLabel.addStyleName("text-right");
 
         quantity.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                calculateAmount(amountLabel, quantity, price);
+                amountLabel.setValue(item.getAmount().setScale(2, RoundingMode.HALF_DOWN).toString());
                 eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, rowIndex);
             }
         });
@@ -134,7 +134,7 @@ public class ItemsTable extends Table {
         price.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                calculateAmount(amountLabel, quantity, price);
+                amountLabel.setValue(item.getAmount().setScale(2,RoundingMode.HALF_DOWN).toString());
                 eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, rowIndex);
             }
         });
@@ -142,39 +142,58 @@ public class ItemsTable extends Table {
         return new Object[]{selector, description, quantity, price, amountLabel, appliedTaxes};
     }
 
-    private void calculateAmount(Label amountLabel, TextField quantity, TextField price) {
-        try {
-            Integer qty = (Integer) quantity.getConvertedValue();
-            BigDecimal prc = (BigDecimal) price.getConvertedValue();
-            amountLabel.setValue(prc.multiply(BigDecimal.valueOf(qty)).toString());
-        } catch (Converter.ConversionException | NumberFormatException e) {
-            Notification.show("Enter the item details correctly", Notification.Type.WARNING_MESSAGE);
-        }
+//    private void calculateAmount(Label amountLabel, TextField quantity, TextField price) {
+//        try {
+//            Integer qty = (Integer) quantity.getConvertedValue();
+//            BigDecimal prc = (BigDecimal) price.getConvertedValue();
+//            amountLabel.setValue(prc.multiply(BigDecimal.valueOf(qty)).toString());
+//        } catch (Converter.ConversionException | NumberFormatException e) {
+//            Notification.show("Enter the item details correctly", Notification.Type.WARNING_MESSAGE);
+//        }
+//
+//    }
 
-    }
-
-
+    /**
+     * Reset the state of the table view and its item tracking.
+     * Also it initialise empty items on the table ready for editing ONLY IF the cost instance has EMPTY items list
+     */
     public void reset() {
         removeAllItems();
         itemsFieldGroup.clear();
         setPageLength(0);
         recentItemID = 0;
 
-//if the cost has no items initialise 4 items to simplify user editing
+        initialiseCostItems();
+    }
+
+    /**
+     *  Initialise empty items on the table ready for editing ONLY IF the cost instance has EMPTY items list
+     */
+    public void initialiseCostItems(){
+        //if the cost has no items initialise 4 items to simplify user editing
         if (cost!=null && CollectionUtils.isEmpty(cost.getItems())) {
             //add 4 initial cost items
-            addCostItem();
-            addCostItem();
-            addCostItem();
-            addCostItem();
+            addCostItem(new Item(cost));
+            addCostItem(new Item(cost));
+            addCostItem(new Item(cost));
+            addCostItem(new Item(cost));
         }
-
-        eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, 0);
     }
 
     public void setCost(Cost cost) {
         this.cost = cost;
+        loadCostItems();
+    }
+
+    /**
+     * Load the items in the cost instance ready to be edited on the table
+     */
+    private void loadCostItems() {
         reset();
+
+        for(Item item:cost.getItems()){
+            addCostItem(item);
+        }
     }
 
     public Cost getCost() {
@@ -188,6 +207,7 @@ public class ItemsTable extends Table {
 
             if (ItemType.class.isAssignableFrom(dataType)) {
                 ComboBox selector = new ComboBox();
+                selector.setNullSelectionAllowed(false);
                 selector.setContainerDataSource(new BeanItemContainer<ItemType>(ItemType.class, itemTypeService.getItemTypes(cost.getCompany())));
                 selector.setWidth("100%");
                 selector.setRequired(true);
@@ -232,13 +252,14 @@ public class ItemsTable extends Table {
     }
 
     public List<Item> getItems() {
-        LinkedList items = new LinkedList();
+        LinkedList<Item> items = new LinkedList<>();
         //iterating with the row index to determine the order they were added and reserve it when saving to the database
-
-        for (BeanFieldGroup fieldGroup : itemsFieldGroup.values()) {
-            items.add(fieldGroup.getItemDataSource().getBean());
+        List itemIDs = getItemIds().stream().sorted((Comparator<Object>) (itemID1, itemID2) -> ((Integer)itemID1).compareTo((Integer)itemID2)).collect(Collectors.toList());
+        for (Object itemID : itemIDs) {
+            items.add(itemsFieldGroup.get(itemID).getItemDataSource().getBean());
         }
 
         return items;
+
     }
 }

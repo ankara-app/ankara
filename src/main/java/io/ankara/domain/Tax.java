@@ -118,6 +118,6 @@ public class Tax {
 
     @Override
     public String toString() {
-        return new StringBuilder().append(getName()).append(" (").append(percentage).append(" %)").toString();
+        return new StringBuilder().append(getName()).append(" (").append(percentage).append("%)").toString();
     }
 }

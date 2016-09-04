@@ -3,7 +3,6 @@ package io.ankara.ui.vaadin.main.view.cost.invoice;
 
 import com.vaadin.data.Property;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -30,7 +29,7 @@ import javax.inject.Inject;
 @SpringComponent
 public class InvoiceEditView extends CostEditView {
     public static final String VIEW_NAME = "InvoiceForm";
-    public static final String TOPIC_CREATE = "Create Invoice";
+    public static final String TOPIC_EDIT = "Create Invoice";
 
     private TextField purchaseOrder;
 
@@ -50,7 +49,7 @@ public class InvoiceEditView extends CostEditView {
 
     }
 
-    @EventBusListenerTopic(topic = TOPIC_CREATE)
+    @EventBusListenerTopic(topic = TOPIC_EDIT)
     @EventBusListenerMethod
     private void editInvoice(Invoice invoice){
         editCost(invoice);
@@ -86,18 +85,4 @@ public class InvoiceEditView extends CostEditView {
         }
     }
 
-    @Override
-    protected FormLayout createAssociatesForm() {
-        FormLayout layout = super.createAssociatesForm();
-
-        company.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                Company company = (Company) event.getProperty().getValue();
-                code.setValue(invoiceService.nextInvoiceNumber(company));
-            }
-        });
-
-        return layout;
-    }
 }

@@ -31,9 +31,6 @@ public class Company {
     @NotBlank
     private String name;
 
-    @Column(columnDefinition = "longtext")
-    private String paymentInformation;
-
     @Column(columnDefinition = "longtext not null")
     @NotBlank
     private String address;
@@ -73,6 +70,9 @@ public class Company {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
     private Set<Tax> taxes;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
+    private Set<Tax> itemTypes;
+
     public Company() {
         timeCreated = new Date();
     }
@@ -99,14 +99,6 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPaymentInformation() {
-        return paymentInformation;
-    }
-
-    public void setPaymentInformation(String paymentInformation) {
-        this.paymentInformation = paymentInformation;
     }
 
     public String getEmail() {
@@ -195,6 +187,14 @@ public class Company {
 
     public void setTaxes(Set<Tax> taxes) {
         this.taxes = taxes;
+    }
+
+    public Set<Tax> getItemTypes() {
+        return itemTypes;
+    }
+
+    public void setItemTypes(Set<Tax> itemTypes) {
+        this.itemTypes = itemTypes;
     }
 
     @Override

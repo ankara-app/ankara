@@ -44,7 +44,7 @@ public class Item {
 
     @Column(nullable = false)
     @NotNull
-    private Integer quantity;
+    private BigDecimal quantity;
 
     @Column(precision = 48, scale = 2,nullable = false)
     @NotNull
@@ -63,7 +63,7 @@ public class Item {
         this.cost = cost;
         this.type = type;
 
-        quantity = 1;
+        quantity = BigDecimal.ONE;
         price = BigDecimal.ZERO;
     }
 
@@ -72,7 +72,7 @@ public class Item {
     }
 
     public BigDecimal getAmount(){
-        return price.multiply(new BigDecimal(quantity));
+        return price.multiply(quantity);
     }
 
     public Long getId() {
@@ -107,11 +107,11 @@ public class Item {
         this.description = description;
     }
 
-    public Integer getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 

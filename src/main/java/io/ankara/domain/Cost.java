@@ -8,10 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -90,7 +87,8 @@ public class Cost implements Serializable {
      */
     private boolean submitted;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER,mappedBy = "cost")
+    @OrderBy("id")
     private List<Item> items;
 
     public Cost() {
@@ -103,6 +101,7 @@ public class Cost implements Serializable {
         this.code = code;
 
         this.discountPercentage = new BigDecimal("0.0");
+        this.items = new LinkedList<>();
 
         if (company != null) {
             terms = company.getTerms();

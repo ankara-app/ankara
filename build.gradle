@@ -30,6 +30,7 @@ jar {
 	baseName = 'ankara'
 	version = '0.0.1-SNAPSHOT'
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -37,6 +38,9 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	all*.exclude group: '', module: 'servlet-api'
+}
 
 dependencies {
 	compile "org.codehaus.groovy:groovy:${groovyVersion}"
@@ -63,6 +67,20 @@ dependencies {
 	compile 'com.vaadin:vaadin-themes:7.6.8'
 
 	compile 'org.vaadin.addon:confirmdialog:2.1.3'
+	compile 'org.vaadin.addon:easyuploads:7.4.10'
+
+	compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+
+	compile group: 'javax.servlet', name: 'jsp-api', version: '2.0'
+
+	compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.9'
+	compile group: 'com.itextpdf.tool', name: 'xmlworker', version: '5.5.9'
+// https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-pdf
+	compile group: 'org.xhtmlrenderer', name: 'flying-saucer-pdf', version: '9.0.9'
+
+// https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-core
+	compile group: 'org.xhtmlrenderer', name: 'flying-saucer-core', version: '9.0.9'
+
 }
 
 dependencyManagement {

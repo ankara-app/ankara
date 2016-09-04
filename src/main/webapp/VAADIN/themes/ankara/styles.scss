@@ -1,6 +1,11 @@
 @import "variables";
 @import "../valo/valo";
+@import "cost";
 
 .ankara {
    @include valo;
+}
+
+.text-right{
+   text-align: right;
 }

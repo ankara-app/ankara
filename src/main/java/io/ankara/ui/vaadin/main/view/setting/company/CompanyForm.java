@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Company;
 import io.ankara.service.CompanyService;
+import org.vaadin.easyuploads.ImagePreviewField;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -26,6 +27,8 @@ public class CompanyForm extends FormLayout {
     @Inject
     private CompanyService companyService;
 
+    private ImagePreviewField picture;
+
     private TextField name;
 
     private TextField email;
@@ -33,8 +36,6 @@ public class CompanyForm extends FormLayout {
     private TextField phone;
 
     private TextField fax;
-
-    private TextArea paymentInformation;
 
     private TextArea address;
 
@@ -55,6 +56,8 @@ public class CompanyForm extends FormLayout {
         addStyleName(ValoTheme.LAYOUT_WELL);
         addStyleName(ValoTheme.LAYOUT_CARD);
 
+        picture = new ImagePreviewField();
+
         name = new TextField("Name");
         name.setNullRepresentation("");
         name.setWidth("100%");
@@ -70,11 +73,6 @@ public class CompanyForm extends FormLayout {
         fax = new TextField("Fax");
         fax.setNullRepresentation("");
         fax.setWidth("100%");
-
-        paymentInformation = new TextArea("Payment Information");
-        paymentInformation.setNullRepresentation("");
-        paymentInformation.setWidth("100%");
-        paymentInformation.setRows(4);
 
         address = new TextArea("Address");
         address.setNullRepresentation("");
@@ -112,7 +110,7 @@ public class CompanyForm extends FormLayout {
                     Company company = (Company) fieldGroup.getItemDataSource().getBean();
                     if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
                         Notification.show("Company information saved successfully", Notification.Type.TRAY_NOTIFICATION);
-                        if(subWindow != null)
+                        if (subWindow != null)
                             subWindow.close();
                     }
                 } catch (FieldGroup.CommitException e) {
@@ -120,7 +118,8 @@ public class CompanyForm extends FormLayout {
                 }
             }
         });
-        addComponents(name, email, phone, fax,paymentInformation, address, description,notes,terms, save);
+
+        addComponents(picture,name, email, phone, fax, address, description, notes, terms, save);
 
     }
 

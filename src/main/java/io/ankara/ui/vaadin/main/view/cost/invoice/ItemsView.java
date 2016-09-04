@@ -7,6 +7,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import io.ankara.domain.Cost;
+import io.ankara.domain.Item;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -24,6 +26,8 @@ public class ItemsView extends VerticalLayout {
     @Inject
     private ItemsTable itemsTable;
 
+    private Cost cost;
+
     @PostConstruct
     private void build() {
         setWidth("100%");
@@ -36,9 +40,13 @@ public class ItemsView extends VerticalLayout {
         setComponentAlignment(addItem, Alignment.BOTTOM_RIGHT);
 
         addItem.addClickListener(event -> {
-            itemsTable.addCostItem();
+            itemsTable.addCostItem(new Item(cost));
         });
 
     }
 
+    public void setCost(Cost cost) {
+        this.cost = cost;
+        itemsTable.setCost(cost);
+    }
 }

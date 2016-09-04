@@ -1,6 +1,7 @@
 package io.ankara.service;
 
 import io.ankara.domain.Company;
+import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
 import io.ankara.domain.User;
 
@@ -22,4 +23,8 @@ public interface InvoiceService {
     boolean save(Invoice invoice);
 
     List<Invoice> getInvoices(User currentUser);
+
+    Invoice getInvoice(Long id);
+
+    boolean delete(Invoice cost);
 }

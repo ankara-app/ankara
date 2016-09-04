@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 8/24/16 1:48 AM
  */
 @Configuration
-public class TemplateConfig {
+public class TemplatesConfiguration {
 
     @Bean
     public MarkupTemplateEngine templateEngine() {
