@@ -81,7 +81,8 @@ public class InvoiceEditView extends CostEditView {
         Invoice invoice = (Invoice) cost;
         if(invoiceService.save(invoice)){
             Notification.show("Invoice saved successfully", Notification.Type.TRAY_NOTIFICATION);
-            ankaraUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
+            ankaraUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
+            eventBus.publish(InvoiceView.TOPIC_SHOW,this,invoice);
         }
     }
 

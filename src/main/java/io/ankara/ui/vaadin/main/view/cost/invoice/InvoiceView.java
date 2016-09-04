@@ -54,6 +54,7 @@ public class InvoiceView extends CostView implements View{
     @Override
     protected void delete(Cost cost) {
         invoiceService.delete((Invoice)cost);
+        ankaraUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
     }
 
     @Override

@@ -51,6 +51,7 @@ public class InvoicesTable extends Table {
 
     public void reload() {
         BeanItemContainer container = (BeanItemContainer) getContainerDataSource();
+        container.removeAllItems();
         container.addAll(invoiceService.getInvoices(userService.getCurrentUser()));
     }
 }
