@@ -1,13 +1,14 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
 
-import com.vaadin.data.Property;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
-import io.ankara.domain.Company;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.TextField;
 import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;

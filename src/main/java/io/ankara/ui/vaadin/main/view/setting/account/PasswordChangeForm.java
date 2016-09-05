@@ -8,8 +8,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.User;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.util.PasswordValidator;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

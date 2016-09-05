@@ -1,7 +1,6 @@
-import io.ankara.domain.Cost
+import com.sun.org.apache.xml.internal.security.utils.Base64
 
 import java.math.RoundingMode
-import com.sun.org.apache.xml.internal.security.utils.Base64
 
 //Cost cost;
 
@@ -35,7 +34,10 @@ div(class: "printSection") {
             }
             div(class: "col-xs-6") {
                 div(class: "row") {
-                    div(class: "col-xs-2 caption", "From")
+                    div(class: "col-xs-2"){
+                        span(class:"caption","From")
+                    }
+
                     div(class: "col-xs-10 left-vertical-line") {
                         address {
                             strong(cost.company.name) br()
@@ -45,7 +47,9 @@ div(class: "printSection") {
 
                             if (cost.company.phone) {
                                 tr {
-                                    td(width: "20%", class: "caption", "Phone")
+                                    td(width: "20%"){
+                                        span(class: "caption", "Phone")
+                                    }
                                     td {
                                         span(cost.company.phone)
                                     }
@@ -55,7 +59,9 @@ div(class: "printSection") {
                             if (cost.company.fax) {
 
                                 tr {
-                                    td(width: "20%", class: "caption", " Fax")
+                                    td(width: "20%"){
+                                        span(class: "caption", "Fax")
+                                    }
                                     td {
                                         span(cost.company.fax)
                                     }
@@ -65,7 +71,9 @@ div(class: "printSection") {
                             if (cost.company.email) {
 
                                 tr {
-                                    td(width: "20%", class: "caption", "Email")
+                                    td(width: "20%"){
+                                        span( class: "caption", "Email")
+                                    }
                                     td {
                                         span(cost.company.email)
                                     }
@@ -81,7 +89,9 @@ div(class: "printSection") {
         div(class: "row top10") {
             div(class: "col-xs-6") {
                 div(class: "row") {
-                    div(class: "col-xs-4 caption", "Invoice ID")
+                    div(class: "col-xs-4"){
+                        span(class:"caption", "Invoice ID")
+                    }
                     div(class: "col-xs-8 left-vertical-line") {
                         strong(cost.code)
                     }
@@ -89,7 +99,9 @@ div(class: "printSection") {
 
                 if (cost.purchaseOrder) {
                     div(class: "row") {
-                        div(class: "col-xs-4 caption", "PO Number")
+                        div(class: "col-xs-4"){
+                            span(class:"caption", "PO Number")
+                        }
                         div(class: "col-xs-8 left-vertical-line") {
                             strong(cost.purchaseOrder)
                         }
@@ -99,8 +111,8 @@ div(class: "printSection") {
 
                 if (cost.issueDate) {
                     div(class: "row top5") {
-                        div(class: "col-xs-4 caption") {
-                            span("Issue Date")
+                        div(class: "col-xs-4") {
+                            span(class:"caption","Issue Date")
                         }
                         div(class: "col-xs-8 left-vertical-line") {
                             span(cost.issueDate)
@@ -111,8 +123,8 @@ div(class: "printSection") {
                 if (cost.dueDate) {
                     div(class: "row") {
 
-                        div(class: "col-xs-4 caption") {
-                            span("Due Date")
+                        div(class: "col-xs-4") {
+                            span(class:"caption","Due Date")
                         }
                         div(class: "col-xs-8 left-vertical-line") {
                             span(cost.dueDate)
@@ -123,8 +135,8 @@ div(class: "printSection") {
 
                 div(class: "row top5") {
 
-                    div(class: "col-xs-4 caption") {
-                        span("Subject")
+                    div(class: "col-xs-4") {
+                        span(class:"caption","Subject")
                     }
                     div(class: "col-xs-8 left-vertical-line") {
                         span(class: "subject", cost.subject)
@@ -135,8 +147,8 @@ div(class: "printSection") {
             div(class: "col-xs-6") {
                 div(class: "row") {
 
-                    div(class: "col-xs-2 caption") {
-                        span("For")
+                    div(class: "col-xs-2") {
+                        span(class:"caption","For")
                     }
                     div(class: "col-xs-10 left-vertical-line") {
                         address {
@@ -146,7 +158,9 @@ div(class: "printSection") {
                         table(class: "table table-condensed") {
                             if (cost.customer.phone) {
                                 tr {
-                                    td(width: "20%", class: "caption", "Phone")
+                                    td(width: "20%"){
+                                        span(class: "caption", "Phone")
+                                    }
                                     td {
                                         span(cost.customer.phone)
                                     }
@@ -156,7 +170,9 @@ div(class: "printSection") {
                             if (cost.customer.fax) {
 
                                 tr {
-                                    td(width: "20%", class: "caption", " Fax")
+                                    td(width: "20%"){
+                                        span(class: "caption", "Fax")
+                                    }
                                     td {
                                         span(cost.customer.fax)
                                     }
@@ -166,7 +182,9 @@ div(class: "printSection") {
                             if (cost.customer.email) {
 
                                 tr {
-                                    td(width: "20%", class: "caption", "Email")
+                                    td(width: "20%"){
+                                        span(class: "caption", "Email")
+                                    }
                                     td {
                                         span(cost.customer.email)
                                     }
@@ -200,9 +218,9 @@ div(class: "printSection") {
                                 th(scope: "row", class: "text-right", ++index)
                                 td() { span(item.type.name) }
                                 td() { span(item.description) }
-                                td(class: "text-right") { span(item.quantity) }
-                                td(class: "text-right") { span("$item.price $cost.currency") }
-                                td(class: "text-right") { span("$item.amount $cost.currency") }
+                                td() { span(class: "text-right",item.quantity) }
+                                td() { span(class: "text-right","$item.price $cost.currency") }
+                                td() { span(class: "text-right","$item.amount $cost.currency") }
                             }
                         }
                     }
@@ -214,24 +232,24 @@ div(class: "printSection") {
             div(class: "col-xs-4 col-xs-offset-8 ") {
                 table(class: "table table-condensed borderless") {
                     tr {
-                        td(width: "50%", class: "caption text-right") {
-                            span(" Subtotal")
+                        td(width: "50%") {
+                            span(class: "caption text-right","Subtotal")
                         }
-                        td(class: "text-right") {
+                        td() {
                             BigDecimal subtotal = cost.calculateSubtotal().setScale(2, RoundingMode.HALF_DOWN)
-                            span("$subtotal $cost.currency")
+                            span(class: "text-right","$subtotal $cost.currency")
                         }
                     }
 
                     if (cost.discountPercentage) {
 
                         tr {
-                            td(width: "50%", class: "caption text-right") {
-                                span("Discount (${cost.discountPercentage}%)")
+                            td(width: "50%") {
+                                span(class: "caption text-right","Discount (${cost.discountPercentage}%)")
                             }
-                            td(class: "text-right") {
+                            td() {
                                 BigDecimal discount = cost.calculateDiscount().setScale(2, RoundingMode.HALF_DOWN)
-                                span("$discount $cost.currency")
+                                span(class: "text-right","$discount $cost.currency")
                             }
                         }
 
@@ -239,24 +257,24 @@ div(class: "printSection") {
 
                     cost.taxes.each { tax ->
                         tr {
-                            td(width: "50%", class: "caption text-right") {
-                                span(tax.toString())
+                            td(width: "50%") {
+                                span(class: "caption text-right",tax.toString())
                             }
-                            td(class: "text-right") {
+                            td() {
                                 BigDecimal taxAmount = cost.calculateTax(tax).setScale(2, RoundingMode.HALF_DOWN)
-                                span("$taxAmount $cost.currency")
+                                span(class: "text-right","$taxAmount $cost.currency")
                             }
                         }
                     }
 
 
                     tr {
-                        td(width: "50%", class: "text-right") {
-                            strong("Amount Due")
+                        td(width: "50%") {
+                            strong(class: "text-right","Amount Due")
                         }
-                        td(class: "text-right") {
+                        td() {
                             BigDecimal due = cost.calculateAmountDue().setScale(2, RoundingMode.HALF_DOWN)
-                            strong("$due $cost.currency")
+                            strong(class: "text-right","$due $cost.currency")
                         }
                     }
                 }

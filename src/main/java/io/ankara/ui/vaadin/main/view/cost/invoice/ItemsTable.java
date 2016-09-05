@@ -1,20 +1,17 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
-import com.google.gwt.thirdparty.guava.common.collect.BiMap;
-import com.google.gwt.thirdparty.guava.common.collect.HashBiMap;
-import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroupFieldFactory;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.Converter;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.Topics;
-import io.ankara.domain.*;
+import io.ankara.domain.Cost;
+import io.ankara.domain.Item;
+import io.ankara.domain.ItemType;
 import io.ankara.service.ItemTypeService;
 import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.util.AppliedTaxesConverter;
@@ -27,7 +24,6 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -54,7 +50,7 @@ public class ItemsTable extends Table {
 
     private Cost cost;
 
-    private BiMap<Integer, BeanFieldGroup<Item>> itemsFieldGroup = HashBiMap.create();
+    private Map<Integer, BeanFieldGroup<Item>> itemsFieldGroup = new HashMap();
 
     private Integer recentItemID = 0;
 
@@ -141,17 +137,6 @@ public class ItemsTable extends Table {
 
         return new Object[]{selector, description, quantity, price, amountLabel, appliedTaxes};
     }
-
-//    private void calculateAmount(Label amountLabel, TextField quantity, TextField price) {
-//        try {
-//            Integer qty = (Integer) quantity.getConvertedValue();
-//            BigDecimal prc = (BigDecimal) price.getConvertedValue();
-//            amountLabel.setValue(prc.multiply(BigDecimal.valueOf(qty)).toString());
-//        } catch (Converter.ConversionException | NumberFormatException e) {
-//            Notification.show("Enter the item details correctly", Notification.Type.WARNING_MESSAGE);
-//        }
-//
-//    }
 
     /**
      * Reset the state of the table view and its item tracking.

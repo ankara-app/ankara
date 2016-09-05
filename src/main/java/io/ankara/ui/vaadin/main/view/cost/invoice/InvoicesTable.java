@@ -3,7 +3,6 @@ package io.ankara.ui.vaadin.main.view.cost.invoice;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.Table;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;

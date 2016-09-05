@@ -1,15 +1,10 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import elemental.json.JsonArray;
 import groovy.text.markup.MarkupTemplateEngine;
 import io.ankara.domain.Cost;
 import org.vaadin.spring.events.EventBus;
@@ -17,7 +12,9 @@ import org.vaadin.spring.events.EventBus;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import java.io.*;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,11 +58,7 @@ public abstract class CostView extends CustomComponent {
         Button print = new Button("Print", FontAwesome.PRINT);
         print.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         print.addClickListener((Button.ClickListener) event -> {
-            try {
-                print(cost);
-            } catch (IOException | DocumentException e) {
-                e.printStackTrace();
-            }
+            print();
         });
 
         header = new HorizontalLayout(edit, delete, print);
@@ -85,7 +78,7 @@ public abstract class CostView extends CustomComponent {
     }
 
 
-    private void print(Cost cost) throws IOException, DocumentException {
+    private void print() {
         JavaScript.getCurrent().execute(
                 "window.print()"
         );

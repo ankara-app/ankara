@@ -1,11 +1,9 @@
 package io.ankara.service;
 
 import io.ankara.domain.Company;
-import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
 import io.ankara.domain.User;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
