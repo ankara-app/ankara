@@ -128,3 +128,6 @@ local.properties
 
 /src/main/webapp/VAADIN/gwt-unitCache/
 /src/main/webapp/VAADIN/widgetsets/
+/src/main/webapp/VAADIN/themes/ankara/styles.css
+src/main/resources/addon/
+src/main/webapp/VAADIN/themes/ankara/styles.css

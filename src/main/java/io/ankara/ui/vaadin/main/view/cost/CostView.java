@@ -83,22 +83,16 @@ public abstract class CostView extends CustomComponent {
 
         Map bindings = new HashMap<>();
         bindings.put("cost", cost);
-        VaadinSession.getCurrent().setAttribute("bindings",bindings);
-        VaadinSession.getCurrent().setAttribute("template",template);
 
-        templateLabel.setValue(generateCostHTML());
-    }
-
-    private String generateCostHTML() {
-        Map bindings = new HashMap<>();
-        bindings.put("cost", cost);
+        VaadinSession.getCurrent().setAttribute("bindings", bindings);
+        VaadinSession.getCurrent().setAttribute("template", template);
 
         try {
-            return templateEngine.generate(template, bindings);
+            templateLabel.setValue(templateEngine.generate(template, bindings));
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             Notification.show("Failed to render content", "Template " + template + " failed to be loaded.", Notification.Type.ERROR_MESSAGE);
-            return null;
+            templateLabel.setValue("Failed to render content");
         }
     }
 

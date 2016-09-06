@@ -1,13 +1,4 @@
 @media print {
-    body * {
-        visibility: hidden !important;
-    }
-
-    .printSection, .printSection * {
-        visibility: visible !important;
-        top: 0px !important;
-        left: 0px !important;
-    }
 
     .left-vertical-line {
         border-left: 1px solid #ddd;

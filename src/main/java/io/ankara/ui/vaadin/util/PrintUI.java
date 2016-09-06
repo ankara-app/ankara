@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.util;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -20,6 +21,7 @@ import java.util.Map;
  * @date 9/5/16 7:35 PM
  */
 @SpringUI(path = "/print")
+@Theme("bootstrap")
 public class PrintUI extends UI {
 
     @Inject
@@ -43,9 +45,15 @@ public class PrintUI extends UI {
 
         setContent(new Label(content,ContentMode.HTML));
 
-        // Print automatically when the window opens
+//         Print automatically when the window opens
+        //         Print automatically when the window opens
         JavaScript.getCurrent().execute(
                 "setTimeout(function() {" +
-                        "  print(); self.close();}, 0);");
+                        "  var originalContents = document.body.innerHTML;\n" +
+                        "        var printReport= document.getElementById('printSection').innerHTML;\n" +
+                        "        document.body.innerHTML = printReport;\n" +
+                        "        window.print();\n" +
+                        "        document.body.innerHTML = originalContents" +
+                        "; self.close();}, 0);");
     }
 }
