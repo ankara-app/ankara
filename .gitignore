@@ -132,3 +132,4 @@ local.properties
 src/main/resources/addon/
 src/main/webapp/VAADIN/themes/ankara/styles.css
 /src/main/webapp/VAADIN/themes/bootstrap/addons.scss
+/src/main/webapp/VAADIN/themes/bootstrap/styles.css.map

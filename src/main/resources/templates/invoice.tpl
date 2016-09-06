@@ -11,7 +11,8 @@ import java.math.RoundingMode
 //script(src: "https://printjs-4de6.kxcdn.com/print.min.js", type: "text/javacript"){}
 //link(rel: "stylesheet", "https://printjs-4de6.kxcdn.com/print.min.css")
 
-div(id: "printSection", class: "container-fluid") {
+// On the printing UI we use bootstrap theme which comes with the necessary styles
+if(!printing){
     link(rel: "stylesheet",
             href: "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css",
             integrity: "sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u",
@@ -21,6 +22,9 @@ div(id: "printSection", class: "container-fluid") {
             href: "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css",
             integrity: "sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp",
             crossorigin: "anonymous")
+}
+
+div(id: "printSection", class: "container-fluid") {
 
     div(class: "row top10") {
         div(class: "col-xs-6") {
@@ -219,9 +223,9 @@ div(id: "printSection", class: "container-fluid") {
                             th(scope: "row", class: "text-right", ++index)
                             td() { span(item.type.name) }
                             td() { span(item.description) }
-                            td() { span(class: "text-right", item.quantity) }
-                            td() { span(class: "text-right", "$item.price $cost.currency") }
-                            td() { span(class: "text-right", "$item.amount $cost.currency") }
+                            td(class: "text-right") { span(item.quantity) }
+                            td(class: "text-right") { span("$item.price $cost.currency") }
+                            td(class: "text-right") { span( "$item.amount $cost.currency") }
                         }
                     }
                 }
@@ -230,27 +234,27 @@ div(id: "printSection", class: "container-fluid") {
     }
 
     div(class: "row top10") {
-        div(class: "col-xs-4 col-xs-offset-8 ") {
+        div(class: "col-xs-6 col-xs-offset-6 ") {
             table(class: "table table-condensed borderless") {
                 tr {
-                    td(width: "50%") {
-                        span(class: "caption text-right", "Subtotal")
+                    td(width: "50%",class: "text-right") {
+                        span(class: "caption","Subtotal")
                     }
-                    td() {
+                    td(class: "text-right") {
                         BigDecimal subtotal = cost.calculateSubtotal().setScale(2, RoundingMode.HALF_DOWN)
-                        span(class: "text-right", "$subtotal $cost.currency")
+                        span( "$subtotal $cost.currency")
                     }
                 }
 
                 if (cost.discountPercentage) {
 
                     tr {
-                        td(width: "50%") {
-                            span(class: "caption text-right", "Discount (${cost.discountPercentage}%)")
+                        td(width: "50%",class: "text-right") {
+                            span(class: "caption", "Discount (${cost.discountPercentage}%)")
                         }
-                        td() {
+                        td(class: "text-right") {
                             BigDecimal discount = cost.calculateDiscount().setScale(2, RoundingMode.HALF_DOWN)
-                            span(class: "text-right", "$discount $cost.currency")
+                            span( "$discount $cost.currency")
                         }
                     }
 
@@ -258,24 +262,24 @@ div(id: "printSection", class: "container-fluid") {
 
                 cost.taxes.each { tax ->
                     tr {
-                        td(width: "50%") {
-                            span(class: "caption text-right", tax.toString())
+                        td(width: "50%",class: "text-right") {
+                            span(class: "caption", tax.toString())
                         }
-                        td() {
+                        td(class: "text-right") {
                             BigDecimal taxAmount = cost.calculateTax(tax).setScale(2, RoundingMode.HALF_DOWN)
-                            span(class: "text-right", "$taxAmount $cost.currency")
+                            span( "$taxAmount $cost.currency")
                         }
                     }
                 }
 
 
                 tr {
-                    td(width: "50%") {
-                        strong(class: "text-right", "Amount Due")
+                    td(width: "50%",class: "text-right") {
+                        strong("Amount Due")
                     }
-                    td() {
+                    td(class: "text-right") {
                         BigDecimal due = cost.calculateAmountDue().setScale(2, RoundingMode.HALF_DOWN)
-                        strong(class: "text-right", "$due $cost.currency")
+                        strong( "$due $cost.currency")
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.util;
+package io.ankara.ui.vaadin.main;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
@@ -12,6 +12,7 @@ import io.ankara.AnkaraTemplateEngine;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,7 +32,9 @@ public class PrintUI extends UI {
     protected void init(VaadinRequest request) {
         // Have some content to print
 
-        Map bindings = (Map) VaadinSession.getCurrent().getAttribute("bindings");
+        Map bindings = new HashMap((Map) VaadinSession.getCurrent().getAttribute("bindings"));
+        bindings.put("printing",true);
+
         String template = (String) VaadinSession.getCurrent().getAttribute("template");
 
         String content;
