@@ -1,20 +1,20 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import groovy.text.markup.MarkupTemplateEngine;
+import io.ankara.AnkaraTemplateEngine;
 import io.ankara.domain.Cost;
+import io.ankara.ui.vaadin.util.HTMLPrintButton;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public abstract class CostView extends CustomComponent {
     private Label templateLabel;
 
     @Inject
-    private MarkupTemplateEngine templateEngine;
+    private AnkaraTemplateEngine templateEngine;
 
     @Inject
     protected EventBus.UIEventBus eventBus;
@@ -55,11 +55,8 @@ public abstract class CostView extends CustomComponent {
         delete.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         delete.addClickListener((Button.ClickListener) event -> delete(cost));
 
-        Button print = new Button("Print", FontAwesome.PRINT);
+        Button print = new HTMLPrintButton("Print", FontAwesome.PRINT);
         print.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        print.addClickListener((Button.ClickListener) event -> {
-            print();
-        });
 
         header = new HorizontalLayout(edit, delete, print);
         content = new VerticalLayout();
@@ -77,13 +74,6 @@ public abstract class CostView extends CustomComponent {
         setCompositionRoot(root);
     }
 
-
-    private void print() {
-        JavaScript.getCurrent().execute(
-                "window.print()"
-        );
-    }
-
     protected abstract void delete(Cost cost);
 
     protected abstract void edit(Cost cost);
@@ -91,19 +81,20 @@ public abstract class CostView extends CustomComponent {
     public void setCost(Cost cost) {
         this.cost = cost;
 
+        Map bindings = new HashMap<>();
+        bindings.put("cost", cost);
+        VaadinSession.getCurrent().setAttribute("bindings",bindings);
+        VaadinSession.getCurrent().setAttribute("template",template);
+
         templateLabel.setValue(generateCostHTML());
     }
 
     private String generateCostHTML() {
-
         Map bindings = new HashMap<>();
         bindings.put("cost", cost);
+
         try {
-            Writer content = new StringWriter();
-            templateEngine.createTemplateByPath("templates/" + template).make(bindings).writeTo(content);
-
-            return content.toString();
-
+            return templateEngine.generate(template, bindings);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             Notification.show("Failed to render content", "Template " + template + " failed to be loaded.", Notification.Type.ERROR_MESSAGE);

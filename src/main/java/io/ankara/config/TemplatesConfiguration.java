@@ -2,6 +2,7 @@ package io.ankara.config;
 
 import groovy.text.markup.MarkupTemplateEngine;
 import groovy.text.markup.TemplateConfiguration;
+import io.ankara.AnkaraTemplateEngine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,12 +16,17 @@ import org.springframework.context.annotation.Configuration;
 public class TemplatesConfiguration {
 
     @Bean
-    public MarkupTemplateEngine templateEngine() {
+    public MarkupTemplateEngine markupTemplateEngine() {
         TemplateConfiguration config = new TemplateConfiguration();
         config.setAutoEscape(true);
         config.setAutoIndent(true);
         MarkupTemplateEngine templateEngine = new MarkupTemplateEngine(config);
 
         return templateEngine;
+    }
+
+    @Bean
+    public AnkaraTemplateEngine ankaraTemplateEngine(){
+        return new AnkaraTemplateEngine();
     }
 }
