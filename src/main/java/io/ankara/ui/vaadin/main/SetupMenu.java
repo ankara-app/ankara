@@ -7,7 +7,6 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.User;
 import io.ankara.service.UserService;
-import io.ankara.ui.vaadin.AnkaraUI;
 import io.ankara.ui.vaadin.main.view.setting.SettingView;
 import org.vaadin.spring.security.VaadinSecurity;
 
@@ -31,7 +30,7 @@ public class SetupMenu extends CustomComponent {
     private UserService userService;
 
     @Inject
-    private AnkaraUI ankaraUI;
+    private MainUI mainUI;
 
     private MenuBar.MenuItem settings;
 
@@ -47,7 +46,7 @@ public class SetupMenu extends CustomComponent {
         settings.addItem("Settings", new MenuBar.Command() {
             @Override
             public void menuSelected(MenuBar.MenuItem selectedItem) {
-                ankaraUI.getNavigator().navigateTo(SettingView.VIEW_NAME);
+                mainUI.getNavigator().navigateTo(SettingView.VIEW_NAME);
             }
         });
         settings.addSeparator();

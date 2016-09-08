@@ -7,7 +7,7 @@ import com.vaadin.ui.Table;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
-import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.main.MainUI;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
@@ -31,7 +31,7 @@ public class InvoicesTable extends Table {
     private UserService userService;
 
     @Inject
-    private AnkaraUI ankaraUI;
+    private MainUI mainUI;
 
     @Inject
     private EventBus.UIEventBus eventBus;
@@ -43,7 +43,7 @@ public class InvoicesTable extends Table {
 
         addItemClickListener(event -> {
             Invoice invoice = (Invoice) event.getItemId();
-            ankaraUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
+            mainUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
             eventBus.publish(InvoiceView.TOPIC_SHOW,this,invoice);
         });
     }

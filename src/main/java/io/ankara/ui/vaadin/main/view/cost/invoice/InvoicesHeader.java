@@ -6,7 +6,6 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.PopupView;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Company;
 import io.ankara.domain.Invoice;
@@ -14,17 +13,14 @@ import io.ankara.domain.User;
 import io.ankara.service.CompanyService;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
-import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.util.CompanySelectorWindow;
 import io.ankara.ui.vaadin.util.SearchField;
-import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * @author Boniface Chacha
@@ -49,7 +45,7 @@ public class InvoicesHeader extends CustomComponent {
     private UserService userService;
 
     @Inject
-    private AnkaraUI ankaraUI;
+    private MainUI mainUI;
 
     @Inject
     private CompanySelectorWindow companySelectorWindow;
@@ -98,7 +94,7 @@ public class InvoicesHeader extends CustomComponent {
     }
 
     private void navigateInvoiceCreateView(Invoice invoice) {
-        ankaraUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
+        mainUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
         eventBus.publish(InvoiceEditView.TOPIC_EDIT, this, invoice);
     }
 }

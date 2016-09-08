@@ -63,8 +63,10 @@ dependencies {
 	compile 'org.vaadin.spring.extensions:vaadin-spring-ext-security:0.0.7.RELEASE'
 	compile 'org.vaadin.spring.addons:vaadin-spring-addon-eventbus:0.0.7.RELEASE'
 	compile 'org.vaadin.spring.addons:vaadin-spring-addon-simple-mvp:0.0.7.RELEASE'
-//// https://mvnrepository.com/artifact/com.vaadin/vaadin-shared-deps
+
 	compile group: 'com.vaadin', name: 'vaadin-shared-deps', version: '1.0.3'
+
+	compile group: 'com.vaadin', name: 'vaadin-push', version: '7.7.0'
 
 //	compile 'com.vaadin:vaadin-themes:7.6.8'
 

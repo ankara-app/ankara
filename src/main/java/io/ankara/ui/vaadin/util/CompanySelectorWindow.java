@@ -11,7 +11,7 @@ import com.vaadin.ui.Window;
 import io.ankara.domain.Company;
 import io.ankara.service.CompanyService;
 import io.ankara.ui.vaadin.AnkaraTheme;
-import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.main.MainUI;
 
 import javax.inject.Inject;
 import java.util.function.Consumer;
@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 public class CompanySelectorWindow extends Window {
 
     @Inject
-    private AnkaraUI ankaraUI;
+    private MainUI mainUI;
 
     @Inject
     private CompanyService companyService;
@@ -70,6 +70,6 @@ public class CompanySelectorWindow extends Window {
         companySelector.removeAllItems();
         companySelector.addItems(companyService.getCurrentUserCompanies());
 
-        ankaraUI.addWindow(this);
+        mainUI.addWindow(this);
     }
 }

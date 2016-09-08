@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.vaadin.spring.security.annotation.EnableVaadinManagedSecurity;
 
 @SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
-@EnableVaadinManagedSecurity
 public class AnkaraApplication {
 
 	public static void main(String[] args) {

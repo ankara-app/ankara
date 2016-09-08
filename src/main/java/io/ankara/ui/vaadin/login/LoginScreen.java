@@ -1,48 +1,37 @@
-/*
- * Copyright 2015 The original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.ankara.ui.vaadin.login;
 
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.vaadin.spring.annotation.PrototypeScope;
-import org.vaadin.spring.events.EventBus;
-import org.vaadin.spring.security.VaadinSecurity;
-import org.vaadin.spring.security.util.SuccessfulLoginEvent;
+import org.vaadin.spring.security.shared.VaadinSharedSecurity;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 /**
- * Full-screen UI component that allows the user to login.
- *
- * @author Petter Holmström (petter@vaadin.com)
+ * @author Boniface Chacha
+ * @email boniface.chacha@niafikra.com
+ * @email bonifacechacha@gmail.com
+ * @date 9/8/16.
  */
 @PrototypeScope
 @SpringComponent
 public class LoginScreen extends CustomComponent {
 
-    private final VaadinSecurity vaadinSecurity;
-    private final EventBus.SessionEventBus eventBus;
+    @Inject
+    private VaadinSharedSecurity vaadinSecurity;
 
     private TextField userName;
 
     private PasswordField passwordField;
+
+    private CheckBox rememberMe;
 
     private Button login;
 
@@ -50,18 +39,8 @@ public class LoginScreen extends CustomComponent {
 
     private Label loggedOutLabel;
 
-    @Autowired
-    public LoginScreen(VaadinSecurity vaadinSecurity, EventBus.SessionEventBus eventBus) {
-        this.vaadinSecurity = vaadinSecurity;
-        this.eventBus = eventBus;
-        initLayout();
-    }
-
-    public void setLoggedOut(boolean loggedOut) {
-        loggedOutLabel.setVisible(loggedOut);
-    }
-
-    private void initLayout() {
+    @PostConstruct
+    protected void build() {
         FormLayout loginForm = new FormLayout();
         loginForm.setSizeUndefined();
         loginForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
@@ -69,9 +48,11 @@ public class LoginScreen extends CustomComponent {
         userName.setWidth("300px");
         passwordField = new PasswordField("Password");
         passwordField.setWidth("300px");
+        rememberMe = new CheckBox("Remember me");
         login = new Button("Login");
         loginForm.addComponent(userName);
         loginForm.addComponent(passwordField);
+        loginForm.addComponent(rememberMe);
         loginForm.addComponent(login);
         login.addStyleName(ValoTheme.BUTTON_PRIMARY);
         login.setDisableOnClick(true);
@@ -85,7 +66,7 @@ public class LoginScreen extends CustomComponent {
 
         VerticalLayout loginLayout = new VerticalLayout();
         loginLayout.setSizeUndefined();
-        
+
         loginFailedLabel = new Label();
         loginLayout.addComponent(loginFailedLabel);
         loginLayout.setComponentAlignment(loginFailedLabel, Alignment.BOTTOM_CENTER);
@@ -112,13 +93,7 @@ public class LoginScreen extends CustomComponent {
 
     private void login() {
         try {
-            loggedOutLabel.setVisible(false);
-
-            String password = passwordField.getValue();
-            passwordField.setValue("");
-
-            final Authentication authentication = vaadinSecurity.login(userName.getValue(), password);
-            eventBus.publish(this, new SuccessfulLoginEvent(getUI(), authentication));
+            Authentication authentication = vaadinSecurity.login(userName.getValue(), passwordField.getValue(), rememberMe.getValue());
         } catch (AuthenticationException ex) {
             userName.focus();
             userName.selectAll();
@@ -128,7 +103,9 @@ public class LoginScreen extends CustomComponent {
             Notification.show("An unexpected error occurred", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
             LoggerFactory.getLogger(getClass()).error("Unexpected error while logging in", ex);
         } finally {
+            passwordField.setValue("");
             login.setEnabled(true);
         }
     }
+
 }

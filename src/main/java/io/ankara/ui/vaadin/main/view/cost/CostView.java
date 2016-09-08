@@ -8,7 +8,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.AnkaraTemplateEngine;
 import io.ankara.domain.Cost;
-import io.ankara.ui.vaadin.util.HTMLPrintButton;
+import io.ankara.ui.vaadin.print.HTMLPrintButton;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;

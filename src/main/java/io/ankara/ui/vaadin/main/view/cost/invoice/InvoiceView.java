@@ -8,7 +8,7 @@ import com.vaadin.spring.annotation.UIScope;
 import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
-import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.CostView;
@@ -32,7 +32,7 @@ public class InvoiceView extends CostView implements View{
     public static final String TOPIC_SHOW = "Show Invoice";
 
     @Inject
-    private AnkaraUI ankaraUI;
+    private MainUI mainUI;
 
     @Inject
     private ViewHeader viewHeader;
@@ -59,12 +59,12 @@ public class InvoiceView extends CostView implements View{
     @Override
     protected void delete(Cost cost) {
         invoiceService.delete((Invoice)cost);
-        ankaraUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
+        mainUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
     }
 
     @Override
     protected void edit(Cost cost) {
-        ankaraUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
+        mainUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
         eventBus.publish(InvoiceEditView.TOPIC_EDIT,this,invoiceService.getInvoice(cost.getId()));
     }
 }

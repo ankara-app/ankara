@@ -12,7 +12,7 @@ import com.vaadin.ui.TextField;
 import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
-import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.CostEditView;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -43,7 +43,7 @@ public class InvoiceEditView extends CostEditView {
     private InvoiceService invoiceService;
 
     @Inject
-    private AnkaraUI ankaraUI;
+    private MainUI mainUI;
 
     @Inject
     private ViewHeader viewHeader;
@@ -86,7 +86,7 @@ public class InvoiceEditView extends CostEditView {
         Invoice invoice = (Invoice) cost;
         if(invoiceService.save(invoice)){
             Notification.show("Invoice saved successfully", Notification.Type.TRAY_NOTIFICATION);
-            ankaraUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
+            mainUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
             eventBus.publish(InvoiceView.TOPIC_SHOW,this,invoice);
         }
     }

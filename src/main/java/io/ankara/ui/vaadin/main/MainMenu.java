@@ -25,7 +25,7 @@ import javax.inject.Inject;
 public class MainMenu extends CustomComponent {
 
     @Inject
-    private UI ankaraUI;
+    private MainUI ankaraUI;
 
     @PostConstruct
     private void build() {

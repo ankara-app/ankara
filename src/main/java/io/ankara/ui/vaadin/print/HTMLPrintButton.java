@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.util;
+package io.ankara.ui.vaadin.print;
 
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.Resource;

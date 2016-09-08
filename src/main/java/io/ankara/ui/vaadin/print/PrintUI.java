@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.main;
+package io.ankara.ui.vaadin.print;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
