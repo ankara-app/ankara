@@ -14,6 +14,7 @@ import io.ankara.domain.Item;
 import io.ankara.domain.ItemType;
 import io.ankara.service.ItemTypeService;
 import io.ankara.service.TaxService;
+import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.util.AppliedTaxesConverter;
 import io.ankara.ui.vaadin.util.RemoveItemButtonGenerator;
 import org.springframework.util.CollectionUtils;
@@ -54,6 +55,8 @@ public class ItemsTable extends Table {
 
     private Integer recentItemID = 0;
 
+    private boolean ignoreSummaryCalculateRequest = false;
+
     @PostConstruct
     private void build() {
         setWidth("100%");
@@ -73,10 +76,22 @@ public class ItemsTable extends Table {
             protected void removeItem(Object itemID) {
                 ItemsTable.this.removeItem(itemID);
                 itemsFieldGroup.remove(itemID);
-                eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, itemID);
+                requestSummaryCalculation(itemID);
             }
         };
 
+        setColumnExpandRatio("description", 3);
+        setColumnExpandRatio("amount", 1);
+        setColumnExpandRatio("price", 1);
+        setColumnWidth("quantity", 100);
+        setColumnWidth("taxes", 100);
+        setColumnWidth("type", 150);
+        setColumnWidth("", 30);
+    }
+
+    private void requestSummaryCalculation(Object changedRowIndex) {
+        if (!ignoreSummaryCalculateRequest)
+            eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, changedRowIndex);
     }
 
     public void addCostItem(Item item) {
@@ -84,7 +99,7 @@ public class ItemsTable extends Table {
             Notification.show("Specify company for the cost first", Notification.Type.WARNING_MESSAGE);
             return;
         }
-        addItem(getRow(recentItemID,item), recentItemID++);
+        addItem(getRow(recentItemID, item), recentItemID++);
     }
 
 
@@ -108,30 +123,32 @@ public class ItemsTable extends Table {
         TextField price = (TextField) fieldGroup.buildAndBind("price");
 
         OptionGroup appliedTaxes = (OptionGroup) fieldGroup.buildAndBind("taxes");
+        appliedTaxes.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
+        appliedTaxes.addStyleName(AnkaraTheme.TEXT_SMALL);
         appliedTaxes.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, rowIndex);
+                requestSummaryCalculation(rowIndex);
             }
         });
 
         Label amountLabel = new Label();
-        amountLabel.setValue(item.getAmount().setScale(2,RoundingMode.HALF_DOWN).toString());
+        amountLabel.setValue(item.getAmount().setScale(2, RoundingMode.HALF_DOWN).toString());
         amountLabel.addStyleName("text-right");
 
         quantity.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 amountLabel.setValue(item.getAmount().setScale(2, RoundingMode.HALF_DOWN).toString());
-                eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, rowIndex);
+                requestSummaryCalculation(rowIndex);
             }
         });
 
         price.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                amountLabel.setValue(item.getAmount().setScale(2,RoundingMode.HALF_DOWN).toString());
-                eventBus.publish(Topics.TOPIC_COST_CALCULATE_SUMMARIES, this, rowIndex);
+                amountLabel.setValue(item.getAmount().setScale(2, RoundingMode.HALF_DOWN).toString());
+                requestSummaryCalculation(rowIndex);
             }
         });
 
@@ -152,11 +169,11 @@ public class ItemsTable extends Table {
     }
 
     /**
-     *  Initialise empty items on the table ready for editing ONLY IF the cost instance has EMPTY items list
+     * Initialise empty items on the table ready for editing ONLY IF the cost instance has EMPTY items list
      */
-    public void initialiseCostItems(){
+    public void initialiseCostItems() {
         //if the cost has no items initialise 4 items to simplify user editing
-        if (cost!=null && CollectionUtils.isEmpty(cost.getItems())) {
+        if (cost != null && CollectionUtils.isEmpty(cost.getItems())) {
             //add 4 initial cost items
             addCostItem(new Item(cost));
             addCostItem(new Item(cost));
@@ -176,7 +193,7 @@ public class ItemsTable extends Table {
     private void loadCostItems() {
         reset();
 
-        for(Item item:cost.getItems()){
+        for (Item item : cost.getItems()) {
             addCostItem(item);
         }
     }
@@ -239,12 +256,20 @@ public class ItemsTable extends Table {
     public List<Item> getItems() {
         LinkedList<Item> items = new LinkedList<>();
         //iterating with the row index to determine the order they were added and reserve it when saving to the database
-        List itemIDs = getItemIds().stream().sorted((Comparator<Object>) (itemID1, itemID2) -> ((Integer)itemID1).compareTo((Integer)itemID2)).collect(Collectors.toList());
+        List itemIDs = getItemIds().stream().sorted((Comparator<Object>) (itemID1, itemID2) -> ((Integer) itemID1).compareTo((Integer) itemID2)).collect(Collectors.toList());
         for (Object itemID : itemIDs) {
             items.add(itemsFieldGroup.get(itemID).getItemDataSource().getBean());
         }
 
         return items;
 
+    }
+
+    public Map<Integer, BeanFieldGroup<Item>> getItemsFieldGroup() {
+        return itemsFieldGroup;
+    }
+
+    public void setIgnoreSummaryCalculateRequest(boolean ignoreSummaryCalculateRequest) {
+        this.ignoreSummaryCalculateRequest = ignoreSummaryCalculateRequest;
     }
 }

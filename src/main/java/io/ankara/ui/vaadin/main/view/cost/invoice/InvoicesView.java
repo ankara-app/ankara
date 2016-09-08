@@ -6,6 +6,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
+import io.ankara.ui.vaadin.main.view.ViewHeader;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -27,6 +28,9 @@ public class InvoicesView extends CustomComponent implements View {
     @Inject
     private InvoicesTable invoicesTable;
 
+    @Inject
+    private ViewHeader viewHeader;
+
     @PostConstruct
     private void build(){
         setSizeFull();
@@ -46,5 +50,6 @@ public class InvoicesView extends CustomComponent implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         invoicesTable.reload();
+        viewHeader.setValue("Invoices");
     }
 }

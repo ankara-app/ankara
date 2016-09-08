@@ -17,8 +17,7 @@ public abstract class RemoveItemButtonGenerator implements Table.ColumnGenerator
 
     @Override
     public Object generateCell(Table source, Object itemId, Object columnId) {
-        return new RemoveItemButton(source.getContainerDataSource(), itemId){
-
+        return new RemoveItemButton(itemId){
             @Override
             public void removeItem(Object itemID) {
                 RemoveItemButtonGenerator.this.removeItem(itemID);

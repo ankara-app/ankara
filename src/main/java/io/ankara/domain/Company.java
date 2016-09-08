@@ -71,7 +71,7 @@ public class Company {
     private Set<Tax> taxes;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
-    private Set<Tax> itemTypes;
+    private Set<ItemType> itemTypes;
 
     public Company() {
         timeCreated = new Date();
@@ -189,11 +189,11 @@ public class Company {
         this.taxes = taxes;
     }
 
-    public Set<Tax> getItemTypes() {
+    public Set<ItemType> getItemTypes() {
         return itemTypes;
     }
 
-    public void setItemTypes(Set<Tax> itemTypes) {
+    public void setItemTypes(Set<ItemType> itemTypes) {
         this.itemTypes = itemTypes;
     }
 

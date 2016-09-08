@@ -2,6 +2,8 @@ package io.ankara.ui.vaadin;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import io.ankara.ui.vaadin.login.LoginScreen;
@@ -12,6 +14,8 @@ import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.security.VaadinSecurity;
 import org.vaadin.spring.security.util.SuccessfulLoginEvent;
+
+import java.util.Locale;
 
 /**
  * @author Boniface Chacha
@@ -35,6 +39,7 @@ public class AnkaraUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         getPage().setTitle("ankara - Simplifying billing and documentation");
+        VaadinSession.getCurrent().setLocale( new Locale("en", "EN"));
 
         if (vaadinSecurity.isAuthenticated()) {
             showMainScreen();

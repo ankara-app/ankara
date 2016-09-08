@@ -1,5 +1,6 @@
 package io.ankara.domain;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
@@ -42,7 +43,7 @@ public class Item {
     @NotBlank
     private String description;
 
-    @Column(nullable = false)
+    @Column(precision = 48, scale = 2,nullable = false)
     @NotNull
     private BigDecimal quantity;
 
@@ -188,5 +189,12 @@ public class Item {
 
     public Optional<AppliedTax> getAppliedTax(Tax tax) {
         return getTaxes().stream().filter(appliedTax -> appliedTax.getTax().equals(tax)).findFirst();
+    }
+
+    public void addTax(Tax tax) {
+        if(taxes == null)
+            taxes = new LinkedList<>();
+
+        taxes.add(new AppliedTax(tax));
     }
 }

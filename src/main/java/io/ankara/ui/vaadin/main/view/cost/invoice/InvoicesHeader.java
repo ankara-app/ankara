@@ -6,14 +6,25 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.themes.ValoTheme;
+import io.ankara.domain.Company;
+import io.ankara.domain.Invoice;
+import io.ankara.domain.User;
+import io.ankara.service.CompanyService;
 import io.ankara.service.InvoiceService;
+import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.util.CompanySelectorWindow;
 import io.ankara.ui.vaadin.util.SearchField;
+import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Boniface Chacha
@@ -32,7 +43,16 @@ public class InvoicesHeader extends CustomComponent {
     private InvoiceService invoiceService;
 
     @Inject
+    private CompanyService companyService;
+
+    @Inject
+    private UserService userService;
+
+    @Inject
     private AnkaraUI ankaraUI;
+
+    @Inject
+    private CompanySelectorWindow companySelectorWindow;
 
     @PostConstruct
     private void build() {
@@ -42,8 +62,7 @@ public class InvoicesHeader extends CustomComponent {
         Button createButton = new Button("Create Invoice", FontAwesome.PLUS_CIRCLE);
         createButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         createButton.addClickListener(event -> {
-            ankaraUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
-            eventBus.publish(InvoiceEditView.TOPIC_EDIT,this,invoiceService.newInvoice());
+            showInvoiceCreateView();
         });
         content.addComponent(createButton);
 
@@ -53,5 +72,33 @@ public class InvoicesHeader extends CustomComponent {
         content.setExpandRatio(searchField, 1);
 
         setCompositionRoot(content);
+    }
+
+    private void showInvoiceCreateView() {
+        List<Company> companies = companyService.getCurrentUserCompanies();
+        if (companies.isEmpty()) {
+            //createCompany
+        }else if(companies.size()==1){
+            Company company = companies.stream().findFirst().get();
+            navigateInvoiceCreateView(createInvoice(company));
+        }else{
+            companySelectorWindow.show(company -> {
+                navigateInvoiceCreateView(createInvoice(company));
+            });
+        }
+
+    }
+
+    private Invoice createInvoice(Company company) {
+        String currency = "TZS";
+        String code = invoiceService.nextInvoiceNumber(company);
+        User creator = userService.getCurrentUser();
+
+        return new Invoice(creator, company, currency, code);
+    }
+
+    private void navigateInvoiceCreateView(Invoice invoice) {
+        ankaraUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
+        eventBus.publish(InvoiceEditView.TOPIC_EDIT, this, invoice);
     }
 }

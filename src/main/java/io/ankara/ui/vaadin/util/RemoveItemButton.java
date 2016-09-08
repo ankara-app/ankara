@@ -12,19 +12,29 @@ import org.vaadin.dialogs.ConfirmDialog;
  * @email bonifacechacha@gmail.com
  * @date 4/10/16
  */
-public abstract class RemoveItemButton extends Button implements Button.ClickListener {
+public abstract class RemoveItemButton extends Button  {
 
     private Object itemID;
-    private Container container;
 
-    public RemoveItemButton(Container container, Object itemID) {
+    public RemoveItemButton( Object itemID) {
         super("Remove", FontAwesome.REMOVE);
         this.itemID = itemID;
-        this.container = container;
         addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         addStyleName(ValoTheme.BUTTON_BORDERLESS);
         addStyleName(ValoTheme.BUTTON_TINY);
-        addClickListener(this);
+        addClickListener((ClickListener) event -> {
+            if (itemID != null) {
+
+                ConfirmDialog.show(getUI(),"Please confirm ...","Should this item be removed?","Yes","Cancel", new ConfirmDialog.Listener() {
+                    @Override
+                    public void onClose(ConfirmDialog confirmDialog) {
+                        if(confirmDialog.isConfirmed())
+                            removeItem(itemID);
+                    }
+                });
+
+            }
+        });
     }
 
     public Object getItemID() {
@@ -33,30 +43,6 @@ public abstract class RemoveItemButton extends Button implements Button.ClickLis
 
     public void setItemID(Object itemID) {
         this.itemID = itemID;
-    }
-
-    public Container getContainer() {
-        return container;
-    }
-
-    public void setContainer(Container container) {
-        this.container = container;
-    }
-
-    @Override
-    public void buttonClick(Button.ClickEvent event) {
-        if (itemID != null && container != null) {
-
-            ConfirmDialog.show(getUI(),"Please confirm ...","Should this item be removed?","Yes","Cancel", new ConfirmDialog.Listener() {
-                @Override
-                public void onClose(ConfirmDialog confirmDialog) {
-                    if(confirmDialog.isConfirmed())
-                        removeItem(itemID);
-                }
-            });
-
-
-        }
     }
 
     public  abstract  void removeItem(Object itemID);

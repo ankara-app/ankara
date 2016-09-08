@@ -55,7 +55,13 @@ public class Customer {
     }
 
     public Customer(Company company) {
+        this(null,company);
+    }
+
+    public Customer(String name, Company company) {
         this();
+
+        this.name = name;
         this.company = company;
     }
 

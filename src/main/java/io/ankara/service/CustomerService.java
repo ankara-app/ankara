@@ -21,4 +21,8 @@ public interface CustomerService {
     boolean save(Customer customer);
 
     boolean delete(Customer customer);
+
+    Customer getCustomer(String name, Company company);
+
+    Customer create(String name, Company company);
 }

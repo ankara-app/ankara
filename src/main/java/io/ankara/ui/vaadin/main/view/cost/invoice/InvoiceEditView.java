@@ -13,6 +13,7 @@ import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.CostEditView;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.events.annotation.EventBusListenerTopic;
@@ -44,6 +45,8 @@ public class InvoiceEditView extends CostEditView {
     @Inject
     private AnkaraUI ankaraUI;
 
+    @Inject
+    private ViewHeader viewHeader;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -54,6 +57,7 @@ public class InvoiceEditView extends CostEditView {
     @EventBusListenerMethod
     private void editInvoice(Invoice invoice){
         editCost(invoice);
+        viewHeader.setValue(invoice.getCompany()+" Invoice");
     }
 
     @Override

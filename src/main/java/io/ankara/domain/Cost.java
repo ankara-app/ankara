@@ -2,6 +2,8 @@ package io.ankara.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -34,7 +36,7 @@ public class Cost implements Serializable {
     @Version
     private Integer version;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     @NotBlank
     private String code;
 
@@ -88,6 +90,7 @@ public class Cost implements Serializable {
     private boolean submitted;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER,mappedBy = "cost")
+    @Fetch(FetchMode.SUBSELECT)
     @OrderBy("id")
     private List<Item> items;
 

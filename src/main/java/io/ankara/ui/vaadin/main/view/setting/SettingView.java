@@ -7,6 +7,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.setting.account.PasswordChangeForm;
 import io.ankara.ui.vaadin.main.view.setting.account.UserDetailsForm;
 import io.ankara.ui.vaadin.main.view.setting.company.CompaniesBeanCRUDComponent;
@@ -34,6 +35,9 @@ public class SettingView extends VerticalLayout implements View{
     @Inject
     private CompaniesBeanCRUDComponent companiesSettingView;
 
+    @Inject
+    private ViewHeader viewHeader;
+
     @PostConstruct
     private void build(){
         TabSheet settingTabs = new TabSheet();
@@ -48,6 +52,6 @@ public class SettingView extends VerticalLayout implements View{
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        viewHeader.setValue("Settings");
     }
 }

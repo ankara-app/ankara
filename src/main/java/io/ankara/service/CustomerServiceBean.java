@@ -53,4 +53,16 @@ public class CustomerServiceBean implements CustomerService {
         customerRepository.delete(customer);
         return true;
     }
+
+    @Override
+    public Customer getCustomer(String name, Company company) {
+        return customerRepository.findFirstByNameAndCompany(name,company);
+    }
+
+    @Override
+    public Customer create(String name, Company company) {
+        Customer customer = new Customer(name, company);
+        save(customer);
+        return customer;
+    }
 }

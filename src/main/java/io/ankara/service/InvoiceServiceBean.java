@@ -29,21 +29,6 @@ public class InvoiceServiceBean implements InvoiceService {
     @Inject
     private InvoiceRepository invoiceRepository;
 
-
-    @Override
-    public Invoice newInvoice() {
-        User creator = userService.getCurrentUser();
-        Collection<Company> companies = companyService.getCompanies(creator);
-        Company defaultCompany = companies.isEmpty() ? null : companies.iterator().next();
-
-        //TODO CURRENCIES SHOULD BE IN SETTING AND CONFIGURABLE
-        String currency = "TZS";
-        String code = defaultCompany == null ? null : nextInvoiceNumber(defaultCompany);
-        Invoice invoice =  new Invoice(creator, defaultCompany, currency, code);
-
-        return invoice;
-    }
-
     public String nextInvoiceNumber(Company company) {
         String prevCode;
         Invoice recentInvoice = invoiceRepository.findOneByCompanyOrderByIdDesc(company);

@@ -14,8 +14,6 @@ import java.util.List;
  */
 public interface InvoiceService {
 
-    Invoice newInvoice();
-
     String nextInvoiceNumber(Company company);
 
     boolean save(Invoice invoice);
