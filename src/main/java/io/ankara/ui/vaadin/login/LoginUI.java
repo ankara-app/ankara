@@ -49,7 +49,7 @@ public class LoginUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-        getPage().setTitle("Ankara | Welcome ...");
+        getPage().setTitle("ankara | Welcome ...");
 
         setContent(loginScreen);
         setSizeFull();
