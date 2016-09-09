@@ -4,7 +4,6 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.ui.vaadin.main.view.cost.estimate.EstimateView;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
@@ -25,7 +24,7 @@ import javax.inject.Inject;
 public class MainMenu extends CustomComponent {
 
     @Inject
-    private MainUI ankaraUI;
+    private MainUI mainUI;
 
     @PostConstruct
     private void build() {
@@ -35,15 +34,15 @@ public class MainMenu extends CustomComponent {
         setCompositionRoot(menuBar);
 
         menuBar.addItem("Invoices", selectedItem -> {
-            ankaraUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
+            mainUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
         });
 
         menuBar.addItem("Estimates", selectedItem -> {
-            ankaraUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
+            mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
         });
 
         menuBar.addItem("Settings", selectedItem -> {
-            ankaraUI.getNavigator().navigateTo(SettingView.VIEW_NAME);
+            mainUI.getNavigator().navigateTo(SettingView.VIEW_NAME);
         });
     }
 }

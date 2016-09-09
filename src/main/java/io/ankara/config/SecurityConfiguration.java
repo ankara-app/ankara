@@ -42,6 +42,8 @@ import javax.inject.Inject;
 @EnableVaadinSharedSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private static final String APP_KEY = "io.ankara.spring.security";
+
     @Inject
     private UserService userService;
 
@@ -67,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout").permitAll();
         http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
         // Instruct Spring Security to use the same RememberMeServices as Vaadin4Spring. Also remember the key.
-        http.rememberMe().rememberMeServices(rememberMeServices()).key("myAppKey");
+        http.rememberMe().rememberMeServices(rememberMeServices()).key(APP_KEY);
         // Instruct Spring Security to use the same authentication strategy as Vaadin4Spring
         http.sessionManagement().sessionAuthenticationStrategy(sessionAuthenticationStrategy());
     }
@@ -91,7 +93,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public RememberMeServices rememberMeServices() {
-        return new TokenBasedRememberMeServices("myAppKey", userDetailsService());
+        return new TokenBasedRememberMeServices(APP_KEY, userDetailsService());
     }
 
     /**
