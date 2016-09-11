@@ -48,6 +48,9 @@ public class MainScreen extends CustomComponent {
     @Inject
     private ViewHeader viewHeader;
 
+    @Inject
+    private MainUI mainUI;
+
     @PostConstruct
     private void build(){
         setWidth("100%");
@@ -73,7 +76,7 @@ public class MainScreen extends CustomComponent {
         root.addComponent(content);
         root.setComponentAlignment(content, Alignment.MIDDLE_CENTER);
 
-        Navigator navigator = new Navigator(UI.getCurrent(), viewContainer);
+        Navigator navigator = new Navigator(mainUI, viewContainer);
         navigator.addProvider(springViewProvider);
         navigator.navigateTo(InvoicesView.VIEW_NAME);
     }

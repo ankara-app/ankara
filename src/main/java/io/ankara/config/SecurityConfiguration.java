@@ -61,14 +61,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable(); // Use Vaadin's built-in CSRF protection instead
-        http.authorizeRequests().antMatchers("/login/**").anonymous().antMatchers("/vaadinServlet/UIDL/**")
-                .permitAll().antMatchers("/vaadinServlet/HEARTBEAT/**").permitAll().anyRequest().authenticated();
+        http.authorizeRequests()
+                .antMatchers("/app/**").authenticated()
+                .antMatchers("/print/**").authenticated()
+                .antMatchers("/welcome/**").permitAll()
+                .antMatchers("/vaadinServlet/UIDL/**").permitAll()
+                .antMatchers("/vaadinServlet/HEARTBEAT/**").permitAll()
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated();
+
         http.httpBasic().disable();
         http.formLogin().disable();
         // Remember to add the VaadinSessionClosingLogoutHandler
         http.logout().addLogoutHandler(new VaadinSessionClosingLogoutHandler()).logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout").permitAll();
-        http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
+                .logoutSuccessUrl("/welcome?logout").permitAll();
+        http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/welcome"));
         // Instruct Spring Security to use the same RememberMeServices as Vaadin4Spring. Also remember the key.
         http.rememberMe().rememberMeServices(rememberMeServices()).key(APP_KEY);
         // Instruct Spring Security to use the same authentication strategy as Vaadin4Spring
@@ -108,6 +115,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean(name = VaadinSharedSecurityConfiguration.VAADIN_AUTHENTICATION_SUCCESS_HANDLER_BEAN)
     VaadinAuthenticationSuccessHandler vaadinAuthenticationSuccessHandler(HttpService httpService,
                                                                           VaadinRedirectStrategy vaadinRedirectStrategy) {
-        return new VaadinUrlAuthenticationSuccessHandler(httpService, vaadinRedirectStrategy, "/");
+        return new VaadinUrlAuthenticationSuccessHandler(httpService, vaadinRedirectStrategy, "/app");
     }
 }

@@ -21,14 +21,11 @@ public class AnkaraApplication {
 	 */
 	@Bean
 	SystemMessagesProvider systemMessagesProvider() {
-		return new SystemMessagesProvider() {
-			@Override
-			public SystemMessages getSystemMessages(SystemMessagesInfo systemMessagesInfo) {
-				CustomizedSystemMessages systemMessages = new CustomizedSystemMessages();
-				systemMessages.setSessionExpiredNotificationEnabled(false);
-				return systemMessages;
-			}
-		};
+		return (SystemMessagesProvider) systemMessagesInfo -> {
+            CustomizedSystemMessages systemMessages = new CustomizedSystemMessages();
+            systemMessages.setSessionExpiredNotificationEnabled(false);
+            return systemMessages;
+        };
 	}
 
 }

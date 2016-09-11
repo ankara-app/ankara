@@ -57,10 +57,11 @@ public class PrintUI extends UI {
     }
 
     private String loadPrintScript() {
-        String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+
+        String printScroptPath = getClass().getClassLoader().getResource("js/print.js").getFile();
 
         try {
-            return new String(Files.readAllBytes(Paths.get(basepath, "js", "print.js")));
+            return new String(Files.readAllBytes(new File(printScroptPath).toPath()));
         } catch (IOException e) {
             e.printStackTrace();
             return null;

@@ -13,46 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.ankara.ui.vaadin.login;
+package io.ankara.ui.vaadin.welcome;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.event.ShortcutAction;
+import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
+import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.AnkaraTheme;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.vaadin.spring.annotation.PrototypeScope;
-import org.vaadin.spring.events.EventBus;
-import org.vaadin.spring.security.VaadinSecurity;
-import org.vaadin.spring.security.shared.VaadinSharedSecurity;
-import org.vaadin.spring.security.util.SuccessfulLoginEvent;
+import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
+import org.springframework.context.ApplicationContext;
 
 import javax.inject.Inject;
 
 /**
- * Full-screen UI component that allows the user to login.
+ * Full-screen UI component that welcomes users.
  *
  * @author Petter Holmström (petter@vaadin.com)
  */
-@SpringUI(path = "/login")
+@SpringUI(path = "/welcome")
 @Theme(AnkaraTheme.THEME)
-public class LoginUI extends UI {
+public class WelcomeUI extends UI {
 
     @Inject
-    private LoginScreen loginScreen;
+    private ApplicationContext applicationContext;
+
+    @Inject
+    private UserService userService;
 
     @Override
     protected void init(VaadinRequest request) {
         getPage().setTitle("ankara | Welcome ...");
 
-        setContent(loginScreen);
-        setSizeFull();
+        if (userService.isCurrentUserAuthenticated())
+            getPage().setLocation("/app");
+        else {
+            setContent(applicationContext.getBean(WelcomeScreen.class));
+            setSizeFull();
+        }
     }
 
 }

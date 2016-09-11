@@ -8,12 +8,7 @@ import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import io.ankara.ui.vaadin.AnkaraTheme;
-import io.ankara.ui.vaadin.login.LoginUI;
-import io.ankara.ui.vaadin.main.MainScreen;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.vaadin.spring.events.EventBus;
-import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.inject.Inject;
 import java.util.Locale;
@@ -24,7 +19,7 @@ import java.util.Locale;
  * @email bonifacechacha@gmail.com
  * @date 8/10/16 9:43 PM
  */
-@SpringUI
+@SpringUI(path = "/app")
 @Theme(AnkaraTheme.THEME)
 @Push(transport = Transport.WEBSOCKET)
 public class MainUI extends UI {

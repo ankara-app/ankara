@@ -20,7 +20,7 @@ import javax.inject.Inject;
 @UIScope
 @SpringView(name = InvoicesView.VIEW_NAME)
 public class InvoicesView extends CustomComponent implements View {
-    public static final String VIEW_NAME = "";
+    public static final String VIEW_NAME = "InvoicesView";
 
     @Inject
     private InvoicesHeader invoicesHeader;

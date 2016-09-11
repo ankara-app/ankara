@@ -132,6 +132,14 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
+    public Date getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

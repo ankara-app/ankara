@@ -12,4 +12,5 @@ public class AnkaraTheme extends ValoTheme{
     public static final String THEME = "ankara";
     public static final String TEXT_SMALL = "text-small";
     public static final String VIEW_HEADER = "view-header";
+    public static final String SIGNUP_LOGIN_LABEL = "signup-login-label";
 }
