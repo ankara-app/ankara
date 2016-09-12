@@ -18,7 +18,10 @@ package io.ankara.ui.vaadin.welcome;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewDisplay;
+import com.vaadin.server.ErrorEvent;
+import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
@@ -47,6 +50,9 @@ public class WelcomeUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         getPage().setTitle("ankara | Welcome ...");
+
+        //TODO IMPLEMENT THE ERROR HANDLER TO EMAIL ERRORS TO SUPPORT ACCOUNT
+        VaadinSession.getCurrent().setErrorHandler((ErrorHandler) event -> event.getThrowable().printStackTrace());
 
         if (userService.isCurrentUserAuthenticated())
             getPage().setLocation("/app");

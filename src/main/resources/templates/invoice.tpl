@@ -14,7 +14,7 @@ import java.math.RoundingMode
 //link(rel: "stylesheet", "https://printjs-4de6.kxcdn.com/print.min.css")
 
 // On the printing UI we use bootstrap theme which comes with the necessary styles
-if(!printing){
+if (!printing) {
     link(rel: "stylesheet",
             href: "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css",
             integrity: "sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u",
@@ -225,9 +225,14 @@ div(id: "printSection", class: "container-fluid") {
                             th(scope: "row", class: "text-right", ++index)
                             td() { span(item.type.name) }
                             td() { span(item.description) }
-                            td(class: "text-right") { span(item.quantity) }
-                            td(class: "text-right") { span("$item.price $cost.currency") }
-                            td(class: "text-right") { span( "$item.amount $cost.currency") }
+
+                            def quantity = item.quantity.setScale(2, RoundingMode.HALF_DOWN)
+                            td(class: "text-right") { span(quantity) }
+
+
+                            td(class: "text-right") { span(formatMoney(item.price, cost.currency)) }
+
+                            td(class: "text-right") { span(formatMoney(item.amount, cost.currency)) }
                         }
                     }
                 }
@@ -239,24 +244,22 @@ div(id: "printSection", class: "container-fluid") {
         div(class: "col-xs-6 col-xs-offset-6 ") {
             table(class: "table table-condensed borderless") {
                 tr {
-                    td(width: "50%",class: "text-right") {
-                        span(class: "caption","Subtotal")
+                    td(width: "50%", class: "text-right") {
+                        span(class: "caption", "Subtotal")
                     }
                     td(class: "text-right") {
-                        BigDecimal subtotal = cost.getSubtotal().setScale(2, RoundingMode.HALF_DOWN)
-                        span( "$subtotal $cost.currency")
+                        span(formatMoney(cost.subtotal, cost.currency))
                     }
                 }
 
                 if (cost.discountPercentage) {
 
                     tr {
-                        td(width: "50%",class: "text-right") {
+                        td(width: "50%", class: "text-right") {
                             span(class: "caption", "Discount (${cost.discountPercentage}%)")
                         }
                         td(class: "text-right") {
-                            BigDecimal discount = cost.getDiscount().setScale(2, RoundingMode.HALF_DOWN)
-                            span( "$discount $cost.currency")
+                            span(formatMoney(cost.discount, cost.currency))
                         }
                     }
 
@@ -264,24 +267,23 @@ div(id: "printSection", class: "container-fluid") {
 
                 cost.taxes.each { tax ->
                     tr {
-                        td(width: "50%",class: "text-right") {
+                        td(width: "50%", class: "text-right") {
                             span(class: "caption", tax.toString())
                         }
                         td(class: "text-right") {
                             BigDecimal taxAmount = cost.calculateTax(tax).setScale(2, RoundingMode.HALF_DOWN)
-                            span( "$taxAmount $cost.currency")
+                            span(formatMoney(taxAmount, cost.currency))
                         }
                     }
                 }
 
 
                 tr {
-                    td(width: "50%",class: "text-right") {
+                    td(width: "50%", class: "text-right") {
                         strong("Amount Due")
                     }
                     td(class: "text-right") {
-                        BigDecimal due = cost.getAmountDue().setScale(2, RoundingMode.HALF_DOWN)
-                        strong( "$due $cost.currency")
+                        strong(formatMoney(cost.amountDue, cost.currency))
                     }
                 }
             }
@@ -307,4 +309,8 @@ div(id: "printSection", class: "container-fluid") {
         }
     }
 
+}
+
+def formatMoney(BigDecimal amount, String currency) {
+    return String.format("%,.2f",amount.setScale(2, RoundingMode.HALF_DOWN))
 }
