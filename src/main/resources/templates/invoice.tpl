@@ -243,7 +243,7 @@ div(id: "printSection", class: "container-fluid") {
                         span(class: "caption","Subtotal")
                     }
                     td(class: "text-right") {
-                        BigDecimal subtotal = cost.calculateSubtotal().setScale(2, RoundingMode.HALF_DOWN)
+                        BigDecimal subtotal = cost.getSubtotal().setScale(2, RoundingMode.HALF_DOWN)
                         span( "$subtotal $cost.currency")
                     }
                 }
@@ -255,7 +255,7 @@ div(id: "printSection", class: "container-fluid") {
                             span(class: "caption", "Discount (${cost.discountPercentage}%)")
                         }
                         td(class: "text-right") {
-                            BigDecimal discount = cost.calculateDiscount().setScale(2, RoundingMode.HALF_DOWN)
+                            BigDecimal discount = cost.getDiscount().setScale(2, RoundingMode.HALF_DOWN)
                             span( "$discount $cost.currency")
                         }
                     }
@@ -280,7 +280,7 @@ div(id: "printSection", class: "container-fluid") {
                         strong("Amount Due")
                     }
                     td(class: "text-right") {
-                        BigDecimal due = cost.calculateAmountDue().setScale(2, RoundingMode.HALF_DOWN)
+                        BigDecimal due = cost.getAmountDue().setScale(2, RoundingMode.HALF_DOWN)
                         strong( "$due $cost.currency")
                     }
                 }

@@ -15,6 +15,8 @@ public interface UserService extends UserDetailsService {
 
     boolean save(User user);
 
+    boolean requestVerification(String email);
+
     User getCurrentUser();
 
     boolean changePassword(User user, String password);
@@ -22,4 +24,10 @@ public interface UserService extends UserDetailsService {
     boolean isCurrentUserAuthenticated();
 
     Authentication getAuthentication();
+
+    User getUser(String userEmail);
+
+    User verify(String tokenID);
+
+    boolean resetPassword(String email);
 }

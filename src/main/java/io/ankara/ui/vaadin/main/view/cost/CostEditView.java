@@ -123,14 +123,14 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
         loadCost();
 
-        amountSubtotal.setValue(createMoneyCaption(cost.calculateSubtotal().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
-        amountDiscounted.setValue(createMoneyCaption(cost.calculateDiscount().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
+        amountSubtotal.setValue(createMoneyCaption(cost.getSubtotal().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
+        amountDiscounted.setValue(createMoneyCaption(cost.getDiscount().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
 
         for (Tax tax : taxLabels.keySet()) {
             taxLabels.get(tax).setValue(createMoneyCaption(cost.calculateTax(tax).setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
         }
 
-        amountDue.setValue(createMoneyCaption(cost.calculateAmountDue().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
+        amountDue.setValue(createMoneyCaption(cost.getAmountDue().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
     }
 
     private String createMoneyCaption(BigDecimal money, String currency) {

@@ -40,8 +40,7 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         createButton = new Button("New", FontAwesome.PLUS_CIRCLE);
         createButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         createButton.addClickListener(event -> {
-            popUpWindow.setContent(getCreateComponent());
-            UI.getCurrent().addWindow(popUpWindow);
+            create();
         });
         header = new HorizontalLayout(createButton);
 
@@ -61,7 +60,7 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         addComponent(table);
         setExpandRatio(table,1);
 
-        new RemoveItemButtonGenerator(table,"Remove"){
+        new RemoveItemButtonGenerator(table,"Remove",true){
             @Override
             protected void removeItem(Object itemID) {
                 BeanCRUDComponent.this.removeItem(itemID);
@@ -70,6 +69,12 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         };
 
     }
+
+    public void create() {
+        popUpWindow.setContent(getCreateComponent());
+        UI.getCurrent().addWindow(popUpWindow);
+    }
+
 
     protected abstract void removeItem(Object itemID);
 

@@ -7,8 +7,10 @@ import com.vaadin.server.SystemMessagesProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.vaadin.spring.security.annotation.EnableVaadinManagedSecurity;
 
+@EnableAsync
 @SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
 public class AnkaraApplication {
 

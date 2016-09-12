@@ -38,14 +38,19 @@ public class InvoicesTable extends Table {
 
     @PostConstruct
     private void build(){
-        setContainerDataSource(new BeanItemContainer<>(Invoice.class));
-        setVisibleColumns("code", "timeCreated", "company", "customer","creator","subject");
+        BeanItemContainer container = new BeanItemContainer<>(Invoice.class);
+        container.addNestedContainerProperty("creator.fullName");
+        setContainerDataSource(container);
 
         addItemClickListener(event -> {
             Invoice invoice = (Invoice) event.getItemId();
             mainUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
             eventBus.publish(InvoiceView.TOPIC_SHOW,this,invoice);
         });
+
+
+        setVisibleColumns("code", "timeCreated", "company", "customer","subject","subtotal","totalTax","discount","amountDue","creator.fullName");
+        setColumnHeaders("Invoice ID","Time Created","Company","Customer","Subject","Subtotal","Total Tax","Discount","Amount Due","Created By");
     }
 
     public void reload() {

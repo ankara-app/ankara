@@ -14,6 +14,7 @@ import io.ankara.service.CompanyService;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.main.MainUI;
+import io.ankara.ui.vaadin.main.view.setting.company.CompaniesBeanCRUDComponent;
 import io.ankara.ui.vaadin.util.CompanySelectorWindow;
 import io.ankara.ui.vaadin.util.SearchField;
 import org.vaadin.spring.events.EventBus;
@@ -50,6 +51,9 @@ public class InvoicesHeader extends CustomComponent {
     @Inject
     private CompanySelectorWindow companySelectorWindow;
 
+    @Inject
+    private CompaniesBeanCRUDComponent companiesBeanCRUDComponent;
+
     @PostConstruct
     private void build() {
         HorizontalLayout content = new HorizontalLayout();
@@ -73,7 +77,7 @@ public class InvoicesHeader extends CustomComponent {
     private void showInvoiceCreateView() {
         List<Company> companies = companyService.getCurrentUserCompanies();
         if (companies.isEmpty()) {
-            //createCompany
+            companiesBeanCRUDComponent.create();
         }else if(companies.size()==1){
             Company company = companies.stream().findFirst().get();
             navigateInvoiceCreateView(createInvoice(company));

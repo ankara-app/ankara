@@ -271,7 +271,7 @@ public class Cost implements Serializable {
         return getCompany() + " : " + getSubject();
     }
 
-    public BigDecimal calculateSubtotal() {
+    public BigDecimal getSubtotal() {
         BigDecimal subtotal = new BigDecimal("0.0");
 
         for (Item item : getItems()) {
@@ -281,8 +281,8 @@ public class Cost implements Serializable {
         return subtotal;
     }
 
-    public BigDecimal calculateDiscount() {
-        return calculateTaxedTotal().multiply(discountPercentage).divide(new BigDecimal("100"));
+    public BigDecimal getDiscount() {
+        return getTaxedTotal().multiply(discountPercentage).divide(new BigDecimal("100"));
     }
 
     public BigDecimal calculateTax(Tax tax) {
@@ -294,11 +294,11 @@ public class Cost implements Serializable {
         return total;
     }
 
-    public BigDecimal calculateAmountDue() {
-        return calculateTaxedTotal().subtract(calculateDiscount());
+    public BigDecimal getAmountDue() {
+        return getTaxedTotal().subtract(getDiscount());
     }
 
-    public BigDecimal calculateTax() {
+    public BigDecimal getTotalTax() {
         BigDecimal total = new BigDecimal("0.0");
         for(Tax tax:getTaxes()){
             total = total.add(calculateTax(tax));
@@ -316,7 +316,7 @@ public class Cost implements Serializable {
         return taxes;
     }
 
-    public BigDecimal calculateTaxedTotal() {
-        return calculateSubtotal().add(calculateTax());
+    public BigDecimal getTaxedTotal() {
+        return getSubtotal().add(getTotalTax());
     }
 }

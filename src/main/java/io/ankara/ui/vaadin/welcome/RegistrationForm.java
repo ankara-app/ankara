@@ -67,14 +67,17 @@ public class RegistrationForm extends FormLayout implements View {
 
         fullName = new TextField("Full Name");
         fullName.setWidth("300px");
+        fullName.setNullRepresentation("");
         fullName.setValidationVisible(false);
 
         email = new EmailField("Email");
         email.setWidth("300px");
+        email.setNullRepresentation("");
         email.setValidationVisible(false);
 
         password = new PasswordField("Password");
         password.setWidth("300px");
+        password.setNullRepresentation("");
         password.setValidationVisible(false);
 
         register = new Button("Register");
@@ -87,7 +90,7 @@ public class RegistrationForm extends FormLayout implements View {
         loginLabel.addStyleName(AnkaraTheme.SIGNUP_LOGIN_LABEL);
 
         ViewLink login = new ViewLink("Login", LoginForm.VIEW_NAME);
-        addComponents(fullName, email, password, register,new HorizontalLayout(loginLabel,login));
+        addComponents(fullName, email, password, register, new HorizontalLayout(loginLabel, login));
     }
 
     public void load() {
@@ -98,21 +101,20 @@ public class RegistrationForm extends FormLayout implements View {
         User user = userFieldGroup.getItemDataSource().getBean();
         try {
             if (userService.create(user)) {
-                Authentication authentication = vaadinSecurity.login(user.getUsername(), user.getPassword());
                 welcomeUI.getNavigator().navigateTo(LoginForm.VIEW_NAME);
 
-                NotificationUtils.show(
+                NotificationUtils.showSuccess(
                         "Your account is almost ready",
-                        "We have sent you an email on you account, confirm your email by clicking the verification link",
-                        Notification.Type.HUMANIZED_MESSAGE);
+                        "We have sent you an email on you account, confirm your email by clicking the verification link");
             }
+        } catch (IllegalArgumentException e) {
+            NotificationUtils.showWarning("Failed to sign you up", e.getMessage());
         } catch (Exception e) {
-            NotificationUtils.show(
-                    "Sorry, "+user.getFullName()+" we could not register",
-                    "Something went wrong during registration, please try again letter",
-                    Notification.Type.WARNING_MESSAGE);
+            NotificationUtils.showWarning(
+                    "Sorry, " + user.getFullName() + " we could not register you",
+                    "Something went wrong during registration, please try again letter");
             LoggerFactory.getLogger(getClass()).error("Unexpected error while signup", e);
-        }finally {
+        } finally {
             register.setEnabled(true);
         }
 
@@ -121,7 +123,7 @@ public class RegistrationForm extends FormLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        load();
     }
 }
 

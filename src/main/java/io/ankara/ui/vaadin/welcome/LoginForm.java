@@ -51,7 +51,7 @@ public class LoginForm extends FormLayout implements View {
     private UserService userService;
 
     @Inject
-    private MainUI mainUI;
+    private WelcomeUI welcomeUI;
 
     private TextField email;
 
@@ -105,24 +105,19 @@ public class LoginForm extends FormLayout implements View {
             Authentication authentication = vaadinSecurity.login(email, password, rememberMe);
         } catch (DisabledException e) {
             VaadinSession.getCurrent().setAttribute("emailConfirm",email);
-            mainUI.getNavigator().navigateTo(ConfirmEmailView.VIEW_NAME);
-
+            welcomeUI.getNavigator().navigateTo(ConfirmEmailView.VIEW_NAME);
         } catch (LockedException e) {
-            NotificationUtils.show(
+            NotificationUtils.showWarning(
                     "Sorry, your account has been locked",
-                    "Contact us for further assistance",
-                    Notification.Type.WARNING_MESSAGE);
-
+                    "Contact us for further assistance");
         } catch (BadCredentialsException e) {
-            NotificationUtils.show(
+            NotificationUtils.showWarning(
                     "Wrong username and/or password",
-                    "Enter your credentials correctly, if you have forgot your password then click link below to reset",
-                    Notification.Type.WARNING_MESSAGE);
+                    "Enter your credentials correctly, if you have forgot your password then click link below to reset");
         } catch (Exception e) {
-            NotificationUtils.show(
+            NotificationUtils.showWarning(
                     "Sorry, we could not sign you in",
-                    "Something went wrong, please try again letter",
-                    Notification.Type.WARNING_MESSAGE);
+                    "Something went wrong, please try again letter");
             LoggerFactory.getLogger(getClass()).error("Unexpected error while signup", e);
         } finally {
             this.email.focus();

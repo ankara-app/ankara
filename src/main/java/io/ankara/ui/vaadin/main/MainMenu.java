@@ -36,10 +36,10 @@ public class MainMenu extends CustomComponent {
         menuBar.addItem("Invoices", selectedItem -> {
             mainUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
         });
-
-        menuBar.addItem("Estimates", selectedItem -> {
-            mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
-        });
+//
+//        menuBar.addItem("Estimates", selectedItem -> {
+//            mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
+//        });
 
         menuBar.addItem("Settings", selectedItem -> {
             mainUI.getNavigator().navigateTo(SettingView.VIEW_NAME);
