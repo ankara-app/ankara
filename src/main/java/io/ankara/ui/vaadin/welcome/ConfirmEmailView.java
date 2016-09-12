@@ -41,8 +41,8 @@ public class ConfirmEmailView extends FormLayout implements View {
         setSizeUndefined();
         addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
-        Label message = new Label("<h2>Enter your email below so that we can resent confirmation email. <br/>" +
-                "Once received the email click the cofirmation link to activate your account</h2>", ContentMode.HTML);
+        Label message = new Label("<h3>Enter your email below so that we can email you a confirmation link. <br/>" +
+                "Once received click the cofirmation link to activate your account</h3>", ContentMode.HTML);
 
         emailField = new EmailField("Email");
         emailField.addValidator(new EmailValidator("Enter your email correctly"));
