@@ -18,6 +18,7 @@ import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.main.view.cost.invoice.ItemsTable;
 import io.ankara.ui.vaadin.main.view.cost.invoice.ItemsView;
+import io.ankara.ui.vaadin.util.NumberUtils;
 import io.ankara.ui.vaadin.util.TextFieldUtils;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -26,8 +27,6 @@ import org.vaadin.spring.events.annotation.EventBusListenerTopic;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -123,18 +122,14 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
         loadCost();
 
-        amountSubtotal.setValue(createMoneyCaption(cost.getSubtotal().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
-        amountDiscounted.setValue(createMoneyCaption(cost.getDiscount().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
+        amountSubtotal.setValue(NumberUtils.formatMoney(cost.getSubtotal(), cost.getCurrency()));
+        amountDiscounted.setValue(NumberUtils.formatMoney(cost.getDiscount(), cost.getCurrency()));
 
         for (Tax tax : taxLabels.keySet()) {
-            taxLabels.get(tax).setValue(createMoneyCaption(cost.calculateTax(tax).setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
+            taxLabels.get(tax).setValue(NumberUtils.formatMoney(cost.calculateTax(tax), cost.getCurrency()));
         }
 
-        amountDue.setValue(createMoneyCaption(cost.getAmountDue().setScale(2, RoundingMode.HALF_DOWN), cost.getCurrency()));
-    }
-
-    private String createMoneyCaption(BigDecimal money, String currency) {
-        return money.toString() + " " + currency;
+        amountDue.setValue(NumberUtils.formatMoney(cost.getAmountDue(), cost.getCurrency()));
     }
 
     @PostConstruct

@@ -1,6 +1,7 @@
 package templates
 
 import com.sun.org.apache.xml.internal.security.utils.Base64
+import io.ankara.ui.vaadin.util.NumberUtils
 
 import java.math.RoundingMode
 
@@ -312,5 +313,5 @@ div(id: "printSection", class: "container-fluid") {
 }
 
 def formatMoney(BigDecimal amount, String currency) {
-    return String.format("%,.2f",amount.setScale(2, RoundingMode.HALF_DOWN))
+    return NumberUtils.formatMoney(amount,currency)
 }

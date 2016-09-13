@@ -16,6 +16,7 @@ import io.ankara.service.ItemTypeService;
 import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.util.AppliedTaxesConverter;
+import io.ankara.ui.vaadin.util.NumberUtils;
 import io.ankara.ui.vaadin.util.RemoveItemButtonGenerator;
 import org.springframework.util.CollectionUtils;
 import org.vaadin.spring.events.EventBus;
@@ -133,13 +134,13 @@ public class ItemsTable extends Table {
         });
 
         Label amountLabel = new Label();
-        amountLabel.setValue(item.getAmount().setScale(2, RoundingMode.HALF_DOWN).toString());
+        amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(),cost.getCurrency()));
         amountLabel.addStyleName("text-right");
 
         quantity.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                amountLabel.setValue(item.getAmount().setScale(2, RoundingMode.HALF_DOWN).toString());
+                amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(),cost.getCurrency()));
                 requestSummaryCalculation(rowIndex);
             }
         });
@@ -147,7 +148,7 @@ public class ItemsTable extends Table {
         price.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                amountLabel.setValue(item.getAmount().setScale(2, RoundingMode.HALF_DOWN).toString());
+                amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(),cost.getCurrency()));
                 requestSummaryCalculation(rowIndex);
             }
         });

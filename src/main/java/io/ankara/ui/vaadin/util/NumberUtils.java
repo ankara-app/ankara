@@ -3,6 +3,7 @@ package io.ankara.ui.vaadin.util;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * @author Boniface Chacha
@@ -18,11 +19,7 @@ public class NumberUtils {
             return new BigDecimal(text.trim().replaceAll(" ", ""));
     }
 
-    public static BigDecimal calculateDiscount(BigDecimal taxedTotal, BigDecimal discountPercentage) {
-        return taxedTotal.multiply(discountPercentage).divide(new BigDecimal("100"));
-    }
-
-    public static BigDecimal calculateTax(BigDecimal amount, BigDecimal taxPercentage) {
-        return amount.multiply(taxPercentage).divide(new BigDecimal("100"));
+    public static String formatMoney(BigDecimal amount, String currency) {
+        return String.format("%,.2f "+currency,amount.setScale(2, RoundingMode.HALF_DOWN));
     }
 }
