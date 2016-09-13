@@ -25,6 +25,12 @@
   margin-top: 15px;
 }
 
+.money{
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 /*.logo{*/
 /*width: 200px;*/
 /*}*/

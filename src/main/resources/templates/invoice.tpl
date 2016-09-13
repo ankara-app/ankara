@@ -231,9 +231,9 @@ div(id: "printSection", class: "container-fluid") {
                             td(class: "text-right") { span(quantity) }
 
 
-                            td(class: "text-right") { span(formatMoney(item.price, cost.currency)) }
+                            td(class: "money") { span(formatMoney(item.price, cost.currency)) }
 
-                            td(class: "text-right") { span(formatMoney(item.amount, cost.currency)) }
+                            td(class: "money") { span(formatMoney(item.amount, cost.currency)) }
                         }
                     }
                 }
@@ -248,7 +248,7 @@ div(id: "printSection", class: "container-fluid") {
                     td(width: "50%", class: "text-right") {
                         span(class: "caption", "Subtotal")
                     }
-                    td(class: "text-right") {
+                    td(class: "money") {
                         span(formatMoney(cost.subtotal, cost.currency))
                     }
                 }
@@ -259,7 +259,7 @@ div(id: "printSection", class: "container-fluid") {
                         td(width: "50%", class: "text-right") {
                             span(class: "caption", "Discount (${cost.discountPercentage}%)")
                         }
-                        td(class: "text-right") {
+                        td(class: "money") {
                             span(formatMoney(cost.discount, cost.currency))
                         }
                     }
@@ -271,7 +271,7 @@ div(id: "printSection", class: "container-fluid") {
                         td(width: "50%", class: "text-right") {
                             span(class: "caption", tax.toString())
                         }
-                        td(class: "text-right") {
+                        td(class: "money") {
                             BigDecimal taxAmount = cost.calculateTax(tax).setScale(2, RoundingMode.HALF_DOWN)
                             span(formatMoney(taxAmount, cost.currency))
                         }
@@ -283,7 +283,7 @@ div(id: "printSection", class: "container-fluid") {
                     td(width: "50%", class: "text-right") {
                         strong("Amount Due")
                     }
-                    td(class: "text-right") {
+                    td(class: "money") {
                         strong(formatMoney(cost.amountDue, cost.currency))
                     }
                 }
