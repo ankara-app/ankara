@@ -13,6 +13,7 @@ import java.util.Map;
  * @email boniface.chacha@niafikra.com
  * @email bonifacechacha@gmail.com
  * @date 9/5/16 8:54 PM
+ * @deprecated we will use Thymeleaf for the templates
  */
 public class AnkaraTemplateEngine {
 

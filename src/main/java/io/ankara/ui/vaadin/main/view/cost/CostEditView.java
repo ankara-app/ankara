@@ -245,7 +245,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
         customer.setNullSelectionAllowed(false);
         customer.setValidationVisible(false);
 
-        Button addCustomerButton = new Button();
+        Button addCustomerButton = new Button("Add");
         addCustomerButton.setDescription("Click to add new customer");
         addCustomerButton.setWidth("30px");
         addCustomerButton.setIcon(FontAwesome.PLUS_CIRCLE);
@@ -255,6 +255,11 @@ public abstract class CostEditView extends VerticalLayout implements View {
             customerName.setVisible(true);
             customerName.focus();
         });
+        HorizontalLayout customerSelectLayout = new HorizontalLayout(customer, addCustomerButton);
+        customerSelectLayout.setCaption("Customer");
+        customerSelectLayout.setExpandRatio(customer, 1);
+        customerSelectLayout.setWidth("100%");
+
 
         customerName = new TextField();
         customerName.setInputPrompt("Enter new customer name ...");
@@ -264,12 +269,18 @@ public abstract class CostEditView extends VerticalLayout implements View {
         //when user loses focus hide the field
         customerName.addBlurListener((FieldEvents.BlurListener) event -> customerName.setVisible(false));
         TextFieldUtils.handleEnter(customerName, (Action.Listener) (sender, target) -> {
-            String name = customerName.getValue();
-            createSelectCustomer(name);
-            customerName.setVisible(false);
-            customerName.setValue(null);
+            saveNewCustomer();
         });
 
+        Button saveCustomerButton = new Button("Save");
+        saveCustomerButton.setDescription("Click to save new customer or press enter");
+        saveCustomerButton.setWidth("30px");
+        saveCustomerButton.setIcon(FontAwesome.SAVE);
+        saveCustomerButton.addStyleName(AnkaraTheme.BUTTON_BORDERLESS_COLORED);
+        saveCustomerButton.addStyleName(AnkaraTheme.BUTTON_SMALL);
+        saveCustomerButton.addClickListener((Button.ClickListener) event -> {
+            saveNewCustomer();
+        });
 
         discountPercentage = new TextField("Discount");
         discountPercentage.setInputPrompt("Specify discount percentage (Optional) ...");
@@ -280,25 +291,26 @@ public abstract class CostEditView extends VerticalLayout implements View {
             calculateSummaries(null);
         });
 
-        HorizontalLayout customerSelectLayout = new HorizontalLayout(customer, addCustomerButton);
-        customerSelectLayout.setCaption("Customer");
-        customerSelectLayout.setExpandRatio(customer, 1);
-        customerSelectLayout.setWidth("100%");
+
         customerLayout = new FormLayout(customerSelectLayout, customerName, discountPercentage);
         customerLayout.setWidth("100%");
         customerLayout.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         return customerLayout;
     }
 
-    private void createSelectCustomer(String name) {
+    private void saveNewCustomer() {
+        String name = customerName.getValue();
+
         Customer selectedCustomer = customerService.getCustomer(name, cost.getCompany());
         if (selectedCustomer == null) {
             selectedCustomer = customerService.create(name, cost.getCompany());
         }
         loadCustomerSelector();
         customer.setValue(selectedCustomer);
-    }
 
+        customerName.setVisible(false);
+        customerName.setValue(null);
+    }
 
     private void rebuildTaxSelector() {
 

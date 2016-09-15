@@ -208,7 +208,7 @@ div(id: "printSection", class: "container-fluid") {
 
     div(class: "row top15") {
         div(class: "col-xs-12") {
-            table(class: "table") {
+            table(class: "table table-bordered table-striped") {
                 thead {
                     tr {
                         th(class: "text-right", "Index")

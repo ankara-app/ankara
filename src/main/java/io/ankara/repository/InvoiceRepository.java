@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
-    Invoice findOneByCompanyOrderByIdDesc(Company company);
-
     List<Invoice> findAllByCompanyInOrderByTimeCreatedDesc(List<Company> companies);
+
+    Invoice findFirstByCompanyOrderByIdDesc(Company company);
 }
