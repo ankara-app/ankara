@@ -2,20 +2,19 @@ package io.ankara.ui.vaadin.print;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
-import io.ankara.AnkaraTemplateEngine;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,22 +29,21 @@ import java.util.Map;
 public class PrintUI extends UI {
 
     @Inject
-    private AnkaraTemplateEngine templateEngine;
+    private TemplateEngine templateEngine;
 
     @Override
     protected void init(VaadinRequest request) {
         // Have some content to print
 
-        Map bindings = new HashMap((Map) VaadinSession.getCurrent().getAttribute("bindings"));
-        bindings.put("printing", true);
-
+        Context context = (Context) VaadinSession.getCurrent().getAttribute("context");
+//        bindings.put("printing", true);
         String template = (String) VaadinSession.getCurrent().getAttribute("template");
 
         String content;
 
         try {
-            content = templateEngine.generate(template, bindings);
-        } catch (IOException | ClassNotFoundException e) {
+            content = templateEngine.process(template, context);
+        } catch (Exception e) {
             content = "Failed to render content";
             e.printStackTrace();
         }

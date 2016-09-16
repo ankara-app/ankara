@@ -45,8 +45,8 @@ configurations {
 }
 
 dependencies {
-    compile "org.codehaus.groovy:groovy:${groovyVersion}"
-    compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
+//    compile "org.codehaus.groovy:groovy:${groovyVersion}"
+//    compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
 
     compile("javax.inject:javax.inject:1")
     compile 'org.apache.commons:commons-lang3:3.3'

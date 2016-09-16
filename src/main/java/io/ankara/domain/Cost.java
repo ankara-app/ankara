@@ -5,12 +5,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -27,10 +30,11 @@ import java.util.stream.Collectors;
 //TODO INSTEAD IT SHOULD ONLY ALLOW EDITING THE ACTUAL DETAILS OF THE COST AS THEY WERE OBTAINED FROM THE CUSTOMER AND COMPANY
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Cost implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Version
@@ -73,6 +77,7 @@ public class Cost implements Serializable {
     @NotNull
     private Customer customer;
 
+    @Min(value = 0)
     @Column(precision = 48, scale = 2)
     private BigDecimal discountPercentage;
 
@@ -314,6 +319,15 @@ public class Cost implements Serializable {
         }
 
         return taxes;
+    }
+
+    public AppliedTax getAppliedTax(Tax tax){
+        for(Item item:items){
+            Optional<AppliedTax> appliedTax = item.getAppliedTax(tax);
+            if(appliedTax.isPresent())
+                return appliedTax.get();
+        }
+        return null;
     }
 
     public BigDecimal getTaxedTotal() {

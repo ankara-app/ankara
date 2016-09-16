@@ -21,9 +21,6 @@ import java.util.List;
 public class InvoiceServiceBean implements InvoiceService {
 
     @Inject
-    private UserService userService;
-
-    @Inject
     private CompanyService companyService;
 
     @Inject

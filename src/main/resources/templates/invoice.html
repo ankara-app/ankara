@@ -1,0 +1,237 @@
+<link th:href="${appAddress}+'/VAADIN/themes/bootstrap/styles.css'" href="../../webapp/VAADIN/themes/bootstrap/styles.css"
+      rel="stylesheet" type="text/css"/>
+
+<div id="printSection" class="container-fluid printSection">
+    <div class="row top10">
+        <div class="col-xs-6"
+             th:with="photoEncoded=${T(com.sun.org.apache.xml.internal.security.utils.Base64).encode(cost.company.picture)}">
+            <img class="logo  img-rounded" src="/image/logo.png"
+                 th:src="|data:image/png;base64,${photoEncoded}|" th:if="${cost.company.picture}"/>
+        </div>
+        <div class="col-xs-6">
+            <div class="row">
+                <div class="col-xs-2">
+                    <span class="caption">From</span>
+                </div>
+                <div class="col-xs-10 left-vertical-line">
+                    <address>
+                        <strong th:text="${cost.company.name}">Ankara Africa</strong><br/>
+                        <span class="pre" th:text="${cost.company.address}">
+                            12th Floor
+                            111 Richmond Street West
+                            Toronto, Ontario M5H 2G4
+                        </span>
+                    </address>
+                    <table class="table table-condensed">
+                        <tbody>
+                        <tr th:unless="${#strings.isEmpty(cost.company.phone)}">
+                            <td width="20%">
+                                <span class="caption">Phone</span>
+                            </td>
+                            <td>
+                                <span th:text="${cost.company.phone}">+255717050609</span>
+                            </td>
+                        </tr>
+                        <tr th:unless="${#strings.isEmpty(cost.company.email)}">
+                            <td width="20%">
+                                <span class="caption">Email</span>
+                            </td>
+                            <td>
+                                <span th:text="${cost.company.email}">info@ankara.io</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${cost.company.fax}">
+                            <td width="20%">
+                                <span class="caption">Fax</span>
+                            </td>
+                            <td>
+                                <span th:text="${cost.company.fax}">255717050609</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row top10">
+        <div class="col-xs-6">
+            <div class="row">
+                <div class="col-xs-4">
+                    <span class="caption">Invoice ID</span>
+                </div>
+                <div class="col-xs-8 left-vertical-line">
+                    <strong th:text="${cost.code}">0001</strong>
+                </div>
+            </div>
+            <div class="row" th:unless="${#strings.isEmpty(cost.purchaseOrder)}">
+                <div class="col-xs-4">
+                    <span class="caption">PO Number</span>
+                </div>
+                <div class="col-xs-8 left-vertical-line">
+                    <strong th:text="${cost.purchaseOrder}">66-77-88</strong>
+                </div>
+            </div>
+            <div class="row top5">
+                <div class="col-xs-4">
+                    <span class="caption">Issue Date</span>
+                </div>
+                <div class="col-xs-8 left-vertical-line">
+                    <span th:text="${cost.issueDate}">2016-09-12</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <span class="caption">Due Date</span>
+                </div>
+                <div class="col-xs-8 left-vertical-line">
+                    <span th:text="${cost.dueDate}">2016-09-12</span>
+                </div>
+            </div>
+            <div class="row top5">
+                <div class="col-xs-4">
+                    <span class="caption">Subject</span>
+                </div>
+                <div class="col-xs-8 left-vertical-line">
+                    <span class="subject" th:text="${cost.subject}">This is a test invoice</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="row">
+                <div class="col-xs-2">
+                    <span class="caption">For</span>
+                </div>
+                <div class="col-xs-10 left-vertical-line">
+                    <address>
+                        <strong th:text="${cost.customer.name}">Raha</strong><br/>
+                        <span class="pre" th:text="${cost.customer.address}">
+                            12th Floor
+                            111 Richmond Street West
+                            Toronto, Ontario M5H 2G
+                        </span>
+                    </address>
+                    <table class="table table-condensed">
+                        <tbody>
+                        <tr th:unless="${#strings.isEmpty(cost.customer.phone)}">
+                            <td width="20%">
+                                <span class="caption">Phone</span>
+                            </td>
+                            <td>
+                                <span th:text="${cost.customer.phone}">+255717050609</span>
+                            </td>
+                        </tr>
+                        <tr th:unless="${#strings.isEmpty(cost.customer.email)}">
+                            <td width="20%">
+                                <span class="caption">Email</span>
+                            </td>
+                            <td>
+                                <span th:text="${cost.customer.email}">info@ankara.io</span>
+                            </td>
+                        </tr>
+                        <tr th:unless="${#strings.isEmpty(cost.customer.fax)}">
+                            <td width="20%">
+                                <span class="caption">Fax</span>
+                            </td>
+                            <td>
+                                <span th:text="${cost.customer.fax}">255717050609</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row top15">
+        <div class="col-xs-12">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th class="text-right">Index</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th class="text-right"> Quantity</th>
+                    <th width="16.5%" class="text-right">Unit Price</th>
+                    <th width="16.5%" class="text-right">Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item,iterStat : ${cost.items}">
+                    <th scope="row" class="text-right" th:text="${iterStat.count}">1</th>
+                    <td>
+                        <span th:text="${item.type.name}">Goods</span>
+                    </td>
+                    <td>
+                        <span th:text="${item.description}">One</span>
+                    </td>
+                    <td class="text-right">
+                        <span th:text="${item.quantity.stripTrailingZeros().toPlainString()}">1</span>
+                    </td>
+                    <td class="money">
+                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(item.price, cost.currency)}">45,000,000.00 TZS</span>
+                    </td>
+                    <td class="money">
+                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(item.amount, cost.currency)}">45,000,000.00 TZS</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row top10">
+        <div class="col-xs-6 col-xs-offset-6 ">
+            <table class="table table-condensed borderless">
+                <tbody>
+                <tr>
+                    <td width="50%" class="text-right">
+                        <span class="caption">Subtotal</span>
+                    </td>
+                    <td class="money">
+                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.subtotal, cost.currency)}">715,000,000.00 TZS</span>
+                    </td>
+                </tr>
+                <tr th:if="${cost.discountPercentage gt 0}">
+                    <td width="50%" class="text-right">
+                        <span class="caption"
+                              th:text="|Discount (${cost.discountPercentage.stripTrailingZeros().toPlainString()}%)|">Discount (6.00%)</span>
+                    </td>
+                    <td class="money">
+                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.discount, cost.currency)}">50,622,000.00 TZS</span>
+                    </td>
+                </tr>
+                <tr th:each="tax,iterStat : ${cost.taxes}">
+                    <td width="50%" class="text-right">
+                        <span class="caption" th:text="${cost.getAppliedTax(tax)}">VAT (18.00%)</span>
+                    </td>
+                    <td class="money">
+                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.calculateTax(tax), cost.currency)}">128,700,000.00 TZS</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%" class="text-right">
+                        <strong>Amount Due</strong>
+                    </td>
+                    <td class="money">
+                        <strong th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.amountDue, cost.currency)}">793,078,000.00
+                            TZS</strong>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row top10" th:unless="${#strings.isEmpty(cost.notes)}">
+    <hr/>
+    <div class="col-lg-8">
+        <strong>Notes</strong><br/>
+        <span class="pre" th:text="${cost.notes}">Payment within 30 days</span>
+    </div>
+</div>
+<div class="row top10" th:unless="${#strings.isEmpty(cost.terms)}">
+    <div class="col-lg-8">
+        <strong>Terms</strong><br/>
+        <span class="pre" th:text="${cost.terms}">Some terms here</span>
+    </div>
+</div>

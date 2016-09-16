@@ -27,7 +27,7 @@ if (!printing) {
             crossorigin: "anonymous")
 }
 
-div(id: "printSection", class: "container-fluid") {
+div(id: "printSection", class: "container-fluid printSection") {
 
     div(class: "row top10") {
         div(class: "col-xs-6") {

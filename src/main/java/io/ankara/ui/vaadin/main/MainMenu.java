@@ -6,6 +6,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.ui.vaadin.main.view.cost.estimate.EstimateView;
+import io.ankara.ui.vaadin.main.view.cost.estimate.EstimatesView;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
 import io.ankara.ui.vaadin.main.view.setting.SettingView;
 
@@ -36,10 +37,10 @@ public class MainMenu extends CustomComponent {
         menuBar.addItem("Invoices", selectedItem -> {
             mainUI.getNavigator().navigateTo(InvoicesView.VIEW_NAME);
         });
-//
-//        menuBar.addItem("Estimates", selectedItem -> {
-//            mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
-//        });
+
+        menuBar.addItem("Estimates", selectedItem -> {
+            mainUI.getNavigator().navigateTo(EstimatesView.VIEW_NAME);
+        });
 
         menuBar.addItem("Settings", selectedItem -> {
             mainUI.getNavigator().navigateTo(SettingView.VIEW_NAME);

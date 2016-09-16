@@ -1,7 +1,6 @@
 package io.ankara.ui.vaadin.util;
 
 import com.vaadin.ui.Table;
-import io.ankara.ui.vaadin.main.view.cost.invoice.ItemsTable;
 
 /**
  * @author Boniface Chacha

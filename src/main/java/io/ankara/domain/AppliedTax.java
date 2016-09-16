@@ -87,4 +87,9 @@ public class AppliedTax {
                 .append(percentage)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append(tax.getName()).append(" (").append(percentage.stripTrailingZeros().toPlainString()).append("%)").toString();
+    }
 }
