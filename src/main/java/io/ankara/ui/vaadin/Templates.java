@@ -9,4 +9,6 @@ package io.ankara.ui.vaadin;
 public class Templates {
     public static final String INVOICE = "invoice";
     public static final String ESTIMATE = "estimate";
+    public static final String INVOICE_ENTRY = "invoiceEntry";
+    public static final String ESTIMATE_ENTRY = "estimateEntry";
 }

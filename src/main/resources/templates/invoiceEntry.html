@@ -1,0 +1,41 @@
+<style>
+    .entry{
+        line-height: 1.55;
+        margin: 10px;
+    }
+
+    .subject{
+
+    }
+
+    .date{
+        font-size: 10px;
+    }
+
+    .fade{
+        color: grey;
+    }
+
+</style>
+<div  class="entry">
+    <div>
+        <table width="80%">
+            <tr>
+                <td>
+                    <strong th:text="${cost.customer.name}">Customer name</strong>
+                    <span th:text="' | '+${cost.code}"> | 35233 </span>
+                </td>
+                <td class="text-right" width="30%">
+                    <strong  th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.amountDue, cost.currency)}" >12340000</strong>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <span th:text="${cost.subject}" class="fade">This is invoice subject</span>
+    </div>
+    <div>
+        <span th:text="${cost.timeCreated}" class="fade date">12/08/2016</span>
+    </div>
+</div>

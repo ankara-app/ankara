@@ -7,8 +7,10 @@ import com.vaadin.ui.Table;
 import io.ankara.domain.Estimate;
 import io.ankara.service.EstimateService;
 import io.ankara.service.UserService;
+import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.main.view.cost.estimate.EstimateView;
+import io.ankara.ui.vaadin.util.TableDecorator;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
@@ -22,7 +24,7 @@ import javax.inject.Inject;
  */
 @UIScope
 @SpringComponent
-public class EstimatesTable extends Table{
+public class EstimatesTable extends Table {
 
     @Inject
     private EstimateService estimateService;
@@ -36,21 +38,23 @@ public class EstimatesTable extends Table{
     @Inject
     private EventBus.UIEventBus eventBus;
 
+    @Inject
+    private TableDecorator tableDecorator;
+
     @PostConstruct
-    private void build(){
+    private void build() {
+        setColumnHeaderMode(ColumnHeaderMode.HIDDEN);
+
         BeanItemContainer container = new BeanItemContainer<>(Estimate.class);
-        container.addNestedContainerProperty("creator.fullName");
         setContainerDataSource(container);
 
         addItemClickListener(event -> {
             Estimate estimate = (Estimate) event.getItemId();
             mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
-            eventBus.publish(EstimateView.TOPIC_SHOW,this,estimate);
+            eventBus.publish(EstimateView.TOPIC_SHOW, this, estimate);
         });
 
-
-        setVisibleColumns("code", "timeCreated", "company", "customer","subject","subtotal","totalTax","discount","amountDue","creator.fullName");
-        setColumnHeaders("Estimate ID","Time Created","Company","Customer","Subject","Subtotal","Total Tax","Discount","Amount Due","Created By");
+        tableDecorator.decorate(this, Templates.ESTIMATE_ENTRY, "Estimate");
 
     }
 
@@ -58,5 +62,8 @@ public class EstimatesTable extends Table{
         BeanItemContainer container = (BeanItemContainer) getContainerDataSource();
         container.removeAllItems();
         container.addAll(estimateService.getEstimates(userService.getCurrentUser()));
+
+        int size = container.size();
+        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
     }
 }
