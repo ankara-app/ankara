@@ -5,12 +5,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -27,10 +30,11 @@ import java.util.stream.Collectors;
 //TODO INSTEAD IT SHOULD ONLY ALLOW EDITING THE ACTUAL DETAILS OF THE COST AS THEY WERE OBTAINED FROM THE CUSTOMER AND COMPANY
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Cost implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Version
@@ -73,6 +77,7 @@ public class Cost implements Serializable {
     @NotNull
     private Customer customer;
 
+    @Min(value = 0)
     @Column(precision = 48, scale = 2)
     private BigDecimal discountPercentage;
 
@@ -271,7 +276,7 @@ public class Cost implements Serializable {
         return getCompany() + " : " + getSubject();
     }
 
-    public BigDecimal calculateSubtotal() {
+    public BigDecimal getSubtotal() {
         BigDecimal subtotal = new BigDecimal("0.0");
 
         for (Item item : getItems()) {
@@ -281,8 +286,8 @@ public class Cost implements Serializable {
         return subtotal;
     }
 
-    public BigDecimal calculateDiscount() {
-        return calculateTaxedTotal().multiply(discountPercentage).divide(new BigDecimal("100"));
+    public BigDecimal getDiscount() {
+        return getTaxedTotal().multiply(discountPercentage).divide(new BigDecimal("100"));
     }
 
     public BigDecimal calculateTax(Tax tax) {
@@ -294,11 +299,11 @@ public class Cost implements Serializable {
         return total;
     }
 
-    public BigDecimal calculateAmountDue() {
-        return calculateTaxedTotal().subtract(calculateDiscount());
+    public BigDecimal getAmountDue() {
+        return getTaxedTotal().subtract(getDiscount());
     }
 
-    public BigDecimal calculateTax() {
+    public BigDecimal getTotalTax() {
         BigDecimal total = new BigDecimal("0.0");
         for(Tax tax:getTaxes()){
             total = total.add(calculateTax(tax));
@@ -316,7 +321,16 @@ public class Cost implements Serializable {
         return taxes;
     }
 
-    public BigDecimal calculateTaxedTotal() {
-        return calculateSubtotal().add(calculateTax());
+    public AppliedTax getAppliedTax(Tax tax){
+        for(Item item:items){
+            Optional<AppliedTax> appliedTax = item.getAppliedTax(tax);
+            if(appliedTax.isPresent())
+                return appliedTax.get();
+        }
+        return null;
+    }
+
+    public BigDecimal getTaxedTotal() {
+        return getSubtotal().add(getTotalTax());
     }
 }

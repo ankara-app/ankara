@@ -5,6 +5,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -41,6 +42,10 @@ public class WelcomeScreen extends VerticalLayout implements ViewDisplay{
     protected void build() {
         setSizeFull();
 
+        Image image = new Image(null,new ThemeResource("img/logo.png"));
+        addComponent(image);
+        setComponentAlignment(image,Alignment.BOTTOM_CENTER);
+
         Navigator navigator = new Navigator(welcomeUI, (ViewDisplay)this);
         navigator.addProvider(springViewProvider);
 
@@ -56,7 +61,8 @@ public class WelcomeScreen extends VerticalLayout implements ViewDisplay{
             if (currentComponent != null)
                 removeComponent(currentComponent);
             addComponent(component);
-            setComponentAlignment(component, Alignment.MIDDLE_CENTER);
+//            setExpandRatio(component,1);
+            setComponentAlignment(component, Alignment.TOP_CENTER);
 
             this.currentComponent = component;
         } else {

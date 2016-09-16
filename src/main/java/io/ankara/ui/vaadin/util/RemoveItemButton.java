@@ -15,26 +15,45 @@ import org.vaadin.dialogs.ConfirmDialog;
 public abstract class RemoveItemButton extends Button  {
 
     private Object itemID;
+    private boolean confirm;
 
-    public RemoveItemButton( Object itemID) {
+    public RemoveItemButton(Object itemID) {
+        this(itemID,false);
+    }
+
+    public RemoveItemButton(Object itemID, boolean confirm) {
         super("Remove", FontAwesome.REMOVE);
         this.itemID = itemID;
+        this.confirm = confirm;
+
         addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         addStyleName(ValoTheme.BUTTON_BORDERLESS);
         addStyleName(ValoTheme.BUTTON_TINY);
         addClickListener((ClickListener) event -> {
             if (itemID != null) {
-
-                ConfirmDialog.show(getUI(),"Please confirm ...","Should this item be removed?","Yes","Cancel", new ConfirmDialog.Listener() {
-                    @Override
-                    public void onClose(ConfirmDialog confirmDialog) {
-                        if(confirmDialog.isConfirmed())
-                            removeItem(itemID);
-                    }
-                });
-
+                if(isConfirm()){
+                    requestConfirmation(itemID);
+                }else removeItem(itemID);
             }
         });
+    }
+
+    private void requestConfirmation(Object itemID) {
+        ConfirmDialog.show(getUI(),"Please confirm ...","Should this item be removed?","Yes","Cancel", new ConfirmDialog.Listener() {
+            @Override
+            public void onClose(ConfirmDialog confirmDialog) {
+                if(confirmDialog.isConfirmed())
+                    removeItem(itemID);
+            }
+        });
+    }
+
+    public boolean isConfirm() {
+        return confirm;
+    }
+
+    public void setConfirm(boolean confirm) {
+        this.confirm = confirm;
     }
 
     public Object getItemID() {

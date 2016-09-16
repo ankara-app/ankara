@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.main.view.cost.invoice;
+package io.ankara.ui.vaadin.main.view.cost;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;

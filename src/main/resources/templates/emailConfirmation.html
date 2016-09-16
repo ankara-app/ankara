@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Ankara email account confirmation</title>
+</head>
+<body>
+<p>
+    Hello <b data-th-text="${user.fullName}">Peter</b>!
+</p>
+
+<p>Thank you for joining us</p>
+
+<p>Please click <a th:href="${appAddress}+'/user/confirmEmail/'+${token}">here</a> to confirm your email address</p>
+
+<p>Have a good day</p>
+<p><b>Ankara Team</b></p>
+<img height="60px" src="../images/logo.png" th:src="'cid:' + logo.png" />
+</body>
+</html>

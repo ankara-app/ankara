@@ -30,17 +30,7 @@ public class Bootstrap implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         LOG.info("Bootstrapping data...");
 
-        createSystemUser();
-
+        // do some setup here
         LOG.info("Bootstrapping completed");
-    }
-
-    private void createSystemUser() {
-        try {
-            userService.loadUserByUsername("bonifacechacha@gmail.com");
-        } catch (UsernameNotFoundException e) {
-            LOG.info("... initialise users");
-            userService.create(new User("bonifacechacha@gmail.com", "ankara", "Boniface Chacha",true, false));
-        }
     }
 }

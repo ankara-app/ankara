@@ -12,9 +12,6 @@ import java.util.List;
  * @email bonifacechacha@gmail.com
  * @date 8/20/16
  */
-public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
+public interface InvoiceRepository extends CostRepository<Invoice> {
 
-    Invoice findOneByCompanyOrderByIdDesc(Company company);
-
-    List<Invoice> findAllByCompanyInOrderByTimeCreatedDesc(List<Company> companies);
 }

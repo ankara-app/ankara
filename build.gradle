@@ -26,7 +26,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: "groovy"
+//apply plugin: "groovy"
 
 jar {
     baseName = 'ankara'
@@ -45,8 +45,8 @@ configurations {
 }
 
 dependencies {
-    compile "org.codehaus.groovy:groovy:${groovyVersion}"
-    compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
+//    compile "org.codehaus.groovy:groovy:${groovyVersion}"
+//    compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
 
     compile("javax.inject:javax.inject:1")
     compile 'org.apache.commons:commons-lang3:3.3'
@@ -56,6 +56,8 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
 //    compile('org.springframework.boot:spring-boot-starter-groovy-templates')
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-mail")
+
 //    compile("org.springframework.boot:spring-boot-devtools")
     compile('com.vaadin:vaadin-spring-boot-starter:1.0.1')
 
@@ -76,6 +78,7 @@ dependencies {
 
     compile "javax.servlet:jstl:1.2"
     compile "javax.servlet:jsp-api:2.0"
+
 //
 //	compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.9'
 //	compile group: 'com.itextpdf.tool', name: 'xmlworker', version: '5.5.9'

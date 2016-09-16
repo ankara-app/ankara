@@ -7,7 +7,9 @@ import com.vaadin.ui.Table;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
+import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.MainUI;
+import io.ankara.ui.vaadin.util.TableDecorator;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
@@ -36,21 +38,32 @@ public class InvoicesTable extends Table {
     @Inject
     private EventBus.UIEventBus eventBus;
 
+    @Inject
+    private TableDecorator tableDecorator;
+
     @PostConstruct
     private void build(){
-        setContainerDataSource(new BeanItemContainer<>(Invoice.class));
-        setVisibleColumns("code", "timeCreated", "company", "customer","creator","subject");
+        setColumnHeaderMode(ColumnHeaderMode.HIDDEN);
+        setPageLength(10);
+
+        BeanItemContainer container = new BeanItemContainer<>(Invoice.class);
+        setContainerDataSource(container);
 
         addItemClickListener(event -> {
             Invoice invoice = (Invoice) event.getItemId();
             mainUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
             eventBus.publish(InvoiceView.TOPIC_SHOW,this,invoice);
         });
+
+        tableDecorator.decorate(this, Templates.INVOICE_ENTRY,"Invoice");
     }
 
     public void reload() {
         BeanItemContainer container = (BeanItemContainer) getContainerDataSource();
         container.removeAllItems();
         container.addAll(invoiceService.getInvoices(userService.getCurrentUser()));
+
+        int size = container.size();
+        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
     }
 }

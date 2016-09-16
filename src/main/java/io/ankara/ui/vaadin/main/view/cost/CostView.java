@@ -6,17 +6,16 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import io.ankara.AnkaraTemplateEngine;
 import io.ankara.domain.Cost;
 import io.ankara.ui.vaadin.print.HTMLPrintButton;
+import org.springframework.beans.factory.annotation.Value;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Boniface Chacha
@@ -34,10 +33,13 @@ public abstract class CostView extends CustomComponent {
     private Label templateLabel;
 
     @Inject
-    private AnkaraTemplateEngine templateEngine;
+    private TemplateEngine templateEngine;
 
     @Inject
     protected EventBus.UIEventBus eventBus;
+
+    @Value("${ankara.app.address}")
+    private String appAddress;
 
     protected Cost cost;
 
@@ -80,16 +82,17 @@ public abstract class CostView extends CustomComponent {
 
     public void setCost(Cost cost) {
         this.cost = cost;
+        Context context = new Context();
 
-        Map bindings = new HashMap<>();
-        bindings.put("cost", cost);
+        context.setVariable("cost", cost);
+        context.setVariable("appAddress",appAddress);
 
-        VaadinSession.getCurrent().setAttribute("bindings", bindings);
+        VaadinSession.getCurrent().setAttribute("context", context);
         VaadinSession.getCurrent().setAttribute("template", template);
 
         try {
-            templateLabel.setValue(templateEngine.generate(template, bindings));
-        } catch (IOException | ClassNotFoundException e) {
+            templateLabel.setValue(templateEngine.process(template, context));
+        } catch (Exception e) {
             e.printStackTrace();
             Notification.show("Failed to render content", "Template " + template + " failed to be loaded.", Notification.Type.ERROR_MESSAGE);
             templateLabel.setValue("Failed to render content");

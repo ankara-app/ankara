@@ -1,6 +1,6 @@
 ---
 applications:
 - name: ankara
-  memory: 1G
+  memory: 2G
   random-route: true
   path: build/libs/ankara.war

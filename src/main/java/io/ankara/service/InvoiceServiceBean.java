@@ -21,9 +21,6 @@ import java.util.List;
 public class InvoiceServiceBean implements InvoiceService {
 
     @Inject
-    private UserService userService;
-
-    @Inject
     private CompanyService companyService;
 
     @Inject
@@ -31,7 +28,7 @@ public class InvoiceServiceBean implements InvoiceService {
 
     public String nextInvoiceNumber(Company company) {
         String prevCode;
-        Invoice recentInvoice = invoiceRepository.findOneByCompanyOrderByIdDesc(company);
+        Invoice recentInvoice = invoiceRepository.findFirstByCompanyOrderByIdDesc(company);
 
         if (recentInvoice == null)
             prevCode = "0000";

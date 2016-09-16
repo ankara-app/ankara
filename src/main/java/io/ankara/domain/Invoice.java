@@ -1,5 +1,7 @@
 package io.ankara.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
@@ -15,7 +17,6 @@ import java.util.Date;
  */
 @Entity
 public class Invoice extends Cost {
-
 
     private String purchaseOrder;
 
