@@ -2,7 +2,7 @@ buildscript {
     ext {
         springBootVersion = '1.4.0.RELEASE'
         groovyVersion = '2.4.7'
-        vaadinVersion = '7.7.0'
+        vaadinVersion = '7.7.1'
         vaadinSpringVersion = '0.0.7.RELEASE'
     }
 
@@ -27,6 +27,10 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 //apply plugin: "groovy"
+
+springBoot {
+    executable = true
+}
 
 jar {
     baseName = 'ankara'
