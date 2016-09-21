@@ -40,7 +40,6 @@ public class InvoiceServiceBean implements InvoiceService {
         return FormattedID.generate(prevCode);
     }
 
-    @Override
     @Transactional
     public boolean save(Invoice invoice) {
         invoiceRepository.save(invoice);
@@ -59,7 +58,6 @@ public class InvoiceServiceBean implements InvoiceService {
         return invoiceRepository.findOne(id);
     }
 
-    @Override
     @Transactional
     public boolean delete(Invoice invoice) {
         invoiceRepository.delete(invoice);
