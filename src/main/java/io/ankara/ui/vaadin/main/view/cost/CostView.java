@@ -38,9 +38,6 @@ public abstract class CostView extends CustomComponent {
     @Inject
     protected EventBus.UIEventBus eventBus;
 
-    @Value("${ankara.app.address}")
-    private String appAddress;
-
     protected Cost cost;
 
     public CostView(String template) {
@@ -85,7 +82,6 @@ public abstract class CostView extends CustomComponent {
         Context context = new Context();
 
         context.setVariable("cost", cost);
-        context.setVariable("appAddress",appAddress);
 
         VaadinSession.getCurrent().setAttribute("context", context);
         VaadinSession.getCurrent().setAttribute("template", template);
