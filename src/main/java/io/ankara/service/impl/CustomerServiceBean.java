@@ -1,8 +1,10 @@
-package io.ankara.service;
+package io.ankara.service.impl;
 
 import io.ankara.domain.Company;
 import io.ankara.domain.Customer;
 import io.ankara.repository.CustomerRepository;
+import io.ankara.service.CompanyService;
+import io.ankara.service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;

@@ -1,8 +1,9 @@
-package io.ankara.service;
+package io.ankara.service.impl;
 
 import io.ankara.domain.Company;
 import io.ankara.domain.ItemType;
 import io.ankara.repository.ItemTypeRepository;
+import io.ankara.service.ItemTypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

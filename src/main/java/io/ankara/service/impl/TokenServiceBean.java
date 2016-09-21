@@ -1,8 +1,9 @@
-package io.ankara.service;
+package io.ankara.service.impl;
 
 import io.ankara.domain.Token;
 import io.ankara.domain.User;
 import io.ankara.repository.TokenRepository;
+import io.ankara.service.TokenService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;

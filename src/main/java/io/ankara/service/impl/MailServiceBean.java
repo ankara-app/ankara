@@ -1,7 +1,8 @@
-package io.ankara.service;
+package io.ankara.service.impl;
 
 import io.ankara.domain.Token;
 import io.ankara.domain.User;
+import io.ankara.service.MailService;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;

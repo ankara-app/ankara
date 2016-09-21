@@ -1,8 +1,11 @@
-package io.ankara.service;
+package io.ankara.service.impl;
 
 import io.ankara.domain.Token;
 import io.ankara.domain.User;
 import io.ankara.repository.UserRepository;
+import io.ankara.service.MailService;
+import io.ankara.service.TokenService;
+import io.ankara.service.UserService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,8 +1,9 @@
-package io.ankara.service;
+package io.ankara.service.impl;
 
 import io.ankara.domain.Company;
 import io.ankara.domain.Tax;
 import io.ankara.repository.TaxRepository;
+import io.ankara.service.TaxService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

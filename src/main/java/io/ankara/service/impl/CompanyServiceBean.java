@@ -1,10 +1,14 @@
-package io.ankara.service;
+package io.ankara.service.impl;
 
 import io.ankara.domain.Company;
 import io.ankara.domain.ItemType;
 import io.ankara.domain.Tax;
 import io.ankara.domain.User;
 import io.ankara.repository.CompanyRepository;
+import io.ankara.service.CompanyService;
+import io.ankara.service.ItemTypeService;
+import io.ankara.service.TaxService;
+import io.ankara.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

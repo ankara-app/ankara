@@ -1,9 +1,11 @@
-package io.ankara.service;
+package io.ankara.service.impl;
 
 import io.ankara.domain.Company;
 import io.ankara.domain.Invoice;
 import io.ankara.domain.User;
 import io.ankara.repository.InvoiceRepository;
+import io.ankara.service.CompanyService;
+import io.ankara.service.InvoiceService;
 import io.ankara.ui.vaadin.util.FormattedID;
 import org.springframework.stereotype.Service;
 
