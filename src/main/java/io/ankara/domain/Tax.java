@@ -13,6 +13,7 @@ import java.math.BigDecimal;
  */
 @Entity
 public class Tax {
+    public static final String VAT = "VAT";
     @Id
     @GeneratedValue
     private Long id;

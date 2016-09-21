@@ -40,6 +40,7 @@ public class ItemTypeServiceBean implements ItemTypeService {
     }
 
     @Override
+    @Transactional
     public boolean delete(ItemType itemType) {
         itemTypeRepository.delete(itemType);
         return true;

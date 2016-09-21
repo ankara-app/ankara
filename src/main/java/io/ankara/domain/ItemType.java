@@ -15,6 +15,9 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 public class ItemType {
+    public static final String GOODS = "Goods";
+    public static final String SERVICE = "Service";
+
     @Id
     @GeneratedValue
     private Long id;

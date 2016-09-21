@@ -6,6 +6,7 @@ import io.ankara.repository.CustomerRepository;
 import io.ankara.service.CompanyService;
 import io.ankara.service.CustomerService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -45,12 +46,14 @@ public class CustomerServiceBean implements CustomerService {
     }
 
     @Override
+    @Transactional
     public boolean save(Customer customer) {
         customerRepository.save(customer);
         return true;
     }
 
     @Override
+    @Transactional
     public boolean delete(Customer customer) {
         customerRepository.delete(customer);
         return true;
@@ -62,6 +65,7 @@ public class CustomerServiceBean implements CustomerService {
     }
 
     @Override
+    @Transactional
     public Customer create(String name, Company company) {
         Customer customer = new Customer(name, company);
         save(customer);

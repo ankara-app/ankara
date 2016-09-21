@@ -9,6 +9,7 @@ import io.ankara.service.CompanyService;
 import io.ankara.service.EstimateService;
 import io.ankara.ui.vaadin.util.FormattedID;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -41,6 +42,7 @@ public class EstimateServiceBean implements EstimateService {
     }
 
     @Override
+    @Transactional
     public boolean save(Estimate Estimate) {
         estimateRepository.save(Estimate);
         return true;
@@ -59,6 +61,7 @@ public class EstimateServiceBean implements EstimateService {
     }
 
     @Override
+    @Transactional
     public boolean delete(Estimate estimate) {
         estimateRepository.delete(estimate);
         return true;

@@ -61,13 +61,13 @@ public class CompanyServiceBean implements CompanyService {
 
     @Transactional
     private void addDefaultTaxes(Company company) {
-        taxService.save(new Tax("VAT", company, new BigDecimal("18"), "Value added tax"));
+        taxService.save(new Tax(Tax.VAT, company, new BigDecimal("18"), "Value added tax"));
     }
 
     @Transactional
     private void addDefaultItemTypes(Company company) {
-        itemTypeService.save(new ItemType("Goods", company, null));
-        itemTypeService.save(new ItemType("Service", company, null));
+        itemTypeService.save(new ItemType(ItemType.GOODS, company, null));
+        itemTypeService.save(new ItemType(ItemType.SERVICE, company, null));
     }
 
     @Override
@@ -85,6 +85,7 @@ public class CompanyServiceBean implements CompanyService {
     }
 
     @Override
+    @Transactional
     public boolean delete(Company company) {
         companyRepository.delete(company);
         return true;

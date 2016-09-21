@@ -22,6 +22,7 @@ public class TaxServiceBean implements TaxService {
     @Inject
     private TaxRepository taxRepository;
 
+    @Transactional
     public boolean save(Tax tax) {
         taxRepository.save(tax);
         return true;

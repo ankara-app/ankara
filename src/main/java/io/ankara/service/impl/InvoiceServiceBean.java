@@ -8,6 +8,7 @@ import io.ankara.service.CompanyService;
 import io.ankara.service.InvoiceService;
 import io.ankara.ui.vaadin.util.FormattedID;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -40,6 +41,7 @@ public class InvoiceServiceBean implements InvoiceService {
     }
 
     @Override
+    @Transactional
     public boolean save(Invoice invoice) {
         invoiceRepository.save(invoice);
         return true;
@@ -58,6 +60,7 @@ public class InvoiceServiceBean implements InvoiceService {
     }
 
     @Override
+    @Transactional
     public boolean delete(Invoice invoice) {
         invoiceRepository.delete(invoice);
         return true;

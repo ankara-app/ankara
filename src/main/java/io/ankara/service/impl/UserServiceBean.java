@@ -133,6 +133,7 @@ public class UserServiceBean implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean resetPassword(String email) {
         User user = getUser(email);
         if (user == null)
