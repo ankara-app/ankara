@@ -8,6 +8,7 @@ import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import io.ankara.ui.vaadin.AnkaraTheme;
+import io.ankara.ui.vaadin.AnkaraUI;
 import org.springframework.context.ApplicationContext;
 
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ import java.util.Locale;
 @SpringUI(path = "/app")
 @Theme(AnkaraTheme.THEME)
 @Push(transport = Transport.WEBSOCKET)
-public class MainUI extends UI {
+public class MainUI extends AnkaraUI {
 
     @Inject
     private ApplicationContext applicationContext;

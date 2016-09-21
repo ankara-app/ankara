@@ -27,6 +27,7 @@ import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.AnkaraTheme;
+import io.ankara.ui.vaadin.AnkaraUI;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
 import org.springframework.context.ApplicationContext;
 
@@ -39,7 +40,7 @@ import javax.inject.Inject;
  */
 @SpringUI(path = "/welcome")
 @Theme(AnkaraTheme.THEME)
-public class WelcomeUI extends UI {
+public class WelcomeUI extends AnkaraUI {
 
     @Inject
     private ApplicationContext applicationContext;
@@ -50,9 +51,6 @@ public class WelcomeUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         getPage().setTitle("ankara | Welcome ...");
-
-        //TODO IMPLEMENT THE ERROR HANDLER TO EMAIL ERRORS TO SUPPORT ACCOUNT
-        VaadinSession.getCurrent().setErrorHandler((ErrorHandler) event -> event.getThrowable().printStackTrace());
 
         if (userService.isCurrentUserAuthenticated())
             getPage().setLocation("/app");

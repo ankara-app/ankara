@@ -8,6 +8,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
+import io.ankara.ui.vaadin.AnkaraUI;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -26,7 +27,7 @@ import java.util.Map;
  */
 @SpringUI(path = "/print")
 @Theme("bootstrap")
-public class PrintUI extends UI {
+public class PrintUI extends AnkaraUI {
 
     @Inject
     private TemplateEngine templateEngine;

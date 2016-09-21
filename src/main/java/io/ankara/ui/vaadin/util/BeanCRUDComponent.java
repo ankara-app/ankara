@@ -4,7 +4,9 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import io.ankara.ui.vaadin.main.MainUI;
 
+import javax.inject.Inject;
 import java.util.Collection;
 
 /**
@@ -20,7 +22,6 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
     protected Window popUpWindow;
     protected Button createButton;
     protected HorizontalLayout header;
-
 
     protected void build(Class type) {
 
@@ -54,6 +55,8 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         table.addItemClickListener(event -> {
             Object bean = event.getItemId();
             popUpWindow.setContent(getBeanComponent(bean));
+
+            if(!popUpWindow.isAttached())
             UI.getCurrent().addWindow(popUpWindow);
         });
 

@@ -2,6 +2,7 @@ package io.ankara.service;
 
 import io.ankara.domain.Token;
 import io.ankara.domain.User;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -36,6 +37,9 @@ public class MailServiceBean implements MailService {
     @Value("${ankara.mail.from}")
     private String from;
 
+    @Value("${ankara.mail.errors}")
+    private String errorsEmail;
+
     @Value("${ankara.app.address}")
     private String appAddress;
 
@@ -59,6 +63,10 @@ public class MailServiceBean implements MailService {
         ctx.setVariable("appAddress", appAddress);
         String htmlContent = this.templateEngine.process(template, ctx);
 
+        sendEmail(to, subject, htmlContent,true);
+    }
+
+    private void sendEmail(String to, String subject, String content, boolean includeLogo) {
         MimeMessage mimeMessage = this.mailSender.createMimeMessage();
         MimeMessageHelper message = null;
 
@@ -67,8 +75,9 @@ public class MailServiceBean implements MailService {
             message.setSubject(subject);
             message.setTo(to);
             message.setFrom(from);
-            message.setText(htmlContent, true);
-            message.addInline("logo.png", new ClassPathResource("images/logo.png"));
+            message.setText(content, true);
+            if (includeLogo)
+                message.addInline("logo.png", new ClassPathResource("images/logo.png"));
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -88,5 +97,16 @@ public class MailServiceBean implements MailService {
         ctx.setVariable("password", password);
 
         sendEmail(to, subject, template, ctx);
+    }
+
+    @Async
+    @Override
+    public void sendErrorsEmail(Throwable throwable) {
+        sendEmail(
+                errorsEmail,
+                ExceptionUtils.getRootCauseMessage(throwable),
+                ExceptionUtils.getStackTrace(throwable),
+                false
+        );
     }
 }

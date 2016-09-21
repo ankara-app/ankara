@@ -13,4 +13,6 @@ public interface MailService {
     void sendConfirmationEmail(Token token);
 
     void sendPasswordResetEmail(User user, String password);
+
+    void sendErrorsEmail(Throwable throwable);
 }
