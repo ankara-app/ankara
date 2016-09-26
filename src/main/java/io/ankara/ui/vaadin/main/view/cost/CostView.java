@@ -7,7 +7,9 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Cost;
+import io.ankara.domain.Invoice;
 import io.ankara.ui.vaadin.print.HTMLPrintButton;
+import io.ankara.ui.vaadin.util.PDFButton;
 import org.springframework.beans.factory.annotation.Value;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -31,6 +33,8 @@ public abstract class CostView extends CustomComponent {
     private VerticalLayout content;
     private HorizontalLayout header;
     private Label templateLabel;
+    private Button edit,delete,print;
+    private PDFButton pdf;
 
     @Inject
     private TemplateEngine templateEngine;
@@ -46,18 +50,22 @@ public abstract class CostView extends CustomComponent {
 
     @PostConstruct
     private void build() {
-        Button edit = new Button("Edit", FontAwesome.PENCIL);
+        edit = new Button("Edit", FontAwesome.PENCIL);
         edit.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         edit.addClickListener((Button.ClickListener) event -> edit(cost));
 
-        Button delete = new Button("Delete", FontAwesome.REMOVE);
+        delete = new Button("Delete", FontAwesome.REMOVE);
         delete.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         delete.addClickListener((Button.ClickListener) event -> delete(cost));
 
-        Button print = new HTMLPrintButton("Print", FontAwesome.PRINT);
+        print = new HTMLPrintButton();
         print.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 
-        header = new HorizontalLayout(edit, delete, print);
+        pdf = new PDFButton();
+        pdf.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+
+        header = new HorizontalLayout(edit, delete, print,pdf);
+
         content = new VerticalLayout();
         content.setMargin(true);
         content.addStyleName(ValoTheme.LAYOUT_CARD);
@@ -79,6 +87,9 @@ public abstract class CostView extends CustomComponent {
 
     public void setCost(Cost cost) {
         this.cost = cost;
+
+        configurePDFButton(cost);
+
         Context context = new Context();
 
         context.setVariable("cost", cost);
@@ -92,6 +103,14 @@ public abstract class CostView extends CustomComponent {
             e.printStackTrace();
             Notification.show("Failed to render content", "Template " + template + " failed to be loaded.", Notification.Type.ERROR_MESSAGE);
             templateLabel.setValue("Failed to render content");
+        }
+    }
+
+    private void configurePDFButton(Cost cost) {
+        if(cost instanceof Invoice){
+            pdf.getOpener().setUrl("/invoice/pdf/"+cost.getId());
+        }else{
+            pdf.getOpener().setUrl("/estimate/pdf/"+cost.getId());
         }
     }
 

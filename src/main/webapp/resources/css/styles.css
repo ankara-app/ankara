@@ -1,3 +1,16 @@
+.entry{
+    line-height: 1.55;
+    margin: 10px;
+}
+
+.date{
+    font-size: 10px;
+}
+
+.fade{
+    color:  grey;
+}
+
 .left-vertical-line {
     border-left: 1px solid #ddd;
 }
@@ -18,12 +31,14 @@
     margin-top: 15px;
 }
 
-/*.logo{*/
-/*width: 200px;*/
-/*}*/
+.money{
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+}
 
 .caption {
-    color: grey;
+    color: grey !important;
     font-weight: 300;
 }
 
@@ -36,16 +51,14 @@
     font-size: 16px;
 }
 
-.money{
-    text-align: right;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
 .pre {
     white-space: pre-wrap; /* css-3 */
     white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
     white-space: -pre-wrap; /* Opera 4-6 */
     white-space: -o-pre-wrap; /* Opera 7 */
     word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f9f9f9 !important;
 }

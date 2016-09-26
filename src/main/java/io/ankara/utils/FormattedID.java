@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.util;
+package io.ankara.utils;
 
 import java.io.Serializable;
 
@@ -18,7 +18,7 @@ public class FormattedID implements Serializable {
      * Generate an ID
      *
      * @return generated ID
-     * @throws FormatExhaustedException when the numbers to be generated from the specified format are over
+     * @throws IndexOutOfBoundsException when the numbers to be generated from the specified format are over
      */
     public static String generate(String lastGeneratedID) throws IndexOutOfBoundsException {
         String currentGenerateID = new String(lastGeneratedID);

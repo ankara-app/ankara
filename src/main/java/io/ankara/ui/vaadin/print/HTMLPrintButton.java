@@ -1,6 +1,7 @@
 package io.ankara.ui.vaadin.print;
 
 import com.vaadin.server.BrowserWindowOpener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
 
@@ -12,12 +13,8 @@ import com.vaadin.ui.Button;
  */
 public class HTMLPrintButton extends Button {
 
-    public HTMLPrintButton(String caption, Resource icon) {
-        super(caption, icon);
-        decorate();
-    }
-
     public HTMLPrintButton() {
+        super("Print", FontAwesome.PRINT);
         decorate();
     }
 

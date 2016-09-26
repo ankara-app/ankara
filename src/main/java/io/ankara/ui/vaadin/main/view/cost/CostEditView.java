@@ -16,7 +16,7 @@ import io.ankara.service.CompanyService;
 import io.ankara.service.CustomerService;
 import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.AnkaraTheme;
-import io.ankara.ui.vaadin.util.NumberUtils;
+import io.ankara.utils.NumberUtils;
 import io.ankara.ui.vaadin.util.TextFieldUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.spring.events.EventBus;

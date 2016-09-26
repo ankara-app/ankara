@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.util;
+package io.ankara.utils;
 
 import org.apache.commons.lang3.StringUtils;
 

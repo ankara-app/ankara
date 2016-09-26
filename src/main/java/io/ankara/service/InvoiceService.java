@@ -4,6 +4,8 @@ import io.ankara.domain.Company;
 import io.ankara.domain.Invoice;
 import io.ankara.domain.User;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,4 +25,6 @@ public interface InvoiceService {
     Invoice getInvoice(Long id);
 
     boolean delete(Invoice cost);
+
+    File generatePDF(Invoice invoice) throws IOException, InterruptedException;
 }

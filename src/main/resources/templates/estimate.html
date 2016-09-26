@@ -1,8 +1,4 @@
-<link th:href="'/VAADIN/themes/bootstrap/styles.css'"
-      href="../../webapp/VAADIN/themes/bootstrap/styles.css"
-      rel="stylesheet" type="text/css"/>
-
-<div id="printSection" class="container-fluid printSection">
+<div th:fragment="estimate_content" class="container-fluid">
     <div class="row top10">
         <div class="col-xs-6"
              th:with="photoEncoded=${T(com.sun.org.apache.xml.internal.security.utils.Base64).encode(cost.company.picture)}">
@@ -155,10 +151,10 @@
                         <span th:text="${item.quantity.stripTrailingZeros().toPlainString()}">1</span>
                     </td>
                     <td class="money">
-                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(item.price, cost.currency)}">45,000,000.00 TZS</span>
+                        <span th:text="${T(io.ankara.utils.NumberUtils).formatMoney(item.price, cost.currency)}">45,000,000.00 TZS</span>
                     </td>
                     <td class="money">
-                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(item.amount, cost.currency)}">45,000,000.00 TZS</span>
+                        <span th:text="${T(io.ankara.utils.NumberUtils).formatMoney(item.amount, cost.currency)}">45,000,000.00 TZS</span>
                     </td>
                 </tr>
                 </tbody>
@@ -174,7 +170,7 @@
                         <span class="caption">Subtotal</span>
                     </td>
                     <td class="money">
-                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.subtotal, cost.currency)}">715,000,000.00 TZS</span>
+                        <span th:text="${T(io.ankara.utils.NumberUtils).formatMoney(cost.subtotal, cost.currency)}">715,000,000.00 TZS</span>
                     </td>
                 </tr>
                 <tr th:if="${cost.discountPercentage gt 0}">
@@ -183,7 +179,7 @@
                               th:text="|Discount (${cost.discountPercentage.stripTrailingZeros().toPlainString()}%)|">Discount (6.00%)</span>
                     </td>
                     <td class="money">
-                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.discount, cost.currency)}">50,622,000.00 TZS</span>
+                        <span th:text="${T(io.ankara.utils.NumberUtils).formatMoney(cost.discount, cost.currency)}">50,622,000.00 TZS</span>
                     </td>
                 </tr>
                 <tr th:each="tax,iterStat : ${cost.taxes}">
@@ -191,7 +187,7 @@
                         <span class="caption" th:text="${cost.getAppliedTax(tax)}">VAT (18.00%)</span>
                     </td>
                     <td class="money">
-                        <span th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.calculateTax(tax), cost.currency)}">128,700,000.00 TZS</span>
+                        <span th:text="${T(io.ankara.utils.NumberUtils).formatMoney(cost.calculateTax(tax), cost.currency)}">128,700,000.00 TZS</span>
                     </td>
                 </tr>
                 <tr>
@@ -199,24 +195,25 @@
                         <strong>Estimate Total</strong>
                     </td>
                     <td class="money">
-                        <strong th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.amountDue, cost.currency)}">793,078,000.00 TZS</strong>
+                        <strong th:text="${T(io.ankara.utils.NumberUtils).formatMoney(cost.amountDue, cost.currency)}">793,078,000.00 TZS</strong>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-</div>
-<div class="row top10" th:unless="${#strings.isEmpty(cost.notes)}">
-    <hr/>
-    <div class="col-lg-8">
-        <strong>Notes</strong><br/>
-        <span class="pre" th:text="${cost.notes}">Payment within 30 days</span>
+
+    <div class="row top10" th:unless="${#strings.isEmpty(cost.notes)}">
+        <hr/>
+        <div class="col-lg-8">
+            <strong>Notes</strong><br/>
+            <span class="pre" th:text="${cost.notes}">Payment within 30 days</span>
+        </div>
     </div>
-</div>
-<div class="row top10" th:unless="${#strings.isEmpty(cost.terms)}">
-    <div class="col-lg-8">
-        <strong>Terms</strong><br/>
-        <span class="pre" th:text="${cost.terms}">Some terms here</span>
+    <div class="row top10" th:unless="${#strings.isEmpty(cost.terms)}">
+        <div class="col-lg-8">
+            <strong>Terms</strong><br/>
+            <span class="pre" th:text="${cost.terms}">Some terms here</span>
+        </div>
     </div>
 </div>

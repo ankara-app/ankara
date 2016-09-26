@@ -16,7 +16,7 @@ import io.ankara.service.ItemTypeService;
 import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.util.AppliedTaxesConverter;
-import io.ankara.ui.vaadin.util.NumberUtils;
+import io.ankara.utils.NumberUtils;
 import io.ankara.ui.vaadin.util.RemoveItemButtonGenerator;
 import org.springframework.util.CollectionUtils;
 import org.vaadin.spring.events.EventBus;

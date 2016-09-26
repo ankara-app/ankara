@@ -9,6 +9,8 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Company;
 import io.ankara.service.CompanyService;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.vaadin.easyuploads.ImagePreviewField;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +22,7 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/14/16 9:10 PM
  */
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @SpringComponent
 public class CompanyForm extends FormLayout {
 

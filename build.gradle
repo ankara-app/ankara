@@ -42,6 +42,7 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 configurations {
@@ -82,6 +83,10 @@ dependencies {
 
     compile "javax.servlet:jstl:1.2"
     compile "javax.servlet:jsp-api:2.0"
+    compile "org.webjars:bootstrap:3.3.7"
+
+    //PDF Lib
+//    compile 'com.github.jhonnymertz:java-wkhtmltopdf-wrapper:1.0.0-RELEASE'
 
 //
 //	compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.9'

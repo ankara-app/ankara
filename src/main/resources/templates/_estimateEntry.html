@@ -1,22 +1,6 @@
-<style>
-    .entry{
-        line-height: 1.55;
-        margin: 10px;
-    }
-
-    .subject{
-
-    }
-
-    .date{
-        font-size: 10px;
-    }
-
-    .fade{
-        color: grey;
-    }
-
-</style>
+<link th:href="'/resources/css/styles.css'"
+      href="/resources/css/styles.css"
+      rel="stylesheet" type="text/css"/>
 <div  class="entry">
     <div>
         <table width="80%">
@@ -26,7 +10,7 @@
                     <span th:text="' | '+${cost.code}"> | 35233 </span>
                 </td>
                 <td class="text-right" width="30%">
-                    <strong  th:text="${T(io.ankara.ui.vaadin.util.NumberUtils).formatMoney(cost.amountDue, cost.currency)}" >12340000</strong>
+                    <strong  th:text="${T(io.ankara.utils.NumberUtils).formatMoney(cost.amountDue, cost.currency)}" >12340000</strong>
 
                 </td>
             </tr>
