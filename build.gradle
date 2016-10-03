@@ -2,7 +2,7 @@ buildscript {
     ext {
         springBootVersion = '1.4.0.RELEASE'
         groovyVersion = '2.4.7'
-        vaadinVersion = '7.7.1'
+        vaadinVersion = '7.7.3'
         vaadinSpringVersion = '0.0.7.RELEASE'
     }
 
@@ -64,7 +64,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-mail")
 
 //    compile("org.springframework.boot:spring-boot-devtools")
-    compile('com.vaadin:vaadin-spring-boot-starter:1.0.1')
+    compile('com.vaadin:vaadin-spring-boot-starter:1.0.2')
 
     runtime('mysql:mysql-connector-java')
     testCompile('org.springframework.boot:spring-boot-starter-test')

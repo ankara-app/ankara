@@ -167,11 +167,11 @@ public abstract class CostEditView extends VerticalLayout implements View {
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setWidth("200px");
         save.addClickListener((Button.ClickListener) event -> {
-            if (fieldGroup.isValid() && itemsTable.ensureItemsValidity()) {
+
+            if (fieldGroup.isValid()) {
                 loadCost();
                 doSave(cost);
-            } else
-                Notification.show("Enter required details correctly", "Items which are not required should be removed", Notification.Type.WARNING_MESSAGE);
+            } else Notification.show("Enter required details correctly", Notification.Type.WARNING_MESSAGE);
         });
 
         HorizontalLayout footer = new HorizontalLayout();
@@ -183,7 +183,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
     }
 
     public void loadCost() {
-        cost.setItems(itemsTable.getItems());
+        cost.setItems(itemsTable.getValidItems());
     }
 
     private FormLayout createSummaryLayout() {

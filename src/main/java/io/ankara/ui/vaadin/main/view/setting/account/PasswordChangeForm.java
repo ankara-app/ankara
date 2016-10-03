@@ -7,6 +7,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.User;
 import io.ankara.service.UserService;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 import io.ankara.ui.vaadin.util.PasswordValidator;
 
 import javax.annotation.PostConstruct;
@@ -53,7 +54,7 @@ public class PasswordChangeForm extends FormLayout {
 
                 User user = userService.getCurrentUser();
                 if (isPasswordCorrect() && userService.changePassword(user, passwordField.getValue())) {
-                    Notification.show("Your password is changed successfully", Notification.Type.TRAY_NOTIFICATION);
+                    NotificationUtils.showSuccess("Your password is changed successfully", null);
                     getUI().getPage().reload();
                 } else {
                     Notification.show("Please enter your password correct", Notification.Type.WARNING_MESSAGE);

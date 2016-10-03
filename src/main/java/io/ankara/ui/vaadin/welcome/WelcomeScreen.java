@@ -1,6 +1,5 @@
 package io.ankara.ui.vaadin.welcome;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;

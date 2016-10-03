@@ -1,19 +1,16 @@
 package io.ankara.service.impl;
 
-import io.ankara.domain.Company;
-import io.ankara.domain.ItemType;
-import io.ankara.domain.Tax;
-import io.ankara.domain.User;
+import io.ankara.domain.*;
 import io.ankara.repository.CompanyRepository;
-import io.ankara.service.CompanyService;
-import io.ankara.service.ItemTypeService;
-import io.ankara.service.TaxService;
-import io.ankara.service.UserService;
+import io.ankara.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,6 +33,10 @@ public class CompanyServiceBean implements CompanyService {
 
     @Inject
     private TaxService taxService;
+
+    @Inject
+    private CustomerService customerService;
+
 
     @Override
     public List<Company> getCurrentUserCompanies() {
@@ -87,7 +88,14 @@ public class CompanyServiceBean implements CompanyService {
     @Override
     @Transactional
     public boolean delete(Company company) {
+        Collection<Customer> customers = customerService.getCustomers(company);
+
+        for(Customer customer:customers)
+            customerService.delete(customer);
+
         companyRepository.delete(company);
+
         return true;
     }
+
 }

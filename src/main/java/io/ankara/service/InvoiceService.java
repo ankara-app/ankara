@@ -1,11 +1,10 @@
 package io.ankara.service;
 
-import io.ankara.domain.Company;
-import io.ankara.domain.Invoice;
-import io.ankara.domain.User;
+import io.ankara.domain.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,6 +20,12 @@ public interface InvoiceService {
     boolean save(Invoice invoice);
 
     List<Invoice> getInvoices(User currentUser);
+
+    List<Invoice> getCompanyInvoices(Collection<Company> companies);
+
+    Collection<Invoice> getCustomerInvoices(Collection<Customer> customers);
+
+    List<Invoice> getCreatedInvoices(User user);
 
     Invoice getInvoice(Long id);
 

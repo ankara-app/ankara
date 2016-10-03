@@ -18,6 +18,7 @@ import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.CostEditView;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoiceEditView;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoiceView;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.events.annotation.EventBusListenerTopic;
 
@@ -61,7 +62,7 @@ public class EstimateEditView extends CostEditView {
     protected void doSave(Cost cost) {
         Estimate estimate = (Estimate) cost;
         if(estimateService.save(estimate)){
-            Notification.show("Estimate saved successfully", Notification.Type.TRAY_NOTIFICATION);
+            NotificationUtils.showSuccess("Estimate saved successfully",null);
             mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
             eventBus.publish(EstimateView.TOPIC_SHOW,this,estimate);
         }

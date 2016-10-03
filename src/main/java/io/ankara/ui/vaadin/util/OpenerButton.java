@@ -2,6 +2,7 @@ package io.ankara.ui.vaadin.util;
 
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
 import io.ankara.ui.vaadin.main.MainUI;
 
@@ -11,15 +12,15 @@ import io.ankara.ui.vaadin.main.MainUI;
  * @email bonifacechacha@gmail.com
  * @date 9/26/16.
  */
-public class PDFButton extends Button{
+public class OpenerButton extends Button{
 
     private BrowserWindowOpener opener;
 
-    public PDFButton() {
+    public OpenerButton(String caption, Resource resource) {
         opener = new BrowserWindowOpener(MainUI.class);
         opener.extend(this);
-        setIcon(FontAwesome.FILE_PDF_O);
-        setCaption("PDF");
+        setIcon(resource);
+        setCaption(caption);
     }
 
     public BrowserWindowOpener getOpener() {

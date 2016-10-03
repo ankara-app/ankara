@@ -18,7 +18,7 @@ import java.util.Arrays;
  * @date 9/26/16.
  */
 @Service
-public class PDFServiceBean implements PDFService {
+public class WKHTMLTOPDFServiceBean implements PDFService {
     @Override
     public File generatePDF(String URL, String outputFile) throws IOException, InterruptedException {
         executePDFGenerateCommand(URL, outputFile);
@@ -26,17 +26,11 @@ public class PDFServiceBean implements PDFService {
     }
 
     private void executePDFGenerateCommand(String url, String outputFile) {
-        String command = String.join(" ", Arrays.asList("xvfb-run wkhtmltopdf", url, outputFile));
-        String s;
+        String command = String.join(" ", Arrays.asList("xvfb-run wkhtmltopdf -L 15 -R 15 -T 15 -B 15", url, outputFile));
         Process p;
         try {
             p = Runtime.getRuntime().exec(command);
-//            BufferedReader br = new BufferedReader(
-//                    new InputStreamReader(p.getInputStream()));
-//            while ((s = br.readLine()) != null)
-//                System.out.println("line: " + s);
             p.waitFor();
-//            System.out.println("exit: " + p.exitValue());
             p.destroy();
         } catch (Exception e) {
             e.printStackTrace();

@@ -38,23 +38,23 @@ public class InvoiceController {
         return "invoice";
     }
 
+    @RequestMapping(value = "print/{invoiceID}", method = RequestMethod.GET)
+    public String print(@PathVariable Long invoiceID, Model model) {
+        model.addAttribute("print", true);
+        model.addAttribute("cost", invoiceService.getInvoice(invoiceID));
+        return "invoicePrint";
+    }
+
     @RequestMapping(value = "pdf/{invoiceID}", method = RequestMethod.GET)
-    public void pdf(@PathVariable Long invoiceID, HttpServletRequest request, HttpServletResponse response) {
+    public void pdf(@PathVariable Long invoiceID, HttpServletResponse response) throws IOException, InterruptedException {
         Invoice invoice = invoiceService.getInvoice(invoiceID);
         if (invoice == null) return;
 
         response.setContentType("application/pdf");
-
-        try {
-            File file = invoiceService.generatePDF(invoice);
-            OutputStream os = response.getOutputStream();
-            Files.copy(file.toPath(), os);
-            os.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        File file = invoiceService.generatePDF(invoice);
+        OutputStream os = response.getOutputStream();
+        Files.copy(file.toPath(), os);
+        os.flush();
     }
 
 

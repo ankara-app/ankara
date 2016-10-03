@@ -69,10 +69,10 @@ public class Company {
     @NotNull
     private Date timeCreated;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
     private Set<Tax> taxes;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
     private Set<ItemType> itemTypes;
 
     public Company() {

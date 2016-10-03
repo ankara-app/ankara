@@ -16,7 +16,7 @@ public class NotificationUtils {
 
     public static void show(String message, String description,Notification.Type type, String... styles) {
         Notification notification = new Notification(message,description,type,true);
-        notification.setDelayMsec(-1);
+//        notification.setDelayMsec(-1);
         notification.setStyleName(StringUtils.join(styles," "));
         notification.show(Page.getCurrent());
     }
@@ -27,5 +27,9 @@ public class NotificationUtils {
 
     public static void showSuccess(String message, String description) {
         show(message,description,Notification.Type.HUMANIZED_MESSAGE,ValoTheme.NOTIFICATION_CLOSABLE);
+    }
+
+    public static void showError(String message, String description) {
+        show(message,description, Notification.Type.ERROR_MESSAGE,ValoTheme.NOTIFICATION_ERROR,ValoTheme.NOTIFICATION_CLOSABLE);
     }
 }

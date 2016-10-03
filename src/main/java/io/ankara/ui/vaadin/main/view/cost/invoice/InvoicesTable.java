@@ -44,7 +44,6 @@ public class InvoicesTable extends Table {
     @PostConstruct
     private void build(){
         setColumnHeaderMode(ColumnHeaderMode.HIDDEN);
-        setPageLength(10);
 
         BeanItemContainer container = new BeanItemContainer<>(Invoice.class);
         setContainerDataSource(container);
@@ -63,7 +62,8 @@ public class InvoicesTable extends Table {
         container.removeAllItems();
         container.addAll(invoiceService.getInvoices(userService.getCurrentUser()));
 
-        int size = container.size();
-        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
+////        int size = container.size();
+////        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
+//        setPageLength(20);
     }
 }

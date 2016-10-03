@@ -29,7 +29,7 @@ public class UserController {
     public String confirmEmail(@PathVariable("tokenID") String tokenID, Model model) {
         User user = userService.verify(tokenID);
         model.addAttribute("user",user);
-        return "confirmEmail";
+        return "redirect:/app";
     }
 
 

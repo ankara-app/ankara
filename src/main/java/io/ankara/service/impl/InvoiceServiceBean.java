@@ -1,8 +1,6 @@
 package io.ankara.service.impl;
 
-import io.ankara.domain.Company;
-import io.ankara.domain.Invoice;
-import io.ankara.domain.User;
+import io.ankara.domain.*;
 import io.ankara.repository.InvoiceRepository;
 import io.ankara.service.CompanyService;
 import io.ankara.service.InvoiceService;
@@ -11,12 +9,11 @@ import io.ankara.utils.FormattedID;
 import io.ankara.utils.GeneralUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -58,8 +55,23 @@ public class InvoiceServiceBean implements InvoiceService {
     @Override
     public List<Invoice> getInvoices(User user) {
         List<Company> companies = companyService.getCompanies(user);
+        return getCompanyInvoices(companies);
+    }
 
+    @Override
+    public List<Invoice> getCompanyInvoices(Collection<Company> companies) {
         return invoiceRepository.findAllByCompanyInOrderByTimeCreatedDesc(companies);
+    }
+
+
+    @Override
+    public Collection<Invoice> getCustomerInvoices(Collection<Customer> customers) {
+        return invoiceRepository.findAllByCustomerInOrderByTimeCreatedDesc(customers);
+    }
+
+    @Override
+    public List<Invoice> getCreatedInvoices(User user) {
+        return invoiceRepository.findAllByCreatorOrderByTimeCreatedDesc(user);
     }
 
     @Override

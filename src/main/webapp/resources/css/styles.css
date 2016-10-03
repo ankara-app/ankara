@@ -3,6 +3,10 @@
     margin: 10px;
 }
 
+.logo{
+    vertical-align:bottom;
+}
+
 .date{
     font-size: 10px;
 }
@@ -61,4 +65,8 @@
 
 .table-striped > tbody > tr:nth-of-type(odd) {
     background-color: #f9f9f9 !important;
+}
+
+.cost-items td{
+    padding: 10px 8px !important;
 }

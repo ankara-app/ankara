@@ -1,6 +1,9 @@
 package io.ankara.repository;
 
+import io.ankara.domain.Customer;
 import io.ankara.domain.Estimate;
+
+import java.util.Collection;
 
 /**
  * @author Boniface Chacha

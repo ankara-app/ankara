@@ -1,3 +1,7 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="page::common_header('ankara | Welcome')"></head>
+<body>
 <div th:fragment="estimate_content" class="container-fluid">
     <div class="row top10">
         <div class="col-xs-6"
@@ -66,7 +70,7 @@
                     <span class="caption">Date</span>
                 </div>
                 <div class="col-xs-8 left-vertical-line">
-                    <span th:text="${cost.timeCreated}">2016-09-12</span>
+                    <span th:text="${#dates.format(cost.timeCreated, 'dd/MM/yyy')}">2016-09-12</span>
                 </div>
             </div>
 
@@ -195,7 +199,8 @@
                         <strong>Estimate Total</strong>
                     </td>
                     <td class="money">
-                        <strong th:text="${T(io.ankara.utils.NumberUtils).formatMoney(cost.amountDue, cost.currency)}">793,078,000.00 TZS</strong>
+                        <strong th:text="${T(io.ankara.utils.NumberUtils).formatMoney(cost.amountDue, cost.currency)}">793,078,000.00
+                            TZS</strong>
                     </td>
                 </tr>
                 </tbody>
@@ -203,17 +208,20 @@
         </div>
     </div>
 
+    <hr th:unless="${#strings.isEmpty(cost.notes) and #strings.isEmpty(cost.terms)}"/>
+
     <div class="row top10" th:unless="${#strings.isEmpty(cost.notes)}">
-        <hr/>
-        <div class="col-lg-8">
+        <div class="col-xs-6">
             <strong>Notes</strong><br/>
             <span class="pre" th:text="${cost.notes}">Payment within 30 days</span>
         </div>
     </div>
     <div class="row top10" th:unless="${#strings.isEmpty(cost.terms)}">
-        <div class="col-lg-8">
+        <div class="col-xs-6">
             <strong>Terms</strong><br/>
             <span class="pre" th:text="${cost.terms}">Some terms here</span>
         </div>
     </div>
 </div>
+</body>
+</html>

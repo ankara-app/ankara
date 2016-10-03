@@ -15,6 +15,7 @@ import io.ankara.service.InvoiceService;
 import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.CostEditView;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.events.annotation.EventBusListenerTopic;
 
@@ -85,7 +86,7 @@ public class InvoiceEditView extends CostEditView {
     protected void doSave(Cost cost) {
         Invoice invoice = (Invoice) cost;
         if(invoiceService.save(invoice)){
-            Notification.show("Invoice saved successfully", Notification.Type.TRAY_NOTIFICATION);
+            NotificationUtils.showSuccess("Invoice saved successfully", null);
             mainUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
             eventBus.publish(InvoiceView.TOPIC_SHOW,this,invoice);
         }

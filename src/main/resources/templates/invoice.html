@@ -1,15 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="page::common_header('ankara | Welcome')">
-    <!--TODO REMOVE THIS REDIRECT AFTER IMPLEMENTING HOME PAGE-->
-    <meta http-equiv="refresh" content="0; url=/app"/>
-</head>
+<head th:replace="page::common_header('ankara | Welcome')"></head>
 <body>
 <div th:fragment="invoice_content" class="container-fluid">
     <div class="row top10">
         <div class="col-xs-6"
              th:with="photoEncoded=${T(com.sun.org.apache.xml.internal.security.utils.Base64).encode(cost.company.picture)}">
-            <img class="logo  img-rounded" src="/image/logo.png"
+            <img class="logo  img-rounded img-responsive" src="/image/logo.png"
                  th:src="|data:image/png;base64,${photoEncoded}|" th:if="${cost.company.picture}"/>
         </div>
         <div class="col-xs-6">
@@ -81,7 +78,7 @@
                     <span class="caption">Issue Date</span>
                 </div>
                 <div class="col-xs-8 left-vertical-line">
-                    <span th:text="${cost.issueDate}">2016-09-12</span>
+                    <span th:text="${#dates.format(cost.issueDate, 'dd/MM/yyy')}">2016-09-12</span>
                 </div>
             </div>
             <div class="row">
@@ -89,7 +86,7 @@
                     <span class="caption">Due Date</span>
                 </div>
                 <div class="col-xs-8 left-vertical-line">
-                    <span th:text="${cost.dueDate}">2016-09-12</span>
+                    <span th:text="${#dates.format(cost.dueDate, 'dd/MM/yyy')}">2016-09-12</span>
                 </div>
             </div>
             <div class="row top5">
@@ -149,7 +146,7 @@
     </div>
     <div class="row top15">
         <div class="col-xs-12">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped cost-items">
                 <thead>
                 <tr>
                     <th class="text-right">Index</th>
@@ -225,15 +222,17 @@
             </table>
         </div>
     </div>
+
+    <hr th:unless="${#strings.isEmpty(cost.notes) and #strings.isEmpty(cost.terms)}"/>
+
     <div class="row top10" th:unless="${#strings.isEmpty(cost.notes)}">
-        <hr/>
-        <div class="col-lg-8">
+        <div class="col-xs-8">
             <strong>Notes</strong><br/>
             <span class="pre" th:text="${cost.notes}">Payment within 30 days</span>
         </div>
     </div>
     <div class="row top10" th:unless="${#strings.isEmpty(cost.terms)}">
-        <div class="col-lg-8">
+        <div class="col-xs-8">
             <strong>Terms</strong><br/>
             <span class="pre" th:text="${cost.terms}">Some terms here</span>
         </div>
