@@ -23,6 +23,8 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
     protected Button createButton;
     protected HorizontalLayout header;
 
+    protected RemoveItemButtonGenerator removeItemButtonGenerator;
+
     protected void build(Class type) {
 
         popUpWindow = new Window();
@@ -49,25 +51,26 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         setComponentAlignment(header, Alignment.TOP_RIGHT);
 
         table = new Table();
-        table.setSizeFull();;
-        container = new BeanItemContainer(type,loadBeans());
+        table.setSizeFull();
+        ;
+        container = new BeanItemContainer(type, loadBeans());
         table.setContainerDataSource(container);
         table.addItemClickListener(event -> {
             Object bean = event.getItemId();
             popUpWindow.setContent(getBeanComponent(bean));
 
-            if(!popUpWindow.isAttached())
-            UI.getCurrent().addWindow(popUpWindow);
+            if (!popUpWindow.isAttached())
+                UI.getCurrent().addWindow(popUpWindow);
         });
 
         addComponent(table);
-        setExpandRatio(table,1);
+        setExpandRatio(table, 1);
 
-        new RemoveItemButtonGenerator(table,"Remove",true){
+        removeItemButtonGenerator = new RemoveItemButtonGenerator(table, "Remove", true) {
             @Override
             protected void removeItem(Object itemID) {
-                BeanCRUDComponent.this.removeItem(itemID);
-                reload();
+                    BeanCRUDComponent.this.removeItem(itemID);
+                    reload();
             }
         };
 

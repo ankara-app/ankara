@@ -3,6 +3,7 @@ package io.ankara.ui.vaadin.util;
 import com.vaadin.data.Container;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.dialogs.ConfirmDialog;
 
@@ -12,13 +13,14 @@ import org.vaadin.dialogs.ConfirmDialog;
  * @email bonifacechacha@gmail.com
  * @date 4/10/16
  */
-public abstract class RemoveItemButton extends Button  {
+public abstract class RemoveItemButton extends Button {
 
     private Object itemID;
     private boolean confirm;
+    private String confirmationMessage = "Should this item be removed?";
 
     public RemoveItemButton(Object itemID) {
-        this(itemID,false);
+        this(itemID, false);
     }
 
     public RemoveItemButton(Object itemID, boolean confirm) {
@@ -31,21 +33,38 @@ public abstract class RemoveItemButton extends Button  {
         addStyleName(ValoTheme.BUTTON_TINY);
         addClickListener((ClickListener) event -> {
             if (itemID != null) {
-                if(isConfirm()){
+                if (isConfirm()) {
                     requestConfirmation(itemID);
-                }else removeItem(itemID);
+                } else requestRemoveItem(itemID);
             }
         });
     }
 
+    private void requestRemoveItem(Object itemID) {
+        try {
+            removeItem(itemID);
+        } catch (Exception e) {
+            e.printStackTrace();
+            NotificationUtils.showError("Failed to remove",e.getMessage());
+        }
+    }
+
     private void requestConfirmation(Object itemID) {
-        ConfirmDialog.show(getUI(),"Please confirm ...","Should this item be removed?","Yes","Cancel", new ConfirmDialog.Listener() {
+        ConfirmDialog.show(getUI(), "Please confirm ...", confirmationMessage, "Proceed", "Cancel", new ConfirmDialog.Listener() {
             @Override
             public void onClose(ConfirmDialog confirmDialog) {
-                if(confirmDialog.isConfirmed())
-                    removeItem(itemID);
+                if (confirmDialog.isConfirmed())
+                    requestRemoveItem(itemID);
             }
         });
+    }
+
+    public String getConfirmationMessage() {
+        return confirmationMessage;
+    }
+
+    public void setConfirmationMessage(String confirmationMessage) {
+        this.confirmationMessage = confirmationMessage;
     }
 
     public boolean isConfirm() {
@@ -64,5 +83,5 @@ public abstract class RemoveItemButton extends Button  {
         this.itemID = itemID;
     }
 
-    public  abstract  void removeItem(Object itemID);
+    public abstract void removeItem(Object itemID);
 }

@@ -1,16 +1,18 @@
 package io.ankara.service.impl;
 
-import io.ankara.domain.Company;
-import io.ankara.domain.Invoice;
-import io.ankara.domain.User;
+import io.ankara.domain.*;
 import io.ankara.repository.InvoiceRepository;
 import io.ankara.service.CompanyService;
 import io.ankara.service.InvoiceService;
-import io.ankara.ui.vaadin.util.FormattedID;
+import io.ankara.service.PDFService;
+import io.ankara.utils.FormattedID;
+import io.ankara.utils.GeneralUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +30,10 @@ public class InvoiceServiceBean implements InvoiceService {
 
     @Inject
     private InvoiceRepository invoiceRepository;
+
+    @Inject
+    private PDFService pdfService;
+
 
     public String nextInvoiceNumber(Company company) {
         String prevCode;
@@ -49,8 +55,23 @@ public class InvoiceServiceBean implements InvoiceService {
     @Override
     public List<Invoice> getInvoices(User user) {
         List<Company> companies = companyService.getCompanies(user);
+        return getCompanyInvoices(companies);
+    }
 
+    @Override
+    public List<Invoice> getCompanyInvoices(Collection<Company> companies) {
         return invoiceRepository.findAllByCompanyInOrderByTimeCreatedDesc(companies);
+    }
+
+
+    @Override
+    public Collection<Invoice> getCustomerInvoices(Collection<Customer> customers) {
+        return invoiceRepository.findAllByCustomerInOrderByTimeCreatedDesc(customers);
+    }
+
+    @Override
+    public List<Invoice> getCreatedInvoices(User user) {
+        return invoiceRepository.findAllByCreatorOrderByTimeCreatedDesc(user);
     }
 
     @Override
@@ -62,5 +83,13 @@ public class InvoiceServiceBean implements InvoiceService {
     public boolean delete(Invoice invoice) {
         invoiceRepository.delete(invoice);
         return true;
+    }
+
+    @Override
+    public File generatePDF(Invoice invoice) throws IOException, InterruptedException {
+        String genPDFFilePath = System.getProperty("java.io.tmpdir") + File.separator + invoice.getClass().getCanonicalName() + invoice.getId() + ".pdf";
+        String invoiceURL = GeneralUtils.getApplicationAddress()+"/invoice/"+invoice.getId();
+
+        return pdfService.generatePDF(invoiceURL,genPDFFilePath);
     }
 }

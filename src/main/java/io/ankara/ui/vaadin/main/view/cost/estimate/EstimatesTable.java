@@ -63,7 +63,7 @@ public class EstimatesTable extends Table {
         container.removeAllItems();
         container.addAll(estimateService.getEstimates(userService.getCurrentUser()));
 
-        int size = container.size();
-        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
+//        int size = container.size();
+//        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
     }
 }

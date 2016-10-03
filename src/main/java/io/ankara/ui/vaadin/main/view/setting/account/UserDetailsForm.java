@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.User;
 import io.ankara.service.UserService;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -51,7 +52,7 @@ public class UserDetailsForm extends FormLayout {
             try {
                 fieldGroup.commit();
                 if (userService.save(user)) {
-                    Notification.show("Your details are saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    NotificationUtils.showSuccess("Your details are saved successfully", null);
                     getUI().getPage().reload();
                 }
 

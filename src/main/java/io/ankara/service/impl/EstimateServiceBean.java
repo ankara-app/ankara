@@ -1,17 +1,22 @@
 package io.ankara.service.impl;
 
 import io.ankara.domain.Company;
+import io.ankara.domain.Customer;
 import io.ankara.domain.Estimate;
-import io.ankara.domain.Invoice;
 import io.ankara.domain.User;
 import io.ankara.repository.EstimateRepository;
 import io.ankara.service.CompanyService;
 import io.ankara.service.EstimateService;
-import io.ankara.ui.vaadin.util.FormattedID;
+import io.ankara.service.PDFService;
+import io.ankara.utils.FormattedID;
+import io.ankara.utils.GeneralUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,6 +33,9 @@ public class EstimateServiceBean implements EstimateService {
 
     @Inject
     private EstimateRepository estimateRepository;
+
+    @Inject
+    private PDFService pdfService;
 
     @Override
     public String nextEstimateNumber(Company company) {
@@ -51,8 +59,17 @@ public class EstimateServiceBean implements EstimateService {
     @Override
     public List<Estimate> getEstimates(User user) {
         List<Company> companies = companyService.getCompanies(user);
+        return getCompanyEstimates(companies);
+    }
 
+    @Override
+    public List<Estimate> getCompanyEstimates(Collection<Company> companies) {
         return estimateRepository.findAllByCompanyInOrderByTimeCreatedDesc(companies);
+    }
+
+    @Override
+    public Collection<Estimate> getCustomerEstimates(Collection<Customer> customers) {
+        return estimateRepository.findAllByCustomerInOrderByTimeCreatedDesc(customers);
     }
 
     @Override
@@ -66,4 +83,13 @@ public class EstimateServiceBean implements EstimateService {
         estimateRepository.delete(estimate);
         return true;
     }
+
+    @Override
+    public File generatePDF(Estimate estimate) throws IOException, InterruptedException {
+        String genPDFFilePath = System.getProperty("java.io.tmpdir") + File.separator + estimate.getClass().getCanonicalName() + estimate.getId() + ".pdf";
+        String estimateURL = GeneralUtils.getApplicationAddress()+"/estimate/"+estimate.getId();
+
+        return pdfService.generatePDF(estimateURL,genPDFFilePath);
+    }
+
 }

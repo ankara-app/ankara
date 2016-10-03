@@ -1,10 +1,13 @@
 package io.ankara.repository;
 
 import io.ankara.domain.Company;
-import io.ankara.domain.Invoice;
+import io.ankara.domain.Customer;
+import io.ankara.domain.Estimate;
+import io.ankara.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -15,7 +18,12 @@ import java.util.List;
  */
 @NoRepositoryBean
 public interface CostRepository<T> extends JpaRepository<T, Long> {
-    List<T> findAllByCompanyInOrderByTimeCreatedDesc(List<Company> companies);
+
+    List<T> findAllByCompanyInOrderByTimeCreatedDesc(Collection<Company> companies);
+
+    List<T> findAllByCustomerInOrderByTimeCreatedDesc(Collection<Customer> customers);
 
     T findFirstByCompanyOrderByIdDesc(Company company);
+
+    List<T> findAllByCreatorOrderByTimeCreatedDesc(User user);
 }

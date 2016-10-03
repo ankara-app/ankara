@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.ItemType;
 import io.ankara.service.ItemTypeService;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -60,7 +61,7 @@ public class ItemTypeForm extends FormLayout {
                 fieldGroup.commit();
                 ItemType itemType = (ItemType) fieldGroup.getItemDataSource().getBean();
                 if (itemTypeService.save(itemType)) {
-                    Notification.show("Item type information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    NotificationUtils.showSuccess("Item type information saved successfully", null);
                     if(subWindow != null)
                         subWindow.close();
                 }

@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="page::common_header(${cost.customer.name+'-Invoice-'+cost.code})"></head>
+<body onload="javascript:doPrint()">
+<div th:replace="invoice :: invoice_content"></div>
+<script type="text/javascript">
+    function doPrint() {
+        setTimeout(function () {
+            window.print();
+            self.close();
+        }, 0);
+    }
+</script>
+</body>
+</html>

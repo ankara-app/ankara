@@ -9,6 +9,9 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Customer;
 import io.ankara.service.CustomerService;
+import io.ankara.ui.vaadin.util.NotificationUtils;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -19,7 +22,7 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/15/16 9:18 AM
  */
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @SpringComponent
 public class CustomerForm extends FormLayout {
 
@@ -72,7 +75,7 @@ public class CustomerForm extends FormLayout {
                 fieldGroup.commit();
                 Customer customer = (Customer) fieldGroup.getItemDataSource().getBean();
                 if (customerService.save(customer)) {
-                    Notification.show("Customer information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    NotificationUtils.showSuccess("Customer information saved successfully", null);
                     if(subWindow != null)
                         subWindow.close();
                 }

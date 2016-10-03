@@ -16,7 +16,7 @@ import io.ankara.service.ItemTypeService;
 import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.util.AppliedTaxesConverter;
-import io.ankara.ui.vaadin.util.NumberUtils;
+import io.ankara.utils.NumberUtils;
 import io.ankara.ui.vaadin.util.RemoveItemButtonGenerator;
 import org.springframework.util.CollectionUtils;
 import org.vaadin.spring.events.EventBus;
@@ -133,13 +133,15 @@ public class ItemsTable extends Table {
         });
 
         Label amountLabel = new Label();
-        amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(),cost.getCurrency()));
+        //TODO CURRENTLY WE CAN NOT LISTEN FOR THE CHANGES ON THE CURRENCY SELECTOR THERE FOR WE SHOULD NOT SHOW CURRENCY HERE
+        // TODO INSTEAD USER WILL REFER TO THE SELECTED CURRENCY UNTIL V2.0
+        amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(), ""));
         amountLabel.addStyleName("text-right");
 
         quantity.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(),cost.getCurrency()));
+                amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(), ""));
                 requestSummaryCalculation(rowIndex);
             }
         });
@@ -147,7 +149,7 @@ public class ItemsTable extends Table {
         price.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(),cost.getCurrency()));
+                amountLabel.setValue(NumberUtils.formatMoney(item.getAmount(), ""));
                 requestSummaryCalculation(rowIndex);
             }
         });
@@ -243,22 +245,14 @@ public class ItemsTable extends Table {
 
     }
 
-    public boolean ensureItemsValidity() {
-        for (BeanFieldGroup fieldGroup : itemsFieldGroup.values()) {
-            if (!fieldGroup.isValid()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public List<Item> getItems() {
+    public List<Item> getValidItems() {
         LinkedList<Item> items = new LinkedList<>();
         //iterating with the row index to determine the order they were added and reserve it when saving to the database
         List itemIDs = getItemIds().stream().sorted((Comparator<Object>) (itemID1, itemID2) -> ((Integer) itemID1).compareTo((Integer) itemID2)).collect(Collectors.toList());
         for (Object itemID : itemIDs) {
-            items.add(itemsFieldGroup.get(itemID).getItemDataSource().getBean());
+            BeanFieldGroup<Item> fieldGroup = itemsFieldGroup.get(itemID);
+            if (fieldGroup.isValid())
+                items.add(fieldGroup.getItemDataSource().getBean());
         }
 
         return items;

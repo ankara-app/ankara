@@ -51,10 +51,6 @@ public class CompanyDetailsView extends VerticalLayout {
         addComponent(detailsMenu);
     }
 
-    private Component createStatusTab() {
-        return new VerticalLayout();
-    }
-
     public void show(Company company) {
         companyForm.edit(company);
         customerBeanCRUDComponent.setCompany(company);

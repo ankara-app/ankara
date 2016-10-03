@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Tax;
 import io.ankara.service.TaxService;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -65,7 +66,7 @@ public class TaxForm extends FormLayout{
                 fieldGroup.commit();
                 Tax tax = (Tax) fieldGroup.getItemDataSource().getBean();
                 if (taxService.save(tax)) {
-                    Notification.show("Tax information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    NotificationUtils.showSuccess("Tax information saved successfully",null);
                     if(subWindow != null)
                         subWindow.close();
                 }

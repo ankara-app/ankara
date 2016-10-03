@@ -45,6 +45,8 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
         holder.setComponentAlignment(customerForm, Alignment.MIDDLE_CENTER);
 
         super.build(Customer.class);
+
+        removeItemButtonGenerator.setConfirmationMessage("Deleting a customer will also delete all records of INVOICES and ESTIMATES created for the customer");
         table.setVisibleColumns("name", "email", "address", "description","Remove");
     }
 

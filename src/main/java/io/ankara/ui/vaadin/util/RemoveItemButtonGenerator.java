@@ -11,6 +11,7 @@ import com.vaadin.ui.Table;
 public abstract class RemoveItemButtonGenerator implements Table.ColumnGenerator {
 
     private boolean confirm;
+    private String confirmationMessage;
 
     public RemoveItemButtonGenerator(Table table,String columnName,boolean confirm) {
         this.confirm = confirm;
@@ -23,14 +24,35 @@ public abstract class RemoveItemButtonGenerator implements Table.ColumnGenerator
         this(table,columnName,false);
     }
 
+    public boolean isConfirm() {
+        return confirm;
+    }
+
+    public void setConfirm(boolean confirm) {
+        this.confirm = confirm;
+    }
+
+    public String getConfirmationMessage() {
+        return confirmationMessage;
+    }
+
+    public void setConfirmationMessage(String confirmationMessage) {
+        this.confirmationMessage = confirmationMessage;
+    }
+
     @Override
     public Object generateCell(Table source, Object itemId, Object columnId) {
-        return new RemoveItemButton(itemId,confirm){
+        RemoveItemButton removeItemButton =  new RemoveItemButton(itemId,confirm){
             @Override
             public void removeItem(Object itemID) {
                 RemoveItemButtonGenerator.this.removeItem(itemID);
             }
         };
+
+        if(confirm && confirmationMessage!=null)
+            removeItemButton.setConfirmationMessage(confirmationMessage);
+
+        return removeItemButton;
     }
 
     protected abstract void removeItem(Object itemID);

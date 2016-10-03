@@ -1,14 +1,14 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Cost;
-import io.ankara.ui.vaadin.print.HTMLPrintButton;
-import org.springframework.beans.factory.annotation.Value;
+import io.ankara.ui.vaadin.util.OpenerButton;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.vaadin.spring.events.EventBus;
@@ -24,13 +24,15 @@ import javax.inject.Inject;
  * @date 8/23/16 2:17 PM
  */
 @SpringComponent
-public abstract class CostView extends CustomComponent {
+public abstract class CostView extends CustomComponent implements View {
 
     private String template;
 
     private VerticalLayout content;
     private HorizontalLayout header;
     private Label templateLabel;
+    private Button edit,delete;
+    private OpenerButton pdf,print;
 
     @Inject
     private TemplateEngine templateEngine;
@@ -46,18 +48,22 @@ public abstract class CostView extends CustomComponent {
 
     @PostConstruct
     private void build() {
-        Button edit = new Button("Edit", FontAwesome.PENCIL);
+        edit = new Button("Edit", FontAwesome.PENCIL);
         edit.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         edit.addClickListener((Button.ClickListener) event -> edit(cost));
 
-        Button delete = new Button("Delete", FontAwesome.REMOVE);
+        delete = new Button("Delete", FontAwesome.REMOVE);
         delete.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         delete.addClickListener((Button.ClickListener) event -> delete(cost));
 
-        Button print = new HTMLPrintButton("Print", FontAwesome.PRINT);
+        print = new OpenerButton("Print",FontAwesome.PRINT);
         print.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 
-        header = new HorizontalLayout(edit, delete, print);
+        pdf = new OpenerButton("PDF",FontAwesome.FILE_PDF_O);
+        pdf.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+
+        header = new HorizontalLayout(edit, delete, print,pdf);
+
         content = new VerticalLayout();
         content.setMargin(true);
         content.addStyleName(ValoTheme.LAYOUT_CARD);
@@ -79,12 +85,13 @@ public abstract class CostView extends CustomComponent {
 
     public void setCost(Cost cost) {
         this.cost = cost;
+
+        pdf.getOpener().setUrl(getPdfURL(cost));
+        print.getOpener().setUrl(getPrintURL(cost));
+
         Context context = new Context();
 
         context.setVariable("cost", cost);
-
-        VaadinSession.getCurrent().setAttribute("context", context);
-        VaadinSession.getCurrent().setAttribute("template", template);
 
         try {
             templateLabel.setValue(templateEngine.process(template, context));
@@ -94,6 +101,10 @@ public abstract class CostView extends CustomComponent {
             templateLabel.setValue("Failed to render content");
         }
     }
+
+    protected abstract String getPrintURL(Cost cost);
+
+    protected abstract String getPdfURL(Cost cost);
 
     @PostConstruct
     protected void init() {
@@ -105,4 +116,6 @@ public abstract class CostView extends CustomComponent {
         eventBus.unsubscribe(this);
     }
 
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {}
 }

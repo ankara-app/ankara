@@ -1,10 +1,11 @@
 package io.ankara.service;
 
-import io.ankara.domain.Company;
-import io.ankara.domain.Estimate;
-import io.ankara.domain.User;
+import io.ankara.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,7 +22,13 @@ public interface EstimateService {
 
     List<Estimate> getEstimates(User user);
 
+    Collection<Estimate> getCompanyEstimates(Collection<Company> companies);
+
     Estimate getEstimate(Long id);
 
     boolean delete(Estimate estimate);
+
+    File generatePDF(Estimate estimate) throws IOException, InterruptedException;
+
+    Collection<Estimate> getCustomerEstimates(Collection<Customer> customers);
 }

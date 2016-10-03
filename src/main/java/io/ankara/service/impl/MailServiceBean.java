@@ -1,29 +1,16 @@
 package io.ankara.service.impl;
 
+import io.ankara.utils.GeneralUtils;
 import io.ankara.domain.Token;
 import io.ankara.domain.User;
 import io.ankara.service.MailService;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpRequest;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Boniface Chacha
@@ -58,19 +45,10 @@ public class MailServiceBean implements MailService {
     }
 
     private void sendEmail(String to, String subject, String template, Context ctx) {
-        ctx.setVariable("appAddress", getApplicationAddress());
+        ctx.setVariable("appAddress", GeneralUtils.getApplicationAddress());
         String htmlContent = this.templateEngine.process(template, ctx);
 
         mailSender.sendEmail(to, subject, htmlContent,true);
-    }
-
-    //This method can not be invoked asynchronous
-    private String getApplicationAddress() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        String appAddress = request.getRequestURL().toString().replace("/vaadinServlet/UIDL/","");
-
-        return appAddress;
     }
 
 

@@ -9,6 +9,9 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Company;
 import io.ankara.service.CompanyService;
+import io.ankara.ui.vaadin.util.NotificationUtils;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.vaadin.easyuploads.ImagePreviewField;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +23,7 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/14/16 9:10 PM
  */
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @SpringComponent
 public class CompanyForm extends FormLayout {
 
@@ -38,8 +41,6 @@ public class CompanyForm extends FormLayout {
     private TextField fax;
 
     private TextArea address;
-
-    private TextArea description;
 
     private TextArea notes;
 
@@ -79,11 +80,6 @@ public class CompanyForm extends FormLayout {
         address.setWidth("100%");
         address.setRows(4);
 
-        description = new TextArea("Description");
-        description.setNullRepresentation("");
-        description.setWidth("100%");
-        description.setRows(4);
-
         notes = new TextArea("Notes");
         notes.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
         notes.setInputPrompt("Specify other notes ...");
@@ -109,7 +105,7 @@ public class CompanyForm extends FormLayout {
                     fieldGroup.commit();
                     Company company = (Company) fieldGroup.getItemDataSource().getBean();
                     if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
-                        Notification.show("Company information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                        NotificationUtils.showSuccess("Company information saved successfully", null);
                         if (subWindow != null)
                             subWindow.close();
                     }
@@ -119,7 +115,7 @@ public class CompanyForm extends FormLayout {
             }
         });
 
-        addComponents(picture,name, email, phone, fax, address, description, notes, terms, save);
+        addComponents(picture,name, email, phone, fax, address,notes, terms, save);
 
     }
 
