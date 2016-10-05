@@ -1,6 +1,5 @@
 package io.ankara.ui.vaadin.util;
 
-import com.vaadin.sass.internal.util.StringUtil;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
