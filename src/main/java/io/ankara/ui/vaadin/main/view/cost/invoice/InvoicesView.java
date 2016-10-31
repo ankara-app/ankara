@@ -39,10 +39,11 @@ public class InvoicesView extends CustomComponent implements View {
         content.setSpacing(true);
         setCompositionRoot(content);
 
+        invoicesHeader.setSearchContainer(invoicesTable.getContainerDataSource());
         invoicesHeader.setWidth("50%");
         content.addComponent(invoicesHeader);
 
-        invoicesTable.setSizeFull();
+//        invoicesTable.setSizeFull();
         content.addComponent(invoicesTable);
         content.setExpandRatio(invoicesTable,1);
     }

@@ -44,6 +44,8 @@ public class EstimatesTable extends Table {
     @PostConstruct
     private void build() {
         setColumnHeaderMode(ColumnHeaderMode.HIDDEN);
+        setHeight("500px");
+        setWidth("100%");
 
         BeanItemContainer container = new BeanItemContainer<>(Estimate.class);
         setContainerDataSource(container);
@@ -59,11 +61,17 @@ public class EstimatesTable extends Table {
     }
 
     public void reload() {
-        BeanItemContainer container = (BeanItemContainer) getContainerDataSource();
+        BeanItemContainer container = getContainerDataSource();
         container.removeAllItems();
         container.addAll(estimateService.getEstimates(userService.getCurrentUser()));
 
 //        int size = container.size();
 //        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
+//        setPageLength(10);
+    }
+
+    @Override
+    public BeanItemContainer getContainerDataSource() {
+        return (BeanItemContainer) super.getContainerDataSource();
     }
 }

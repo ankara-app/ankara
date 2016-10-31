@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
+import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -44,6 +45,8 @@ public class InvoicesTable extends Table {
     @PostConstruct
     private void build(){
         setColumnHeaderMode(ColumnHeaderMode.HIDDEN);
+        setHeight("500px");
+        setWidth("100%");
 
         BeanItemContainer container = new BeanItemContainer<>(Invoice.class);
         setContainerDataSource(container);
@@ -55,15 +58,21 @@ public class InvoicesTable extends Table {
         });
 
         tableDecorator.decorate(this, Templates.INVOICE_ENTRY,"Invoice");
+
     }
 
     public void reload() {
-        BeanItemContainer container = (BeanItemContainer) getContainerDataSource();
+        BeanItemContainer container = getContainerDataSource();
         container.removeAllItems();
         container.addAll(invoiceService.getInvoices(userService.getCurrentUser()));
 
-////        int size = container.size();
-////        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
-//        setPageLength(20);
+//        int size = container.size();
+//        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
+//        setPageLength(10);
+    }
+
+    @Override
+    public BeanItemContainer getContainerDataSource() {
+        return (BeanItemContainer) super.getContainerDataSource();
     }
 }

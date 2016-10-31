@@ -42,10 +42,11 @@ public class EstimatesView extends CustomComponent implements View {
         content.setSpacing(true);
         setCompositionRoot(content);
 
+        estimatesHeader.setSearchContainer(estimatesTable.getContainerDataSource());
         estimatesHeader.setWidth("50%");
         content.addComponent(estimatesHeader);
 
-        estimatesTable.setSizeFull();
+//        estimatesTable.setSizeFull();
         content.addComponent(estimatesTable);
         content.setExpandRatio(estimatesTable,1);
     }
