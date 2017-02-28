@@ -26,6 +26,7 @@ import org.vaadin.spring.events.annotation.EventBusListenerTopic;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -183,6 +184,9 @@ public abstract class CostEditView extends VerticalLayout implements View {
     }
 
     public void loadCost() {
+        if (cost.getDiscountPercentage() == null)
+            cost.setDiscountPercentage(BigDecimal.ZERO);
+
         cost.setItems(itemsTable.getValidItems());
     }
 
@@ -218,7 +222,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
     }
 
     private Collection<String> getCurrencies() {
-        return Arrays.asList("TZS", "USD", "EUR");
+        return Arrays.asList("TZS","KES","UGX", "USD", "EUR");
     }
 
     protected Layout createSubjectForm() {

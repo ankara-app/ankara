@@ -78,8 +78,9 @@ public class Cost implements Serializable {
     private Customer customer;
 
     @Min(value = 0)
-    @Column(precision = 48, scale = 2)
-    private BigDecimal discountPercentage;
+    @Column(precision = 48, scale = 2,nullable = false)
+    @NotNull
+    private BigDecimal discountPercentage = BigDecimal.ZERO;
 
     @Column(columnDefinition = "longtext")
     private String notes;
@@ -108,7 +109,7 @@ public class Cost implements Serializable {
         this.currency = currency;
         this.code = code;
 
-        this.discountPercentage = new BigDecimal("0.0");
+        this.discountPercentage = BigDecimal.ZERO;
         this.items = new LinkedList<>();
 
         if (company != null) {
