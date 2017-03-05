@@ -36,8 +36,6 @@ public class InvoiceEditView extends CostEditView {
 
     private TextField purchaseOrder;
 
-    private DateField issueDate;
-
     private DateField dueDate;
 
     @Inject
@@ -70,15 +68,11 @@ public class InvoiceEditView extends CostEditView {
         purchaseOrder.setWidth("100%");
         purchaseOrder.setNullRepresentation("");
 
-        issueDate = new DateField("Issue Date");
-        issueDate.setDescription("Specify invoice issue date");
-        issueDate.setWidth("100%");
-
         dueDate = new DateField("Due Date");
         dueDate.setDescription("Specify invoice due date");
         dueDate.setWidth("100%");
 
-        costDetailsLayout.addComponents(purchaseOrder,issueDate,dueDate);
+        costDetailsLayout.addComponents(dueDate,purchaseOrder);
         return costDetailsLayout;
     }
 

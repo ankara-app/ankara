@@ -21,11 +21,6 @@ public class Invoice extends Cost {
     private String purchaseOrder;
 
     @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    @NotNull
-    private Date issueDate;
-
-    @Temporal(TemporalType.DATE)
     @NotNull
     private Date dueDate;
 
@@ -34,7 +29,6 @@ public class Invoice extends Cost {
 
     public Invoice(User creator, Company company, String currency, String code) {
         super(creator, company, currency, code);
-        issueDate = new Date();
         dueDate = new Date();
     }
 
@@ -44,14 +38,6 @@ public class Invoice extends Cost {
 
     public void setPurchaseOrder(String purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
-    }
-
-    public Date getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(Date issueDate) {
-        this.issueDate = issueDate;
     }
 
     public Date getDueDate() {

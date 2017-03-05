@@ -58,6 +58,11 @@ public class Cost implements Serializable {
     @NotNull
     private Date lastTimeUpdated = new Date();
 
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    @NotNull
+    private Date issueDate;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     @NotNull
@@ -109,6 +114,7 @@ public class Cost implements Serializable {
         this.currency = currency;
         this.code = code;
 
+        issueDate = new Date();
         this.discountPercentage = BigDecimal.ZERO;
         this.items = new LinkedList<>();
 
@@ -148,6 +154,14 @@ public class Cost implements Serializable {
 
     public void setLastTimeUpdated(Date lastTimeUpdated) {
         this.lastTimeUpdated = lastTimeUpdated;
+    }
+
+    public Date getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
     }
 
     public Company getCompany() {

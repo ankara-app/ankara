@@ -55,6 +55,8 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
     protected TextArea subject;
 
+    private DateField issueDate;
+
     @Inject
     protected ItemsView itemsView;
 
@@ -423,7 +425,11 @@ public abstract class CostEditView extends VerticalLayout implements View {
             calculateSummaries(null);
         });
 
-        FormLayout basicsForm = new FormLayout(code, currency);
+        issueDate = new DateField("Issue Date");
+        issueDate.setDescription("Specify invoice issue date");
+        issueDate.setWidth("100%");
+
+        FormLayout basicsForm = new FormLayout(code, currency,issueDate);
         basicsForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         basicsForm.setWidth("100%");
         return basicsForm;

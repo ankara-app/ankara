@@ -10,6 +10,7 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Estimate extends Cost {
+
     public Estimate() {
     }
 
