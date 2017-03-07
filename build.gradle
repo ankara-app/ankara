@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.1.RELEASE'
+        springBootVersion = '1.5.2.RELEASE'
         groovyVersion = '2.4.7'
         vaadinVersion = '7.7.3'
         vaadinSpringVersion = '0.0.7.RELEASE'
