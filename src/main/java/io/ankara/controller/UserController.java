@@ -1,8 +1,6 @@
 package io.ankara.controller;
 
-import io.ankara.domain.Token;
 import io.ankara.domain.User;
-import io.ankara.service.TokenService;
 import io.ankara.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

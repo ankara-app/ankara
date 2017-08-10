@@ -1,6 +1,5 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Button;
@@ -11,7 +10,6 @@ import io.ankara.domain.Company;
 import io.ankara.service.CompanyService;
 import io.ankara.ui.vaadin.main.view.setting.company.CompaniesBeanCRUDComponent;
 import io.ankara.ui.vaadin.util.CompanySelectorWindow;
-import io.ankara.ui.vaadin.util.SearchField;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -37,7 +35,6 @@ public abstract class CostsHeader extends CustomComponent{
 
     private Button createButton;
 
-    private SearchField searchField;
 
     @PostConstruct
     protected void build() {
@@ -50,12 +47,6 @@ public abstract class CostsHeader extends CustomComponent{
             initCostCreate();
         });
         content.addComponent(createButton);
-
-        searchField = new SearchField();
-        searchField.setVisible(false);
-        searchField.setWidth("100%");
-        content.addComponent(searchField);
-        content.setExpandRatio(searchField, 1);
 
         setCompositionRoot(content);
     }
@@ -74,10 +65,6 @@ public abstract class CostsHeader extends CustomComponent{
         }
     }
 
-    public void setSearchContainer(BeanItemContainer container){
-        searchField.setContainer(container);
-        searchField.setVisible(true);
-    }
 
     protected abstract void showCostCreateView(Company company);
 

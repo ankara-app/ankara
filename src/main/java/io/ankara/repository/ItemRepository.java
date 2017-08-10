@@ -4,7 +4,6 @@ import io.ankara.domain.Item;
 import io.ankara.domain.ItemType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

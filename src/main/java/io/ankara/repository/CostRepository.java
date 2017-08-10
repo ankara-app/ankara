@@ -2,7 +2,6 @@ package io.ankara.repository;
 
 import io.ankara.domain.Company;
 import io.ankara.domain.Customer;
-import io.ankara.domain.Estimate;
 import io.ankara.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;

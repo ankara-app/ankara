@@ -1,12 +1,8 @@
 package io.ankara.ui.vaadin.main.view.cost.estimate;
 
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
 import io.ankara.domain.Cost;
 import io.ankara.domain.Estimate;
 import io.ankara.service.EstimateService;
@@ -14,12 +10,10 @@ import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.CostView;
-import io.ankara.ui.vaadin.main.view.cost.invoice.InvoiceView;
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.events.annotation.EventBusListenerTopic;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 /**
@@ -28,9 +22,7 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/11/16 3:03 AM
  */
-@UIScope
 @SpringView(name = EstimateView.VIEW_NAME)
-@SpringComponent
 public class EstimateView extends CostView {
     public static final String VIEW_NAME = "Estimate";
     public static final String TOPIC_SHOW = "Show Estimate";

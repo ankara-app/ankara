@@ -1,11 +1,10 @@
 package io.ankara.ui.vaadin.welcome;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -17,9 +16,6 @@ import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.util.NotificationUtils;
 import io.ankara.ui.vaadin.util.ViewLink;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.vaadin.spring.annotation.PrototypeScope;
 import org.vaadin.spring.security.VaadinSecurity;
 import org.vaadin.viritin.fields.EmailField;
 
@@ -46,7 +42,7 @@ public class RegistrationForm extends FormLayout implements View {
 
     private PasswordField password;
 
-    private BeanFieldGroup<User> userFieldGroup;
+    private Binder<User> userBinder = new Binder<>();
 
     private Button register;
 
@@ -67,24 +63,21 @@ public class RegistrationForm extends FormLayout implements View {
 
         fullName = new TextField("Full Name");
         fullName.setWidth("300px");
-        fullName.setNullRepresentation("");
-        fullName.setValidationVisible(false);
 
         email = new EmailField("Email");
         email.setWidth("300px");
-        email.setNullRepresentation("");
-        email.setValidationVisible(false);
 
         password = new PasswordField("Password");
         password.setWidth("300px");
-        password.setNullRepresentation("");
-        password.setValidationVisible(false);
 
         register = new Button("Register");
         register.addStyleName(ValoTheme.BUTTON_PRIMARY);
         register.setDisableOnClick(true);
         register.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         register.addClickListener((Button.ClickListener) event -> register());
+
+
+        userBinder.bindInstanceFields(this);
 
         Label loginLabel = new Label("Already have an account?", ContentMode.HTML);
         loginLabel.addStyleName(AnkaraTheme.SIGNUP_LOGIN_LABEL);
@@ -94,11 +87,11 @@ public class RegistrationForm extends FormLayout implements View {
     }
 
     public void load() {
-        userFieldGroup = BeanFieldGroup.bindFieldsUnbuffered(new User(), this);
+        userBinder.setBean(new User());
     }
 
     private void register() {
-        User user = userFieldGroup.getItemDataSource().getBean();
+        User user = userBinder.getBean();
         try {
             if (userService.create(user)) {
                 welcomeUI.getNavigator().navigateTo(LoginForm.VIEW_NAME);

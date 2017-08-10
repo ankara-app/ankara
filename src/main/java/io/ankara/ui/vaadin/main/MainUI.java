@@ -6,7 +6,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.Label;
 import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.AnkaraUI;
 import org.springframework.context.ApplicationContext;
@@ -34,6 +34,7 @@ public class MainUI extends AnkaraUI {
         VaadinSession.getCurrent().setLocale( new Locale("en", "EN"));
 
         setContent(applicationContext.getBean(MainScreen.class));
+//        setContent(new Label("Welcome"));
     }
 
 }

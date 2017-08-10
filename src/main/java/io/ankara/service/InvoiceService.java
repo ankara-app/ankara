@@ -1,6 +1,9 @@
 package io.ankara.service;
 
-import io.ankara.domain.*;
+import io.ankara.domain.Company;
+import io.ankara.domain.Customer;
+import io.ankara.domain.Invoice;
+import io.ankara.domain.User;
 
 import java.io.File;
 import java.io.IOException;

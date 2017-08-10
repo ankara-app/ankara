@@ -1,28 +1,17 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
-import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Company;
 import io.ankara.domain.Invoice;
 import io.ankara.domain.User;
-import io.ankara.service.CompanyService;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.main.view.cost.CostsHeader;
-import io.ankara.ui.vaadin.main.view.setting.company.CompaniesBeanCRUDComponent;
-import io.ankara.ui.vaadin.util.CompanySelectorWindow;
-import io.ankara.ui.vaadin.util.SearchField;
 import org.vaadin.spring.events.EventBus;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.List;
 
 /**
  * @author Boniface Chacha

@@ -1,7 +1,6 @@
 package io.ankara.ui.vaadin.util;
 
 import com.vaadin.server.BrowserWindowOpener;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
 import io.ankara.ui.vaadin.main.MainUI;

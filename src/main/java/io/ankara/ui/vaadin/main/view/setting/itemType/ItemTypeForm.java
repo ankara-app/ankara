@@ -1,7 +1,7 @@
 package io.ankara.ui.vaadin.main.view.setting.itemType;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -32,7 +32,8 @@ public class ItemTypeForm extends FormLayout {
 
     private TextArea description;
 
-    private BeanFieldGroup fieldGroup;
+    private Binder<ItemType> itemTypeBinder = new Binder<>(ItemType.class);
+    private ItemType itemType;
 
     private Window subWindow;
 
@@ -44,13 +45,13 @@ public class ItemTypeForm extends FormLayout {
         addStyleName(ValoTheme.LAYOUT_CARD);
 
         name = new TextField("Name");
-        name.setNullRepresentation("");
         name.setWidth("100%");
 
         description = new TextArea("Description");
-        description.setNullRepresentation("");
         description.setWidth("100%");
         description.setRows(4);
+
+        itemTypeBinder.bindInstanceFields(this);
 
         Button save = new Button("Save");
         save.setIcon(FontAwesome.SAVE);
@@ -58,14 +59,13 @@ public class ItemTypeForm extends FormLayout {
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
         save.addClickListener(event -> {
             try {
-                fieldGroup.commit();
-                ItemType itemType = (ItemType) fieldGroup.getItemDataSource().getBean();
+                itemTypeBinder.writeBean(itemType);
                 if (itemTypeService.save(itemType)) {
                     NotificationUtils.showSuccess("Item type information saved successfully", null);
                     if(subWindow != null)
                         subWindow.close();
                 }
-            } catch (FieldGroup.CommitException e) {
+            } catch (ValidationException e) {
                 Notification.show("Enter item type information correctly", Notification.Type.WARNING_MESSAGE);
             }
         });
@@ -74,7 +74,8 @@ public class ItemTypeForm extends FormLayout {
     }
 
     public void edit(ItemType itemType) {
-        fieldGroup = BeanFieldGroup.bindFieldsBuffered(itemType, this);
+        this.itemType = itemType;
+        itemTypeBinder.readBean(itemType);
     }
 
 

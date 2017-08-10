@@ -1,12 +1,11 @@
 package io.ankara.service.impl;
 
-import io.ankara.domain.*;
+import io.ankara.domain.AppliedTax;
+import io.ankara.domain.Company;
+import io.ankara.domain.Tax;
 import io.ankara.repository.AppliedTaxRepository;
 import io.ankara.repository.TaxRepository;
-import io.ankara.service.EstimateService;
-import io.ankara.service.InvoiceService;
 import io.ankara.service.TaxService;
-import org.hibernate.validator.internal.engine.messageinterpolation.parser.ELState;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

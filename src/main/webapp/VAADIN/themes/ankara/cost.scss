@@ -49,3 +49,8 @@
     white-space: -o-pre-wrap; /* Opera 7 */
     word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
+
+
+.long-text, table > tbody > tr > td.long-text,table > tbody > tr > th.long-text{
+    white-space: pre-wrap;
+}

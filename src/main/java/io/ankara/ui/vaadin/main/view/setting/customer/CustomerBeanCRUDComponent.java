@@ -22,7 +22,7 @@ import java.util.Collection;
  */
 @UIScope
 @SpringComponent
-public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
+public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
 
     @Inject
     private CustomerService customerService;
@@ -34,6 +34,7 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
 
     private Company company;
 
+
     @PostConstruct
     protected void build() {
         setSizeFull();
@@ -44,10 +45,15 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
         holder.setMargin(true);
         holder.setComponentAlignment(customerForm, Alignment.MIDDLE_CENTER);
 
-        super.build(Customer.class);
+        super.build();
 
-        removeItemButtonGenerator.setConfirmationMessage("Deleting a customer will also delete all records of INVOICES and ESTIMATES created for the customer");
-        table.setVisibleColumns("name", "email", "address", "description","Remove");
+        table.addColumn(Customer::getName).setCaption("Name");
+        table.addColumn(Customer::getEmail).setCaption("Email");
+        table.addColumn(Customer::getAddress).setCaption("Address");
+        table.addColumn(Customer::getDescription).setCaption("Description");
+        //TODO NOTIFY ABOUT THE EFFECT OF DELETING CUSTOMER
+//        removeItemButtonGenerator.setConfirmationMessage("Deleting a customer will also delete all records of INVOICES and ESTIMATES created for the customer");
+
     }
 
     @Override

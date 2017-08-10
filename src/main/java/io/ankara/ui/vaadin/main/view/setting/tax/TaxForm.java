@@ -1,7 +1,9 @@
 package io.ankara.ui.vaadin.main.view.setting.tax;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
+import com.vaadin.data.converter.StringToBigDecimalConverter;
+import com.vaadin.data.converter.StringToBigIntegerConverter;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -22,7 +24,7 @@ import javax.inject.Inject;
  */
 @UIScope
 @SpringComponent
-public class TaxForm extends FormLayout{
+public class TaxForm extends FormLayout {
 
     @Inject
     private TaxService taxService;
@@ -33,7 +35,9 @@ public class TaxForm extends FormLayout{
 
     private TextArea description;
 
-    private BeanFieldGroup fieldGroup;
+    private Binder<Tax> taxBinder = new Binder<>(Tax.class);
+
+    private Tax tax;
 
     private Window subWindow;
 
@@ -45,17 +49,19 @@ public class TaxForm extends FormLayout{
         addStyleName(ValoTheme.LAYOUT_CARD);
 
         name = new TextField("Name");
-        name.setNullRepresentation("");
         name.setWidth("100%");
+        taxBinder.forField(name).bind("name");
 
         percentage = new TextField("Percentage");
-        percentage.setNullRepresentation("");
         percentage.setWidth("100%");
+        taxBinder.forField(percentage)
+                .withConverter(new StringToBigDecimalConverter("Percentage must be a number"))
+                .bind("percentage");
 
         description = new TextArea("Description");
-        description.setNullRepresentation("");
         description.setWidth("100%");
         description.setRows(4);
+        taxBinder.forField(description).bind("description");
 
         Button save = new Button("Save");
         save.setIcon(FontAwesome.SAVE);
@@ -63,23 +69,24 @@ public class TaxForm extends FormLayout{
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
         save.addClickListener(event -> {
             try {
-                fieldGroup.commit();
-                Tax tax = (Tax) fieldGroup.getItemDataSource().getBean();
+                taxBinder.writeBean(tax);
                 if (taxService.save(tax)) {
                     NotificationUtils.showSuccess("Tax information saved successfully",null);
                     if(subWindow != null)
                         subWindow.close();
                 }
-            } catch (FieldGroup.CommitException e) {
+            } catch (ValidationException e) {
                 Notification.show("Enter tax information correctly", Notification.Type.WARNING_MESSAGE);
             }
         });
+
         addComponents(name,percentage,description, save);
 
     }
 
     public void edit(Tax tax) {
-        fieldGroup = BeanFieldGroup.bindFieldsBuffered(tax, this);
+        this.tax = tax;
+        taxBinder.readBean(tax);
     }
 
 

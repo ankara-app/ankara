@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.util;
 
+
 import com.vaadin.data.validator.StringLengthValidator;
 
 /**
@@ -11,6 +12,6 @@ import com.vaadin.data.validator.StringLengthValidator;
 public class PasswordValidator extends StringLengthValidator {
 
     public PasswordValidator() {
-        super("Password should have a minimum of five characters, make it strong", 5, -1, false);
+        super("Password should have a minimum of five characters, make it strong", 5, -1);
     }
 }

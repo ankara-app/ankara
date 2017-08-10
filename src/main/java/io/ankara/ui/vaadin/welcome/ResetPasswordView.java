@@ -3,17 +3,17 @@ package io.ankara.ui.vaadin.welcome;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.util.NotificationUtils;
+import io.ankara.ui.vaadin.util.VaadinUtils;
 import org.vaadin.viritin.fields.EmailField;
 
 import javax.annotation.PostConstruct;
@@ -45,9 +45,8 @@ public class ResetPasswordView extends FormLayout implements View {
 
         emailField = new EmailField("Email");
         emailField.setWidth("300px");
-        emailField.addValidator(new EmailValidator("Enter a correct email"));
-        emailField.setRequired(true);
-        emailField.setInputPrompt("Enter your email");
+        VaadinUtils.addValidator(emailField, new EmailValidator("Enter a correct email"));
+        emailField.setDescription("Enter your email");
 
         Button resend = new Button("Reset password");
         resend.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -57,20 +56,20 @@ public class ResetPasswordView extends FormLayout implements View {
     }
 
     private void resetPassword() {
-        if(emailField.isValid()){
+        if (emailField.getErrorMessage() == null) {
             String email = emailField.getValue();
 
-            try{
-                if(userService.resetPassword(email)){
+            try {
+                if (userService.resetPassword(email)) {
                     NotificationUtils.showSuccess(
                             "Your password have been reset",
                             "We have emailed you a password.<br/> You will be required to change to your own once you login");
                 }
-            }catch (IllegalArgumentException e){
-                NotificationUtils.showWarning("Failed to reset your password",e.getMessage());
+            } catch (IllegalArgumentException e) {
+                NotificationUtils.showWarning("Failed to reset your password", e.getMessage());
             }
-        }else{
-            NotificationUtils.showWarning("Enter correct email",null);
+        } else {
+            NotificationUtils.showWarning("Enter correct email", null);
         }
     }
 

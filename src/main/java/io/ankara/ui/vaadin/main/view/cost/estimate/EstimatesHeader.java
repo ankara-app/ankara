@@ -2,15 +2,14 @@ package io.ankara.ui.vaadin.main.view.cost.estimate;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.spring.annotation.ViewScope;
 import io.ankara.domain.Company;
 import io.ankara.domain.Estimate;
-import io.ankara.domain.Invoice;
 import io.ankara.domain.User;
 import io.ankara.service.EstimateService;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.main.view.cost.CostsHeader;
-import io.ankara.ui.vaadin.main.view.cost.invoice.InvoiceEditView;
 import org.vaadin.spring.events.EventBus;
 
 import javax.inject.Inject;
@@ -21,8 +20,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 9/16/16.
  */
-@UIScope
 @SpringComponent
+@ViewScope
 public class EstimatesHeader extends CostsHeader{
     @Inject
     private EventBus.UIEventBus eventBus;

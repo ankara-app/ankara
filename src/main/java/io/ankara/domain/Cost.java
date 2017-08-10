@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -13,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -85,7 +83,7 @@ public class Cost implements Serializable {
     @Min(value = 0)
     @Column(precision = 48, scale = 2,nullable = false)
     @NotNull
-    private BigDecimal discountPercentage = BigDecimal.ZERO;
+    private BigDecimal discountPercentage;
 
     @Column(columnDefinition = "longtext")
     private String notes;
@@ -106,16 +104,17 @@ public class Cost implements Serializable {
     private List<Item> items;
 
     public Cost() {
+        this.discountPercentage = new BigDecimal("0.0");
     }
 
     public Cost(User creator, Company company, String currency, String code) {
+        this();
         this.creator = creator;
         this.company = company;
         this.currency = currency;
         this.code = code;
 
         issueDate = new Date();
-        this.discountPercentage = BigDecimal.ZERO;
         this.items = new LinkedList<>();
 
         if (company != null) {
@@ -302,7 +301,7 @@ public class Cost implements Serializable {
     }
 
     public BigDecimal getDiscount() {
-        return getTaxedTotal().multiply(discountPercentage).divide(new BigDecimal("100"));
+        return getSubtotal().multiply(discountPercentage).divide(new BigDecimal("100"));
     }
 
     public BigDecimal calculateTax(Tax tax) {

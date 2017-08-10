@@ -22,7 +22,6 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
@@ -53,23 +52,25 @@ public class MainScreen extends CustomComponent {
 
     @PostConstruct
     private void build(){
-        setWidth("100%");
+        setSizeFull();
 
         VerticalLayout root =new VerticalLayout();
-        root.setWidth("100%");
+        root.setSizeFull();
+        root.setMargin(true);
         setCompositionRoot(root);
 
         VerticalLayout content = new VerticalLayout();
         content.setSpacing(true);
+        content.setMargin(false);
 //        content.setHeight("100%");
-        content.setWidth("90%");
+        content.setSizeFull();
 
         content.addComponents(mainHeader,viewHeader);
 
         VerticalLayout viewContainer = new VerticalLayout();
-        viewContainer.setMargin(new MarginInfo(false,true,false,true));
 //        viewContainer.setWidth("100%");
-//        viewContainer.setSizeFull();
+        viewContainer.setSizeFull();
+        viewContainer.setMargin(false);
         content.addComponent(viewContainer);
         content.setExpandRatio(viewContainer,1);
 

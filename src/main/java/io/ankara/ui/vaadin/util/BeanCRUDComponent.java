@@ -1,12 +1,11 @@
 package io.ankara.ui.vaadin.util;
 
-import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
+import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.themes.ValoTheme;
-import io.ankara.ui.vaadin.main.MainUI;
 
-import javax.inject.Inject;
 import java.util.Collection;
 
 /**
@@ -15,17 +14,18 @@ import java.util.Collection;
  * @email bonifacechacha@gmail.com
  * @date 8/14/16 5:24 PM
  */
-public abstract class BeanCRUDComponent extends VerticalLayout {
+public abstract class BeanCRUDComponent<T> extends VerticalLayout {
 
-    protected Table table;
-    protected BeanItemContainer container;
+    protected Grid<T> table;
     protected Window popUpWindow;
     protected Button createButton;
     protected HorizontalLayout header;
 
-    protected RemoveItemButtonGenerator removeItemButtonGenerator;
+    public BeanCRUDComponent() {
+        table = new Grid<>();
+    }
 
-    protected void build(Class type) {
+    protected void build() {
 
         popUpWindow = new Window();
         popUpWindow.setModal(true);
@@ -50,13 +50,11 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         addComponent(header);
         setComponentAlignment(header, Alignment.TOP_RIGHT);
 
-        table = new Table();
         table.setSizeFull();
-        ;
-        container = new BeanItemContainer(type, loadBeans());
-        table.setContainerDataSource(container);
+
+        table.setItems(loadBeans());
         table.addItemClickListener(event -> {
-            Object bean = event.getItemId();
+            Object bean = event.getItem();
             popUpWindow.setContent(getBeanComponent(bean));
 
             if (!popUpWindow.isAttached())
@@ -66,13 +64,17 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
         addComponent(table);
         setExpandRatio(table, 1);
 
-        removeItemButtonGenerator = new RemoveItemButtonGenerator(table, "Remove", true) {
-            @Override
-            protected void removeItem(Object itemID) {
-                    BeanCRUDComponent.this.removeItem(itemID);
+        table.addComponentColumn((ValueProvider<T, Component>) t -> {
+            RemoveItemButton removeItemButton = new RemoveItemButton(t) {
+                @Override
+                public void removeItem(Object itemID) {
+                    BeanCRUDComponent.this.removeItem(t);
                     reload();
-            }
-        };
+                }
+            };
+
+            return removeItemButton;
+        }).setCaption("");
 
     }
 
@@ -85,8 +87,7 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
     protected abstract void removeItem(Object itemID);
 
     public void reload() {
-        container.removeAllItems();
-        container.addAll(loadBeans());
+        table.setItems(loadBeans());
     }
 
 
@@ -94,16 +95,11 @@ public abstract class BeanCRUDComponent extends VerticalLayout {
 
     protected abstract Component getCreateComponent();
 
-    public Table getTable() {
+    public Grid<T> getTable() {
         return table;
     }
 
     protected abstract Component getBeanComponent(Object bean);
-
-
-    public BeanItemContainer getContainer() {
-        return container;
-    }
 
     public Window getPopUpWindow() {
         return popUpWindow;

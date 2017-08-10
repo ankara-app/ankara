@@ -7,9 +7,6 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.ui.vaadin.main.view.ViewHeader;
-import io.ankara.ui.vaadin.main.view.cost.estimate.EstimatesHeader;
-import io.ankara.ui.vaadin.main.view.cost.estimate.EstimatesTable;
-import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -20,7 +17,6 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 9/16/16.
  */
-@UIScope
 @SpringView(name = EstimatesView.VIEW_NAME)
 public class EstimatesView extends CustomComponent implements View {
     public static final String VIEW_NAME = "EstimatesView";
@@ -40,9 +36,9 @@ public class EstimatesView extends CustomComponent implements View {
         VerticalLayout content = new VerticalLayout();
         content.setSizeFull();
         content.setSpacing(true);
+        content.setMargin(false);
         setCompositionRoot(content);
 
-        estimatesHeader.setSearchContainer(estimatesTable.getContainerDataSource());
         estimatesHeader.setWidth("50%");
         content.addComponent(estimatesHeader);
 

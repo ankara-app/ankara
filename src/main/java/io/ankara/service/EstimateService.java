@@ -1,6 +1,9 @@
 package io.ankara.service;
 
-import io.ankara.domain.*;
+import io.ankara.domain.Company;
+import io.ankara.domain.Customer;
+import io.ankara.domain.Estimate;
+import io.ankara.domain.User;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

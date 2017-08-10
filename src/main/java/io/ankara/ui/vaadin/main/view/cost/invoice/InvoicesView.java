@@ -37,9 +37,9 @@ public class InvoicesView extends CustomComponent implements View {
         VerticalLayout content = new VerticalLayout();
         content.setSizeFull();
         content.setSpacing(true);
+        content.setMargin(false);
         setCompositionRoot(content);
 
-        invoicesHeader.setSearchContainer(invoicesTable.getContainerDataSource());
         invoicesHeader.setWidth("50%");
         content.addComponent(invoicesHeader);
 

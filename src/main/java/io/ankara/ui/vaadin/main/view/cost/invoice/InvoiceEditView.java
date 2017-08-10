@@ -7,7 +7,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
@@ -47,6 +46,10 @@ public class InvoiceEditView extends CostEditView {
     @Inject
     private ViewHeader viewHeader;
 
+    public InvoiceEditView() {
+        super(Invoice.class);
+    }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
@@ -64,9 +67,8 @@ public class InvoiceEditView extends CostEditView {
         FormLayout costDetailsLayout =  super.createCostDetailsForm();
 
         purchaseOrder = new TextField("PO Number");
-        purchaseOrder.setInputPrompt("Enter PO Number");
+        purchaseOrder.setPlaceholder("Enter PO Number");
         purchaseOrder.setWidth("100%");
-        purchaseOrder.setNullRepresentation("");
 
         dueDate = new DateField("Due Date");
         dueDate.setDescription("Specify invoice due date");
