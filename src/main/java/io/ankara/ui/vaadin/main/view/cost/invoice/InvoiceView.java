@@ -23,7 +23,6 @@ import javax.inject.Inject;
  * @date 8/13/16 7:09 PM
  */
 @SpringView(name = InvoiceView.VIEW_NAME)
-@SpringComponent
 public class InvoiceView extends CostView{
 
     public static final String VIEW_NAME = "Invoice";

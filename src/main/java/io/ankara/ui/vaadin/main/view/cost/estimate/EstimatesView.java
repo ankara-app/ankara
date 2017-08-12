@@ -4,9 +4,13 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
+import io.ankara.domain.Estimate;
 import io.ankara.ui.vaadin.main.view.ViewHeader;
+import io.ankara.ui.vaadin.main.view.cost.CostsTable;
+import io.ankara.ui.vaadin.main.view.cost.CostsView;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -18,7 +22,7 @@ import javax.inject.Inject;
  * @date 9/16/16.
  */
 @SpringView(name = EstimatesView.VIEW_NAME)
-public class EstimatesView extends CustomComponent implements View {
+public class EstimatesView extends CostsView<Estimate> {
     public static final String VIEW_NAME = "EstimatesView";
 
     @Inject
@@ -31,25 +35,23 @@ public class EstimatesView extends CustomComponent implements View {
     private ViewHeader viewHeader;
 
     @PostConstruct
-    private void build(){
-        setSizeFull();
-        VerticalLayout content = new VerticalLayout();
-        content.setSizeFull();
-        content.setSpacing(true);
-        content.setMargin(false);
-        setCompositionRoot(content);
+    protected void build(){
+        super.build();
+    }
 
-        estimatesHeader.setWidth("50%");
-        content.addComponent(estimatesHeader);
+    @Override
+    protected CostsTable<Estimate> getCostsTable() {
+        return estimatesTable;
+    }
 
-//        estimatesTable.setSizeFull();
-        content.addComponent(estimatesTable);
-        content.setExpandRatio(estimatesTable,1);
+    @Override
+    protected Component getHeader() {
+        return estimatesHeader;
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        estimatesTable.reload();
+        super.enter(event);
         viewHeader.setValue("Estimates");
     }
 }

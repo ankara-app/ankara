@@ -1,6 +1,7 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
 
+import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
@@ -26,16 +27,15 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/11/16 7:59 PM
  */
-@UIScope
+
 @SpringView(name = InvoiceEditView.VIEW_NAME)
-@SpringComponent
 public class InvoiceEditView extends CostEditView {
     public static final String VIEW_NAME = "InvoiceForm";
     public static final String TOPIC_EDIT = "Create Invoice";
 
     private TextField purchaseOrder;
 
-    private DateField dueDate;
+    private DateField dueDateField;
 
     @Inject
     private InvoiceService invoiceService;
@@ -70,11 +70,15 @@ public class InvoiceEditView extends CostEditView {
         purchaseOrder.setPlaceholder("Enter PO Number");
         purchaseOrder.setWidth("100%");
 
-        dueDate = new DateField("Due Date");
-        dueDate.setDescription("Specify invoice due date");
-        dueDate.setWidth("100%");
+        dueDateField = new DateField("Due Date");
+        dueDateField.setPlaceholder("Specify invoice due date");
+        dueDateField.setWidth("100%");
+        getCostBinder()
+                .forField(dueDateField)
+                .withConverter(new LocalDateToDateConverter())
+                .bind("dueDate");
 
-        costDetailsLayout.addComponents(dueDate,purchaseOrder);
+        costDetailsLayout.addComponents(dueDateField,purchaseOrder);
         return costDetailsLayout;
     }
 

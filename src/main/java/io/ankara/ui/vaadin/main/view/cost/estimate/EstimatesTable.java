@@ -10,6 +10,7 @@ import io.ankara.domain.Estimate;
 import io.ankara.service.EstimateService;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.main.MainUI;
+import io.ankara.ui.vaadin.main.view.cost.CostsTable;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
@@ -23,7 +24,7 @@ import javax.inject.Inject;
  */
 @SpringComponent
 @ViewScope
-public class EstimatesTable extends Grid<Estimate>{
+public class EstimatesTable extends CostsTable<Estimate> {
 
     @Inject
     private EstimateService estimateService;
@@ -39,23 +40,14 @@ public class EstimatesTable extends Grid<Estimate>{
 
 
     @PostConstruct
-    private void build() {
-        setSizeFull();
+    protected void build() {
+        super.build();
 
         addItemClickListener(event -> {
             Estimate estimate = event.getItem();
             mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
             eventBus.publish(EstimateView.TOPIC_SHOW, this, estimate);
         });
-
-        addColumn(Estimate::getCode).setCaption("Code");
-        addColumn(Estimate::getTimeCreated).setCaption("Created on");
-        addColumn(Estimate::getCustomer).setCaption("Customer");
-        addColumn(Estimate::getSubject).setCaption("Subject");
-        addColumn(estimate -> estimate.getAmountDue()+" "+estimate.getCurrency()).setCaption("Amount");
-        addColumn(Estimate::getIssueDate).setCaption("Issued on");
-        addColumn(Estimate::getCompany).setCaption("Company");
-        addColumn(Estimate::getCreator).setCaption("Creator");
     }
 
     public void reload() {

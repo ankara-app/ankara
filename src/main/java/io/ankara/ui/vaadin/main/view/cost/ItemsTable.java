@@ -100,6 +100,7 @@ public class ItemsTable extends Grid<Integer> {
             quantityField.setSigned(false);
             quantityField.setDecimalSeparator('.');
             quantityField.setWidth("100%");
+            quantityField.addStyleName(AnkaraTheme.TEXTFIELD_TINY);
 
             itemBinders.get(key).forField(quantityField).withConverter(new StringToBigDecimalConverter("Quantity must be a number")).bind("quantity");
             quantityField.addValueChangeListener(event -> calculateSummaries(key));

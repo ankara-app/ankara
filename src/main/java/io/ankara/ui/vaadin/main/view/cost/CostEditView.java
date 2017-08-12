@@ -208,16 +208,19 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
     private FormLayout createSummaryLayout() {
 
         amountSubtotal = new Label();
-        amountSubtotal.addStyleName("text-right");
+        amountSubtotal.addStyleName(AnkaraTheme.TEXT_RIGHT);
         amountSubtotal.setCaption("Subtotal");
+        amountSubtotal.setWidth("100%");
 
         amountDiscounted = new Label();
-        amountDiscounted.addStyleName("text-right");
+        amountDiscounted.addStyleName(AnkaraTheme.TEXT_RIGHT);
         amountDiscounted.setCaption("Discount");
+        amountDiscounted.setWidth("100%");
 
         amountDue = new Label();
-        amountDue.addStyleName("text-right");
+        amountDue.addStyleName(AnkaraTheme.TEXT_RIGHT);
         amountDue.setCaption("Amount Due");
+        amountDue.setWidth("100%");
 
         FormLayout summaryForm = new FormLayout(amountSubtotal, amountDiscounted, amountDue);
         summaryForm.setWidth("400px");
@@ -408,8 +411,9 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
 
         companyTaxes.forEach(tax -> {
             Label taxLabel = new Label();
-            taxLabel.addStyleName("text-right");
+            taxLabel.addStyleName(AnkaraTheme.TEXT_RIGHT);
             taxLabel.setCaption(createTaxCaption(tax));
+            taxLabel.setWidth("100%");
 
             taxLabels.put(tax, taxLabel);
 

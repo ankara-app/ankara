@@ -2,6 +2,7 @@ package io.ankara.ui.vaadin.main.view.cost.invoice;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.spring.annotation.ViewScope;
 import io.ankara.domain.Company;
 import io.ankara.domain.Invoice;
 import io.ankara.domain.User;
@@ -19,8 +20,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/11/16 3:05 AM
  */
-@UIScope
 @SpringComponent
+@ViewScope
 public class InvoicesHeader extends CostsHeader {
 
     @Inject

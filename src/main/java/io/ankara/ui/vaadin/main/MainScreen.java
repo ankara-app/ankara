@@ -56,7 +56,7 @@ public class MainScreen extends CustomComponent {
 
         VerticalLayout root =new VerticalLayout();
         root.setSizeFull();
-        root.setMargin(true);
+        root.setMargin(new MarginInfo(false,true,true,true));
         setCompositionRoot(root);
 
         VerticalLayout content = new VerticalLayout();
