@@ -6,6 +6,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
+import io.ankara.ui.vaadin.main.view.ViewHeader;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -19,13 +20,16 @@ import javax.inject.Inject;
 @UIScope
 @SpringView(name = InvoicesView.VIEW_NAME)
 public class InvoicesView extends CustomComponent implements View {
-    public static final String VIEW_NAME = "";
+    public static final String VIEW_NAME = "InvoicesView";
 
     @Inject
     private InvoicesHeader invoicesHeader;
 
     @Inject
-    private InvoicesGrid invoicesGrid;
+    private InvoicesTable invoicesTable;
+
+    @Inject
+    private ViewHeader viewHeader;
 
     @PostConstruct
     private void build(){
@@ -35,16 +39,18 @@ public class InvoicesView extends CustomComponent implements View {
         content.setSpacing(true);
         setCompositionRoot(content);
 
+        invoicesHeader.setSearchContainer(invoicesTable.getContainerDataSource());
         invoicesHeader.setWidth("50%");
         content.addComponent(invoicesHeader);
 
-        invoicesGrid.setSizeFull();
-        content.addComponent(invoicesGrid);
-        content.setExpandRatio(invoicesGrid,1);
+//        invoicesTable.setSizeFull();
+        content.addComponent(invoicesTable);
+        content.setExpandRatio(invoicesTable,1);
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        invoicesTable.reload();
+        viewHeader.setValue("Invoices");
     }
 }

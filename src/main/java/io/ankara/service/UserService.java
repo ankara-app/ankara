@@ -1,6 +1,7 @@
 package io.ankara.service;
 
 import io.ankara.domain.User;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -14,7 +15,19 @@ public interface UserService extends UserDetailsService {
 
     boolean save(User user);
 
+    boolean requestVerification(String email);
+
     User getCurrentUser();
 
     boolean changePassword(User user, String password);
+
+    boolean isCurrentUserAuthenticated();
+
+    Authentication getAuthentication();
+
+    User getUser(String userEmail);
+
+    User verify(String tokenID);
+
+    boolean resetPassword(String email);
 }

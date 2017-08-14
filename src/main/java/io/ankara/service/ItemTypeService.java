@@ -18,4 +18,6 @@ public interface ItemTypeService {
     List<ItemType> getItemTypes(Company company);
 
     ItemType getItemType(String name);
+
+    boolean delete(ItemType itemType);
 }

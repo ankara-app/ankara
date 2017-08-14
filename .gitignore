@@ -30,7 +30,7 @@ hs_err_pid*
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
 .idea/uiDesigner.xml
-
+/src/main/resources/templates/bootstrap
 # Gradle:
 .idea/gradle.xml
 .idea/libraries
@@ -126,3 +126,11 @@ local.properties
 # Code Recommenders
 .recommenders/
 
+/src/main/webapp/VAADIN/gwt-unitCache/
+/src/main/webapp/VAADIN/widgetsets/
+/src/main/webapp/VAADIN/themes/ankara/styles.css
+src/main/resources/addon/
+src/main/webapp/VAADIN/themes/ankara/styles.css
+/src/main/webapp/VAADIN/themes/bootstrap/addons.scss
+/src/main/webapp/VAADIN/themes/bootstrap/styles.css.map
+/src/main/webapp/VAADIN/themes/ankara/addons.scss

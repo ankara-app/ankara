@@ -15,4 +15,6 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     List<Customer> findByCompany(Company company);
+
+    Customer findFirstByNameAndCompany(String name, Company company);
 }

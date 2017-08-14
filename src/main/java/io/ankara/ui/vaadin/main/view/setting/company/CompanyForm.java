@@ -4,12 +4,15 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Company;
 import io.ankara.service.CompanyService;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.vaadin.easyuploads.ImagePreviewField;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -20,30 +23,32 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/14/16 9:10 PM
  */
-@SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@SpringComponent
 public class CompanyForm extends FormLayout {
 
     @Inject
     private CompanyService companyService;
 
+    private ImagePreviewField picture;
+
     private TextField name;
 
-    private TextField registration;
+    private TextField email;
 
-    private TextField VAT;
+    private TextField phone;
 
-    private TextArea paymentInformation;
+    private TextField fax;
 
     private TextArea address;
-
-    private TextArea description;
 
     private TextArea notes;
 
     private TextArea terms;
 
     private BeanFieldGroup fieldGroup;
+
+    private Window subWindow;
 
     @PostConstruct
     private void build() {
@@ -52,41 +57,37 @@ public class CompanyForm extends FormLayout {
         addStyleName(ValoTheme.LAYOUT_WELL);
         addStyleName(ValoTheme.LAYOUT_CARD);
 
+        picture = new ImagePreviewField();
+
         name = new TextField("Name");
         name.setNullRepresentation("");
         name.setWidth("100%");
 
-        registration = new TextField("Registration Number");
-        registration.setNullRepresentation("");
-        registration.setWidth("100%");
+        email = new TextField("Email");
+        email.setNullRepresentation("");
+        email.setWidth("100%");
 
-        VAT = new TextField("VAT");
-        VAT.setNullRepresentation("");
-        VAT.setWidth("100%");
+        phone = new TextField("Phone");
+        phone.setNullRepresentation("");
+        phone.setWidth("100%");
 
-        paymentInformation = new TextArea("Payment Information");
-        paymentInformation.setNullRepresentation("");
-        paymentInformation.setWidth("100%");
-        paymentInformation.setRows(4);
+        fax = new TextField("Fax");
+        fax.setNullRepresentation("");
+        fax.setWidth("100%");
 
         address = new TextArea("Address");
         address.setNullRepresentation("");
         address.setWidth("100%");
         address.setRows(4);
 
-        description = new TextArea("Description");
-        description.setNullRepresentation("");
-        description.setWidth("100%");
-        description.setRows(4);
-
-        notes = new TextArea();
+        notes = new TextArea("Notes");
         notes.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
         notes.setInputPrompt("Specify other notes ...");
         notes.setRows(6);
         notes.setWidth("100%");
         notes.setNullRepresentation("");
 
-        terms = new TextArea();
+        terms = new TextArea("Terms");
         terms.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
         terms.setInputPrompt("Specify terms ...");
         terms.setRows(6);
@@ -104,19 +105,25 @@ public class CompanyForm extends FormLayout {
                     fieldGroup.commit();
                     Company company = (Company) fieldGroup.getItemDataSource().getBean();
                     if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
-                        Notification.show("Company information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                        NotificationUtils.showSuccess("Company information saved successfully", null);
+                        if (subWindow != null)
+                            subWindow.close();
                     }
                 } catch (FieldGroup.CommitException e) {
                     Notification.show("Enter company information correctly", Notification.Type.WARNING_MESSAGE);
                 }
             }
         });
-        addComponents(name, registration, VAT, paymentInformation, address, description,notes,terms, save);
+
+        addComponents(picture,name, email, phone, fax, address,notes, terms, save);
 
     }
 
     public void edit(Company company) {
         fieldGroup = BeanFieldGroup.bindFieldsBuffered(company, this);
+    }
 
+    public void setSubWindow(Window subWindow) {
+        this.subWindow = subWindow;
     }
 }

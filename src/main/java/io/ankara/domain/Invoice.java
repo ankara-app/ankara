@@ -1,5 +1,7 @@
 package io.ankara.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
@@ -16,13 +18,7 @@ import java.util.Date;
 @Entity
 public class Invoice extends Cost {
 
-
     private String purchaseOrder;
-
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    @NotNull
-    private Date issueDate;
 
     @Temporal(TemporalType.DATE)
     @NotNull
@@ -31,9 +27,8 @@ public class Invoice extends Cost {
     public Invoice() {
     }
 
-    public Invoice(User creator) {
-        super(creator);
-        issueDate = new Date();
+    public Invoice(User creator, Company company, String currency, String code) {
+        super(creator, company, currency, code);
         dueDate = new Date();
     }
 
@@ -43,14 +38,6 @@ public class Invoice extends Cost {
 
     public void setPurchaseOrder(String purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
-    }
-
-    public Date getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(Date issueDate) {
-        this.issueDate = issueDate;
     }
 
     public Date getDueDate() {

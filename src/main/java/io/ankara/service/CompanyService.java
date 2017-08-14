@@ -3,7 +3,7 @@ package io.ankara.service;
 import io.ankara.domain.Company;
 import io.ankara.domain.User;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Boniface Chacha
@@ -13,13 +13,15 @@ import java.util.Collection;
  */
 public interface CompanyService {
 
-    Collection<Company> getCurrentUserCompanies();
+    List<Company> getCurrentUserCompanies();
 
-    Collection<Company> getCompanies(User user);
+    List<Company> getCompanies(User user);
 
     boolean create(Company company);
 
     boolean addUser(Company company, User user);
 
     boolean save(Company company);
+
+    boolean delete(Company company);
 }

@@ -11,4 +11,10 @@ import javax.persistence.Entity;
 @Entity
 public class Estimate extends Cost {
 
+    public Estimate() {
+    }
+
+    public Estimate(User creator, Company company, String currency, String code) {
+        super(creator, company, currency, code);
+    }
 }

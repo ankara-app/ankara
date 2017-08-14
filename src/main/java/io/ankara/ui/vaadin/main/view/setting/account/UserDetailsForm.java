@@ -4,12 +4,12 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.User;
 import io.ankara.service.UserService;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -20,8 +20,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/14/16 3:08 PM
  */
+@UIScope
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserDetailsForm extends FormLayout {
 
     private TextField fullName;
@@ -52,7 +52,7 @@ public class UserDetailsForm extends FormLayout {
             try {
                 fieldGroup.commit();
                 if (userService.save(user)) {
-                    Notification.show("Your details are saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    NotificationUtils.showSuccess("Your details are saved successfully", null);
                     getUI().getPage().reload();
                 }
 

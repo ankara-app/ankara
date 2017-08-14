@@ -13,9 +13,16 @@ import java.util.List;
  * @date 8/13/16 1:10 AM
  */
 public interface CustomerService {
+
     List<Customer> getCurrentUserCustomers();
 
     Collection<Customer> getCustomers(Company company);
 
     boolean save(Customer customer);
+
+    boolean delete(Customer customer);
+
+    Customer getCustomer(String name, Company company);
+
+    Customer create(String name, Company company);
 }

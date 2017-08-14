@@ -4,12 +4,12 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.ItemType;
 import io.ankara.service.ItemTypeService;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -20,8 +20,9 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/15/16 11:17 AM
  */
+
+@UIScope
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ItemTypeForm extends FormLayout {
 
     @Inject
@@ -32,6 +33,8 @@ public class ItemTypeForm extends FormLayout {
     private TextArea description;
 
     private BeanFieldGroup fieldGroup;
+
+    private Window subWindow;
 
     @PostConstruct
     private void build() {
@@ -58,7 +61,9 @@ public class ItemTypeForm extends FormLayout {
                 fieldGroup.commit();
                 ItemType itemType = (ItemType) fieldGroup.getItemDataSource().getBean();
                 if (itemTypeService.save(itemType)) {
-                    Notification.show("Item type information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    NotificationUtils.showSuccess("Item type information saved successfully", null);
+                    if(subWindow != null)
+                        subWindow.close();
                 }
             } catch (FieldGroup.CommitException e) {
                 Notification.show("Enter item type information correctly", Notification.Type.WARNING_MESSAGE);
@@ -70,5 +75,10 @@ public class ItemTypeForm extends FormLayout {
 
     public void edit(ItemType itemType) {
         fieldGroup = BeanFieldGroup.bindFieldsBuffered(itemType, this);
+    }
+
+
+    public void setSubWindow(Window subWindow) {
+        this.subWindow = subWindow;
     }
 }

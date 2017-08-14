@@ -1,78 +1,123 @@
 buildscript {
-	ext {
-		springBootVersion = '1.4.0.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-		jcenter()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE"
-		classpath 'org.springframework:springloaded:1.2.0.RELEASE'
-	}
+    ext {
+        springBootVersion = '1.4.1.RELEASE'
+        groovyVersion = '2.4.7'
+        vaadinVersion = '7.7.3'
+        vaadinSpringVersion = '0.0.7.RELEASE'
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'org.springframework:springloaded:1.2.0.RELEASE'
+    }
+
 }
 
 plugins {
-	id 'fi.jasoft.plugin.vaadin' version '0.11.0-beta'
+    id 'fi.jasoft.plugin.vaadin' version '0.11.0-beta'
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+//apply plugin: "groovy"
+
+springBoot {
+    executable = true
+}
 
 jar {
-	baseName = 'ankara'
-	version = '0.0.1-SNAPSHOT'
+    baseName = 'ankara'
+    version = '0.0.1-SNAPSHOT'
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
+configurations {
+    all*.exclude group: '', module: 'servlet-api'
+}
 
 dependencies {
-	compile("javax.inject:javax.inject:1")
-	compile 'org.apache.commons:commons-lang3:3.3'
+//    compile "org.codehaus.groovy:groovy:${groovyVersion}"
+//    compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
 
-	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-aop')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-groovy-templates')
-	compile('com.vaadin:vaadin-spring-boot-starter:1.0.0')
+    compile("javax.inject:javax.inject:1")
+    compile 'org.apache.commons:commons-lang3:3.3'
 
-	runtime('mysql:mysql-connector-java')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-aop')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+//    compile('org.springframework.boot:spring-boot-starter-groovy-templates')
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-mail")
 
-	compile 'org.vaadin.spring.extensions:vaadin-spring-ext-core:0.0.7.RELEASE'
-	compile 'org.vaadin.spring.extensions:vaadin-spring-ext-boot:0.0.7.RELEASE'
-	compile 'org.vaadin.spring.extensions:vaadin-spring-ext-security:0.0.7.RELEASE'
-	compile 'org.vaadin.spring.addons:vaadin-spring-addon-eventbus:0.0.7.RELEASE'
-	compile 'org.vaadin.spring.addons:vaadin-spring-addon-simple-mvp:0.0.7.RELEASE'
+//    compile("org.springframework.boot:spring-boot-devtools")
+    compile('com.vaadin:vaadin-spring-boot-starter:1.0.2')
 
-	compile 'com.vaadin:vaadin-themes:7.6.8'
+    runtime('mysql:mysql-connector-java')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    compile "org.vaadin.spring.extensions:vaadin-spring-ext-core:$vaadinSpringVersion"
+    compile "org.vaadin.spring.extensions:vaadin-spring-ext-boot:$vaadinSpringVersion"
+    compile "org.vaadin.spring.extensions:vaadin-spring-ext-security:$vaadinSpringVersion"
+    compile "org.vaadin.spring.addons:vaadin-spring-addon-eventbus:$vaadinSpringVersion"
+    compile "org.vaadin.spring.addons:vaadin-spring-addon-simple-mvp:$vaadinSpringVersion"
+
+    compile "com.vaadin:vaadin-shared-deps:1.0.3"
+    compile "com.vaadin:vaadin-push:$vaadinVersion"
+
+    compile 'org.vaadin.addon:confirmdialog:2.1.3'
+    compile 'org.vaadin.addon:easyuploads:7.4.10'
+
+    compile "javax.servlet:jstl:1.2"
+    compile "javax.servlet:jsp-api:2.0"
+    compile "org.webjars:bootstrap:3.3.7"
+
+    compile "org.flywaydb:flyway-core:4.1.1"
+
+    //PDF Lib
+//    compile 'com.github.jhonnymertz:java-wkhtmltopdf-wrapper:1.0.0-RELEASE'
+
+//
+//	compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.9'
+//	compile group: 'com.itextpdf.tool', name: 'xmlworker', version: '5.5.9'
+//// https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-pdf
+//	compile group: 'org.xhtmlrenderer', name: 'flying-saucer-pdf', version: '9.0.9'
+//
+//// https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-core
+//	compile group: 'org.xhtmlrenderer', name: 'flying-saucer-core', version: '9.0.9'
+
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "com.vaadin:vaadin-bom:7.6.3"
-	}
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
+    }
 }
 
 
 eclipse {
-	classpath {
-		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-	}
+    classpath {
+        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
 }
 
 idea {
-	module {
-		inheritOutputDirs = false
-		outputDir = file("$buildDir/classes/main/")
-	}
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+    }
 }

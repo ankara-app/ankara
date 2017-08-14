@@ -1,0 +1,72 @@
+.entry{
+    line-height: 1.55;
+    margin: 10px;
+}
+
+.logo{
+    vertical-align:bottom;
+}
+
+.date{
+    font-size: 10px;
+}
+
+.fade{
+    color:  grey;
+}
+
+.left-vertical-line {
+    border-left: 1px solid #ddd;
+}
+
+.top5 {
+    margin-top: 5px;
+}
+
+.top7 {
+    margin-top: 7px;
+}
+
+.top10 {
+    margin-top: 10px;
+}
+
+.top15 {
+    margin-top: 15px;
+}
+
+.money{
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.caption {
+    color: grey !important;
+    font-weight: 300;
+}
+
+.borderless td, .borderless th {
+    border: none !important;
+}
+
+.subject {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.pre {
+    white-space: pre-wrap; /* css-3 */
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f9f9f9 !important;
+}
+
+.cost-items td{
+    padding: 10px 8px !important;
+}

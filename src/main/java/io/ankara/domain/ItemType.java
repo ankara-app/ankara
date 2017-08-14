@@ -15,6 +15,9 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 public class ItemType {
+    public static final String GOODS = "Goods";
+    public static final String SERVICE = "Service";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -31,15 +34,21 @@ public class ItemType {
     @NotNull
     private Company company;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String description;
 
     public ItemType() {
     }
 
     public ItemType(Company company) {
+        this(null,company,null);
+    }
+
+    public ItemType(String name, Company company, String description) {
+        this();
+        this.name = name;
         this.company = company;
+        this.description = description;
     }
 
     public Long getId() {

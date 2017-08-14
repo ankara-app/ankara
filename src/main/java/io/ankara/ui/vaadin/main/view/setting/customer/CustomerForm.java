@@ -4,10 +4,12 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Customer;
 import io.ankara.service.CustomerService;
+import io.ankara.ui.vaadin.util.NotificationUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -20,8 +22,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/15/16 9:18 AM
  */
-@SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@SpringComponent
 public class CustomerForm extends FormLayout {
 
     @Inject
@@ -36,6 +38,8 @@ public class CustomerForm extends FormLayout {
     private TextArea description;
 
     private BeanFieldGroup fieldGroup;
+
+    private Window subWindow;
 
     @PostConstruct
     private void build() {
@@ -71,7 +75,9 @@ public class CustomerForm extends FormLayout {
                 fieldGroup.commit();
                 Customer customer = (Customer) fieldGroup.getItemDataSource().getBean();
                 if (customerService.save(customer)) {
-                    Notification.show("Customer information saved successfully", Notification.Type.TRAY_NOTIFICATION);
+                    NotificationUtils.showSuccess("Customer information saved successfully", null);
+                    if(subWindow != null)
+                        subWindow.close();
                 }
             } catch (FieldGroup.CommitException e) {
                 Notification.show("Enter customer information correctly", Notification.Type.WARNING_MESSAGE);
@@ -83,5 +89,10 @@ public class CustomerForm extends FormLayout {
 
     public void edit(Customer customer) {
         fieldGroup = BeanFieldGroup.bindFieldsBuffered(customer, this);
+    }
+
+
+    public void setSubWindow(Window subWindow) {
+        this.subWindow = subWindow;
     }
 }

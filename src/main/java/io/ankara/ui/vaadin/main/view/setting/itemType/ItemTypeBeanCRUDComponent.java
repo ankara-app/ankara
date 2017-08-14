@@ -1,6 +1,7 @@
 package io.ankara.ui.vaadin.main.view.setting.itemType;
 
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
@@ -8,8 +9,6 @@ import io.ankara.domain.Company;
 import io.ankara.domain.ItemType;
 import io.ankara.service.ItemTypeService;
 import io.ankara.ui.vaadin.util.BeanCRUDComponent;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -21,8 +20,8 @@ import java.util.Collection;
  * @email bonifacechacha@gmail.com
  * @date 8/15/16 11:16 AM
  */
+@UIScope
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
 
     @Inject
@@ -46,7 +45,13 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
         holder.setComponentAlignment(itemTypeForm, Alignment.MIDDLE_CENTER);
 
         super.build(ItemType.class);
-        grid.setColumns( "name", "description");
+        table.setVisibleColumns("name", "description","Remove");
+    }
+
+    @Override
+    protected void removeItem(Object itemID) {
+        ItemType itemType = (ItemType) itemID;
+        itemTypeService.delete(itemType);
     }
 
     @Override
@@ -58,6 +63,7 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
     protected Component getCreateComponent() {
         popUpWindow.setCaption("Create new item type");
         itemTypeForm.edit(new ItemType(company));
+        itemTypeForm.setSubWindow(popUpWindow);
 
         return holder;
     }
@@ -65,6 +71,7 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
     @Override
     protected Component getBeanComponent(Object bean) {
         itemTypeForm.edit((ItemType) bean);
+        itemTypeForm.setSubWindow(popUpWindow);
         return holder;
     }
 

@@ -4,9 +4,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @author Boniface Chacha
@@ -27,27 +29,40 @@ public class Customer {
     @NotBlank
     private String name;
 
-    @Column(nullable = false)
     @Email
-    @NotBlank
     private String email;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    private String phone;
+
+    private String fax;
+
+    @Column(columnDefinition = "longtext")
     private String address;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String description;
 
     @ManyToOne
     @NotNull
     private Company company;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    @NotNull
+    private Date timeCreated;
+
     public Customer() {
+        timeCreated = new Date();
     }
 
     public Customer(Company company) {
+        this(null,company);
+    }
+
+    public Customer(String name, Company company) {
+        this();
+
+        this.name = name;
         this.company = company;
     }
 
@@ -73,6 +88,22 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 
     public String getAddress() {

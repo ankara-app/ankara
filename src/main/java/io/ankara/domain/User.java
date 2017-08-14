@@ -7,12 +7,11 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * @author Boniface Chacha
@@ -43,7 +42,14 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    @NotNull
+    private Date timeCreated;
+
     public User(String email, String password, String fullName, boolean enabled, boolean locked) {
+        timeCreated = new Date();
+
         this.email = email;
         this.password = password;
         this.fullName = fullName;
@@ -124,6 +130,14 @@ public class User implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Date getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
     @Override

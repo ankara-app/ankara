@@ -7,14 +7,22 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import io.ankara.domain.Company;
 import io.ankara.domain.Invoice;
+import io.ankara.domain.User;
+import io.ankara.service.CompanyService;
+import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
-import io.ankara.ui.vaadin.AnkaraUI;
+import io.ankara.ui.vaadin.main.MainUI;
+import io.ankara.ui.vaadin.main.view.cost.CostsHeader;
+import io.ankara.ui.vaadin.main.view.setting.company.CompaniesBeanCRUDComponent;
+import io.ankara.ui.vaadin.util.CompanySelectorWindow;
 import io.ankara.ui.vaadin.util.SearchField;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * @author Boniface Chacha
@@ -24,35 +32,35 @@ import javax.inject.Inject;
  */
 @UIScope
 @SpringComponent
-public class InvoicesHeader extends CustomComponent {
+public class InvoicesHeader extends CostsHeader {
 
     @Inject
     private EventBus.UIEventBus eventBus;
 
     @Inject
+    private InvoiceService invoiceService;
+
+    @Inject
     private UserService userService;
 
     @Inject
-    private AnkaraUI ankaraUI;
+    private MainUI mainUI;
 
-    @PostConstruct
-    private void build() {
-        HorizontalLayout content = new HorizontalLayout();
-        content.setWidth("100%");
+    private Invoice createInvoice(Company company) {
+        String currency = "TZS";
+        String code = invoiceService.nextInvoiceNumber(company);
+        User creator = userService.getCurrentUser();
 
-        Button createButton = new Button("Create Invoice", FontAwesome.PLUS_CIRCLE);
-        createButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        createButton.addClickListener(event -> {
-            ankaraUI.getNavigator().navigateTo(InvoiceFormView.VIEW_NAME);
-            eventBus.publish(InvoiceFormView.TOPIC_CREATE,this,new Invoice(userService.getCurrentUser()));
-        });
-        content.addComponent(createButton);
+        return new Invoice(creator, company, currency, code);
+    }
 
-        SearchField searchField = new SearchField();
-        searchField.setWidth("100%");
-        content.addComponent(searchField);
-        content.setExpandRatio(searchField, 1);
+    private void navigateInvoiceCreateView(Invoice invoice) {
+        mainUI.getNavigator().navigateTo(InvoiceEditView.VIEW_NAME);
+        eventBus.publish(InvoiceEditView.TOPIC_EDIT, this, invoice);
+    }
 
-        setCompositionRoot(content);
+    @Override
+    protected void showCostCreateView(Company company) {
+        navigateInvoiceCreateView(createInvoice(company));
     }
 }

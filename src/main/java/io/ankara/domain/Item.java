@@ -1,5 +1,6 @@
 package io.ankara.domain;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
@@ -7,6 +8,10 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Boniface Chacha
@@ -38,22 +43,37 @@ public class Item {
     @NotBlank
     private String description;
 
-    @Column(nullable = false)
+    @Column(precision = 48, scale = 2,nullable = false)
     @NotNull
-    private Integer quantity;
+    private BigDecimal quantity;
 
     @Column(precision = 48, scale = 2,nullable = false)
     @NotNull
     private BigDecimal price;
 
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    private List<AppliedTax> taxes;
+
     public Item() {
+        taxes = new LinkedList<>();
     }
 
     public Item(Cost cost, ItemType type) {
+        this();
         this.cost = cost;
         this.type = type;
-        quantity = 1;
+
+        quantity = BigDecimal.ONE;
         price = BigDecimal.ZERO;
+    }
+
+    public Item(Cost cost) {
+       this(cost,null);
+    }
+
+    public BigDecimal getAmount(){
+        return price.multiply(quantity);
     }
 
     public Long getId() {
@@ -88,11 +108,11 @@ public class Item {
         this.description = description;
     }
 
-    public Integer getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -102,6 +122,17 @@ public class Item {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public void loadTaxes(Set<Tax> taxes){
+        if(cost == null)
+            throw new IllegalStateException("Associated cost for the item is not specified");
+
+        LinkedList appliedTaxes = new LinkedList();
+        for(Tax tax:taxes){
+            appliedTaxes.add(new AppliedTax(tax));
+        }
+        setTaxes(appliedTaxes);
     }
 
     @Override
@@ -128,5 +159,42 @@ public class Item {
                 .append(type)
                 .append(description)
                 .toHashCode();
+    }
+
+
+    public List<AppliedTax> getTaxes() {
+        return taxes;
+    }
+
+    public void setTaxes(List<AppliedTax> taxes) {
+        this.taxes = taxes;
+    }
+
+    public BigDecimal calculateTax() {
+        BigDecimal taxAmount = new BigDecimal("0.0");
+
+        for(AppliedTax appliedTax: taxes){
+            taxAmount = taxAmount.add(getAmount().multiply(appliedTax.getPercentage()).divide(new BigDecimal("100")));
+        }
+
+        return taxAmount;
+    }
+
+    public BigDecimal calculateTax(Tax tax) {
+        Optional<AppliedTax> appliedTax = getAppliedTax(tax);
+        if(!appliedTax.isPresent()) return BigDecimal.ZERO;
+
+        return getAmount().multiply(appliedTax.get().getPercentage()).divide(new BigDecimal("100"));
+    }
+
+    public Optional<AppliedTax> getAppliedTax(Tax tax) {
+        return getTaxes().stream().filter(appliedTax -> appliedTax.getTax().equals(tax)).findFirst();
+    }
+
+    public void addTax(Tax tax) {
+        if(taxes == null)
+            taxes = new LinkedList<>();
+
+        taxes.add(new AppliedTax(tax));
     }
 }

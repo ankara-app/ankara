@@ -7,10 +7,11 @@ import com.vaadin.server.SystemMessagesProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.vaadin.spring.security.annotation.EnableVaadinManagedSecurity;
 
+@EnableAsync
 @SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
-@EnableVaadinManagedSecurity
 public class AnkaraApplication {
 
 	public static void main(String[] args) {
@@ -22,14 +23,11 @@ public class AnkaraApplication {
 	 */
 	@Bean
 	SystemMessagesProvider systemMessagesProvider() {
-		return new SystemMessagesProvider() {
-			@Override
-			public SystemMessages getSystemMessages(SystemMessagesInfo systemMessagesInfo) {
-				CustomizedSystemMessages systemMessages = new CustomizedSystemMessages();
-				systemMessages.setSessionExpiredNotificationEnabled(false);
-				return systemMessages;
-			}
-		};
+		return (SystemMessagesProvider) systemMessagesInfo -> {
+            CustomizedSystemMessages systemMessages = new CustomizedSystemMessages();
+            systemMessages.setSessionExpiredNotificationEnabled(false);
+            return systemMessages;
+        };
 	}
 
 }

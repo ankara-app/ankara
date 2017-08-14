@@ -2,9 +2,13 @@ package io.ankara.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,16 +28,9 @@ public class Company {
     @Version
     private Integer version;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     @NotBlank
     private String name;
-
-    private String registration;
-
-    private String VAT;
-
-    @Column(columnDefinition = "longtext")
-    private String paymentInformation;
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
@@ -41,6 +38,18 @@ public class Company {
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
+    @Email
+    private String email;
+
+    @Column(columnDefinition = "longtext not null")
+    @NotBlank
+    private String phone;
+
+
+    @Column(columnDefinition = "longtext")
+    private String fax;
+
+    @Column(columnDefinition = "longtext")
     private String description;
 
     @Lob
@@ -49,13 +58,26 @@ public class Company {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String notes;
 
-    @Column(columnDefinition = "longtext not null")
-    @NotBlank
+    @Column(columnDefinition = "longtext")
     private String terms;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    @NotNull
+    private Date timeCreated;
+
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
+    private Set<Tax> taxes;
+
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "company")
+    private Set<ItemType> itemTypes;
+
+    public Company() {
+        timeCreated = new Date();
+    }
 
     public Long getId() {
         return id;
@@ -81,28 +103,28 @@ public class Company {
         this.name = name;
     }
 
-    public String getRegistration() {
-        return registration;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRegistration(String registration) {
-        this.registration = registration;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getVAT() {
-        return VAT;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setVAT(String VAT) {
-        this.VAT = VAT;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getPaymentInformation() {
-        return paymentInformation;
+    public String getFax() {
+        return fax;
     }
 
-    public void setPaymentInformation(String paymentInformation) {
-        this.paymentInformation = paymentInformation;
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 
     public String getAddress() {
@@ -153,6 +175,30 @@ public class Company {
         this.terms = terms;
     }
 
+    public Date getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public Set<Tax> getTaxes() {
+        return taxes;
+    }
+
+    public void setTaxes(Set<Tax> taxes) {
+        this.taxes = taxes;
+    }
+
+    public Set<ItemType> getItemTypes() {
+        return itemTypes;
+    }
+
+    public void setItemTypes(Set<ItemType> itemTypes) {
+        this.itemTypes = itemTypes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -164,9 +210,6 @@ public class Company {
         return new EqualsBuilder()
                 .append(id, company.id)
                 .append(name, company.name)
-                .append(registration, company.registration)
-                .append(VAT, company.VAT)
-                .append(users, company.users)
                 .isEquals();
     }
 
@@ -175,9 +218,6 @@ public class Company {
         return new HashCodeBuilder(17, 37)
                 .append(id)
                 .append(name)
-                .append(registration)
-                .append(VAT)
-                .append(users)
                 .toHashCode();
     }
 
