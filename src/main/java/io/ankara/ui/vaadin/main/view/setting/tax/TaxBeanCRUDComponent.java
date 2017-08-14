@@ -60,8 +60,8 @@ public class TaxBeanCRUDComponent extends BeanCRUDComponent<Tax>{
     }
 
     @Override
-    protected Collection loadBeans() {
-        return taxService.getTaxes(company);
+    public void reload() {
+        getTable().setItems(taxService.getTaxes(company));
     }
 
     @Override

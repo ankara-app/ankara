@@ -33,12 +33,7 @@ public abstract class BeanCRUDComponent<T> extends VerticalLayout {
         popUpWindow.setDraggable(true);
         popUpWindow.setWidth("70%");
         popUpWindow.setHeight("90%");
-        popUpWindow.addCloseListener(new Window.CloseListener() {
-            @Override
-            public void windowClose(Window.CloseEvent e) {
-                reload();
-            }
-        });
+        popUpWindow.addCloseListener(e -> reload());
 
         createButton = new Button("New", FontAwesome.PLUS_CIRCLE);
         createButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
@@ -52,7 +47,6 @@ public abstract class BeanCRUDComponent<T> extends VerticalLayout {
 
         table.setSizeFull();
 
-        table.setItems(loadBeans());
         table.addItemClickListener(event -> {
             Object bean = event.getItem();
             popUpWindow.setContent(getBeanComponent(bean));
@@ -76,6 +70,7 @@ public abstract class BeanCRUDComponent<T> extends VerticalLayout {
             return removeItemButton;
         }).setCaption("");
 
+        reload();
     }
 
     public void create() {
@@ -87,11 +82,8 @@ public abstract class BeanCRUDComponent<T> extends VerticalLayout {
     protected abstract void removeItem(Object itemID);
 
     public void reload() {
-        table.setItems(loadBeans());
+        table.getDataProvider().refreshAll();
     }
-
-
-    protected abstract Collection loadBeans();
 
     protected abstract Component getCreateComponent();
 

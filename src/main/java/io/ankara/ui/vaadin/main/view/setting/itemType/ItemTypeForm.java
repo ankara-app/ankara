@@ -51,7 +51,6 @@ public class ItemTypeForm extends FormLayout {
         description.setWidth("100%");
         description.setRows(4);
 
-        itemTypeBinder.bindInstanceFields(this);
 
         Button save = new Button("Save");
         save.setIcon(FontAwesome.SAVE);
@@ -70,6 +69,7 @@ public class ItemTypeForm extends FormLayout {
             }
         });
         addComponents(name,description, save);
+        itemTypeBinder.bindInstanceFields(this);
 
     }
 

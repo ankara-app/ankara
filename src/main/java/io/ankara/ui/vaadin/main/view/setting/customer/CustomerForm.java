@@ -78,6 +78,7 @@ public class CustomerForm extends FormLayout {
             }
         });
         addComponents(name, email, address, description, save);
+        customerBinder.bindInstanceFields(this);
 
     }
 

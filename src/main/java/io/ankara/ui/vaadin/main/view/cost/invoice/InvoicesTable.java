@@ -9,6 +9,7 @@ import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.main.MainUI;
+import io.ankara.ui.vaadin.main.view.cost.CostsProvider;
 import io.ankara.ui.vaadin.main.view.cost.CostsTable;
 import io.ankara.ui.vaadin.main.view.cost.estimate.EstimatesTable;
 import io.ankara.utils.DateUtils;
@@ -28,18 +29,16 @@ import javax.inject.Inject;
 @ViewScope
 public class InvoicesTable extends CostsTable<Invoice> {
 
-    @Inject
-    private InvoiceService invoiceService;
 
-    @Inject
-    private UserService userService;
-
-    @Inject
     private MainUI mainUI;
-
-    @Inject
     private EventBus.UIEventBus eventBus;
+    private InvoicesProvider invoicesProvider;
 
+    public InvoicesTable(MainUI mainUI, EventBus.UIEventBus eventBus, InvoicesProvider invoicesProvider) {
+        this.mainUI = mainUI;
+        this.eventBus = eventBus;
+        this.invoicesProvider = invoicesProvider;
+    }
 
     @PostConstruct
     public void build() {
@@ -58,9 +57,10 @@ public class InvoicesTable extends CostsTable<Invoice> {
 
     }
 
-    public void reload() {
-        //TODO IMPLEMENT LAZY LOADING
-        setItems(invoiceService.getInvoices(userService.getCurrentUser()));
+    @Override
+    protected CostsProvider<Invoice> getCostProvider() {
+        return invoicesProvider;
     }
+
 
 }

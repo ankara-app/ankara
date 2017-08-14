@@ -61,8 +61,8 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent<ItemType>{
     }
 
     @Override
-    protected Collection loadBeans() {
-        return itemTypeService.getItemTypes(company);
+    public void reload() {
+        getTable().setItems(itemTypeService.getItemTypes(company));
     }
 
     @Override

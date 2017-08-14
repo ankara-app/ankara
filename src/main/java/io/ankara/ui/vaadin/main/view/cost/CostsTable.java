@@ -2,18 +2,9 @@ package io.ankara.ui.vaadin.main.view.cost;
 
 import com.vaadin.ui.Grid;
 import io.ankara.domain.Cost;
-import io.ankara.domain.Estimate;
-import io.ankara.service.EstimateService;
-import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.AnkaraTheme;
-import io.ankara.ui.vaadin.main.MainUI;
-import io.ankara.ui.vaadin.main.view.cost.estimate.EstimateView;
 import io.ankara.utils.DateUtils;
 import io.ankara.utils.NumberUtils;
-import org.vaadin.spring.events.EventBus;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 /**
  * @author Boniface Chacha
@@ -27,16 +18,22 @@ public abstract class CostsTable<T extends Cost> extends Grid<T> {
     protected void build() {
         setSizeFull();
 
-        addColumn(T::getCode).setCaption("Code");
-        addColumn(cost-> DateUtils.formatDateTime(cost.getTimeCreated())).setCaption("Created on").setHidable(true).setHidden(true);
-        addColumn(T::getCustomer).setCaption("Customer");
-        addColumn(T::getSubject).setCaption("Subject");
-        addColumn(cost -> NumberUtils.formatMoney( cost.getAmountDue(),cost.getCurrency())).setCaption("Amount").setStyleGenerator(item -> AnkaraTheme.TEXT_RIGHT);
-        addColumn(cost-> DateUtils.formatDate(cost.getIssueDate())).setCaption("Issued on").setHidable(true).setHidden(true);
-        addColumn(T::getCompany).setCaption("Company").setHidable(true).setHidden(true);
-        addColumn(T::getCreator).setCaption("Creator").setHidable(true).setHidden(true);
+        addColumn(T::getCode).setId("code").setCaption("Code");
+        addColumn(cost-> DateUtils.formatDateTime(cost.getTimeCreated())).setId("timeCreated").setCaption("Created on").setHidable(true).setHidden(true);
+        addColumn(T::getCustomer).setId("customer").setCaption("Customer");
+        addColumn(T::getSubject).setId("subject").setCaption("Subject");
+        addColumn(cost -> NumberUtils.formatMoney( cost.getAmountDue(),cost.getCurrency())).setId("amount").setCaption("Amount").setStyleGenerator(item -> AnkaraTheme.TEXT_RIGHT);
+        addColumn(cost-> DateUtils.formatDate(cost.getIssueDate())).setId("issueDate").setCaption("Issued on").setHidable(true).setHidden(true);
+        addColumn(T::getCompany).setCaption("Company").setId("company").setHidable(true).setHidden(true);
+        addColumn(T::getCreator).setCaption("Creator").setId("creator").setHidable(true).setHidden(true);
+
+        setDataProvider(getCostProvider());
     }
 
-    public abstract void reload();
+    protected abstract CostsProvider<T> getCostProvider();
+
+    public void reload(){
+        getDataProvider().refreshAll();
+    }
 
 }

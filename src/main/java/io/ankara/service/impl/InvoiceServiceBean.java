@@ -1,15 +1,14 @@
 package io.ankara.service.impl;
 
-import io.ankara.domain.Company;
-import io.ankara.domain.Customer;
-import io.ankara.domain.Invoice;
-import io.ankara.domain.User;
+import io.ankara.domain.*;
 import io.ankara.repository.InvoiceRepository;
 import io.ankara.service.CompanyService;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.PDFService;
 import io.ankara.utils.FormattedID;
 import io.ankara.utils.GeneralUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,4 +94,25 @@ public class InvoiceServiceBean implements InvoiceService {
 
         return pdfService.generatePDF(invoiceURL,genPDFFilePath);
     }
+
+    @Override
+    public Long countInvoices(User user, String codeFilter, String customerNameFilter, String subjectFilter) {
+        return countInvoices(companyService.getCompanies(user), codeFilter, customerNameFilter, subjectFilter);
+    }
+
+    @Override
+    public Page<Invoice> getInvoices(User currentUser, String codeFilter, String customerNameFilter, String subjectFilter, Pageable pageable) {
+        return getInvoices(companyService.getCurrentUserCompanies(), codeFilter, customerNameFilter, subjectFilter,pageable);
+    }
+
+    @Override
+    public Page<Invoice> getInvoices(Collection<Company> companies, String codeFilter, String customerNameFilter, String subjectFilter, Pageable pageable) {
+        return invoiceRepository.findAllByCompanyInAndCodeContainingIgnoreCaseAndCustomerNameContainingIgnoreCaseAndSubjectContainingIgnoreCase(companies, codeFilter, customerNameFilter, subjectFilter,pageable);
+    }
+
+    @Override
+    public Long countInvoices(Collection<Company> companies, String codeFilter, String customerNameFilter, String subjectFilter) {
+        return invoiceRepository.countByCompanyInAndCodeContainingIgnoreCaseAndCustomerNameContainingIgnoreCaseAndSubjectContainingIgnoreCase(companies, codeFilter, customerNameFilter, subjectFilter);
+    }
+
 }

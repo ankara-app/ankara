@@ -59,8 +59,8 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent<Company> {
     }
 
     @Override
-    protected Collection loadBeans() {
-        return companyService.getCurrentUserCompanies();
+    public void reload() {
+        getTable().setItems(companyService.getCurrentUserCompanies());
     }
 
     @Override

@@ -1,20 +1,22 @@
 package io.ankara.ui.vaadin.main.view.cost.estimate;
 
-import com.vaadin.data.ValueProvider;
+import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.Grid;
-import io.ankara.domain.Cost;
 import io.ankara.domain.Estimate;
 import io.ankara.service.EstimateService;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.main.MainUI;
+import io.ankara.ui.vaadin.main.view.cost.CostsProvider;
 import io.ankara.ui.vaadin.main.view.cost.CostsTable;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.stream.Stream;
 
 /**
  * @author Boniface Chacha
@@ -26,18 +28,16 @@ import javax.inject.Inject;
 @ViewScope
 public class EstimatesTable extends CostsTable<Estimate> {
 
-    @Inject
-    private EstimateService estimateService;
-
-    @Inject
-    private UserService userService;
-
-    @Inject
     private MainUI mainUI;
-
-    @Inject
     private EventBus.UIEventBus eventBus;
 
+    private EstimatesProvider estimatesProvider;
+
+    public EstimatesTable(MainUI mainUI, EventBus.UIEventBus eventBus, EstimatesProvider estimatesProvider) {
+        this.mainUI = mainUI;
+        this.eventBus = eventBus;
+        this.estimatesProvider = estimatesProvider;
+    }
 
     @PostConstruct
     protected void build() {
@@ -50,13 +50,10 @@ public class EstimatesTable extends CostsTable<Estimate> {
         });
     }
 
-    public void reload() {
-        //TODO IMPLEMENT LAZY LOADING
-        setItems(estimateService.getEstimates(userService.getCurrentUser()));
-
-//        int size = container.size();
-//        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
-//        setPageLength(10);
+    @Override
+    protected CostsProvider<Estimate> getCostProvider() {
+        return estimatesProvider;
     }
+
 
 }

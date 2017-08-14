@@ -3,7 +3,6 @@ package io.ankara.ui.vaadin.main.view.setting.tax;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
-import com.vaadin.data.converter.StringToBigIntegerConverter;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -31,7 +30,7 @@ public class TaxForm extends FormLayout {
 
     private TextField name;
 
-    private TextField percentage;
+    private TextField percentageField;
 
     private TextArea description;
 
@@ -50,18 +49,16 @@ public class TaxForm extends FormLayout {
 
         name = new TextField("Name");
         name.setWidth("100%");
-        taxBinder.forField(name).bind("name");
 
-        percentage = new TextField("Percentage");
-        percentage.setWidth("100%");
-        taxBinder.forField(percentage)
+        percentageField = new TextField("Percentage");
+        percentageField.setWidth("100%");
+        taxBinder.forField(percentageField)
                 .withConverter(new StringToBigDecimalConverter("Percentage must be a number"))
                 .bind("percentage");
 
         description = new TextArea("Description");
         description.setWidth("100%");
         description.setRows(4);
-        taxBinder.forField(description).bind("description");
 
         Button save = new Button("Save");
         save.setIcon(FontAwesome.SAVE);
@@ -80,8 +77,8 @@ public class TaxForm extends FormLayout {
             }
         });
 
-        addComponents(name,percentage,description, save);
-
+        addComponents(name, percentageField,description, save);
+        taxBinder.bindInstanceFields(this);
     }
 
     public void edit(Tax tax) {

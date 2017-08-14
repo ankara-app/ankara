@@ -1,5 +1,6 @@
 package io.ankara;
 
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.CustomizedSystemMessages;
 import com.vaadin.server.SystemMessagesProvider;
 import org.springframework.boot.SpringApplication;

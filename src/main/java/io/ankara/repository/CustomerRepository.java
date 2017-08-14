@@ -2,6 +2,8 @@ package io.ankara.repository;
 
 import io.ankara.domain.Company;
 import io.ankara.domain.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -14,7 +16,11 @@ import java.util.List;
  */
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    List<Customer> findByCompany(Company company);
+    List<Customer> findAllByCompany(Company company);
 
     Customer findFirstByNameAndCompany(String name, Company company);
+
+    Page<Customer> findAllByCompany(Company company, Pageable pageable);
+
+    Long countByCompany(Company company);
 }

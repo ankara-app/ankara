@@ -24,16 +24,19 @@ import java.util.Collection;
 @SpringComponent
 public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
 
-    @Inject
     private CustomerService customerService;
-
-    @Inject
     private CustomerForm customerForm;
+    private CustomersProvider customersProvider;
 
     private VerticalLayout holder;
 
     private Company company;
 
+    public CustomerBeanCRUDComponent(CustomerService customerService,  CustomersProvider customersProvider,CustomerForm customerForm) {
+        this.customerService = customerService;
+        this.customerForm = customerForm;
+        this.customersProvider = customersProvider;
+    }
 
     @PostConstruct
     protected void build() {
@@ -45,7 +48,6 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
         holder.setMargin(true);
         holder.setComponentAlignment(customerForm, Alignment.MIDDLE_CENTER);
 
-        super.build();
 
         table.addColumn(Customer::getName).setCaption("Name");
         table.addColumn(Customer::getEmail).setCaption("Email");
@@ -54,6 +56,8 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
         //TODO NOTIFY ABOUT THE EFFECT OF DELETING CUSTOMER
 //        removeItemButtonGenerator.setConfirmationMessage("Deleting a customer will also delete all records of INVOICES and ESTIMATES created for the customer");
 
+        table.setDataProvider(customersProvider);
+        super.build();
     }
 
     @Override
@@ -62,10 +66,6 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
         customerService.delete(customer);
     }
 
-    @Override
-    protected Collection loadBeans() {
-        return customerService.getCustomers(company);
-    }
 
     @Override
     protected Component getCreateComponent() {
@@ -85,6 +85,7 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
 
     public void setCompany(Company company) {
         this.company = company;
+        customersProvider.setCompany(company);
         reload();
     }
 }
