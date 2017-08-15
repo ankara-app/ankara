@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.setting.itemType;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
@@ -32,7 +33,7 @@ public class ItemTypeForm extends FormLayout {
 
     private TextArea description;
 
-    private Binder<ItemType> itemTypeBinder = new Binder<>(ItemType.class);
+    private BeanValidationBinder<ItemType> itemTypeBinder = new BeanValidationBinder<>(ItemType.class);
     private ItemType itemType;
 
     private Window subWindow;

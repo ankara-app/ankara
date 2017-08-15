@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.setting.account;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
@@ -43,7 +44,7 @@ public class UserDetailsForm extends FormLayout {
 
         User user = userService.getCurrentUser();
 
-        Binder<User> userBinder = new Binder<>(User.class);
+        BeanValidationBinder<User> userBinder = new BeanValidationBinder<>(User.class);
         userBinder.bindInstanceFields(this);
 
         userBinder.readBean(user);

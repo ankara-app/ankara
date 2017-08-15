@@ -7,7 +7,6 @@ import io.ankara.domain.Cost;
 import io.ankara.domain.Estimate;
 import io.ankara.service.EstimateService;
 import io.ankara.service.UserService;
-import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.vaadin.artur.spring.dataprovider.PageableDataProvider;

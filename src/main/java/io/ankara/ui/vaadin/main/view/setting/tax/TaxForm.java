@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.setting.tax;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
@@ -34,7 +35,7 @@ public class TaxForm extends FormLayout {
 
     private TextArea description;
 
-    private Binder<Tax> taxBinder = new Binder<>(Tax.class);
+    private BeanValidationBinder<Tax> taxBinder = new BeanValidationBinder<>(Tax.class);
 
     private Tax tax;
 

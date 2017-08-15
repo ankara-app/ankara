@@ -40,10 +40,12 @@ public class Cost implements Serializable {
 
     @Column(nullable = false)
     @NotBlank
+    @NotNull
     private String code;
 
     @Column(nullable = false)
     @NotBlank
+    @NotNull
     private String currency;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -73,6 +75,7 @@ public class Cost implements Serializable {
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
+    @NotNull
     private String subject;
 
     @ManyToOne

@@ -1,16 +1,4 @@
 buildscript {
-    repositories.jcenter()
-    dependencies {
-        classpath("org.springframework:springloaded:1.2.7.RELEASE")
-    }
-
-}
-plugins {
-    id 'org.springframework.boot' version '1.5.6.RELEASE'
-    id 'com.devsoap.plugin.vaadin' version '1.2.1'
-}
-
-ext {
     ext {
         groovyVersion = '2.4.12'
         gradleWrapperVersion = '4.0.1'
@@ -20,58 +8,62 @@ ext {
         viritinVersion = '2.0.beta2'
         codenarcVersion = '0.25.1'
         spockVersion = '1.0-groovy-2.4'
+        springBootVersion = '1.5.6.RELEASE'
     }
-    mainClassName = "io.ankara.AnkaraApplication"
-}
 
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'groovy'
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'org.springframework:springloaded:1.2.7.RELEASE'
+        classpath "com.devsoap.plugin:gradle-vaadin-plugin:1.2.1"
+    }
+
+}
+//
+//plugins {
+////    id 'org.springframework.boot' version '1.5.6.RELEASE'
+//    id 'com.devsoap.plugin.vaadin' version '1.2.1'
+//}
+
 apply plugin: 'java'
-
-repositories {
-    jcenter()
-    maven { url 'https://maven.vaadin.com/vaadin-addons' }
-}
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-compileGroovy {
-    groovyOptions.configurationScript = file("gradle/groovyOptions.groovy")
-}
+//apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: "com.devsoap.plugin.vaadin"
+apply plugin: 'war'
 
 springBoot {
     executable = true
 }
 
-jar {
+war {
     baseName = 'ankara'
-    version = null // no version in the filename
-    manifest {
-        attributes 'Main-Class': mainClassName // Allow to run with `java -jar app.jar`
-    }
+    version = null
 }
 
-bootRun.systemProperties = System.properties // pass sysprops down to bootRun, so we can add them in configs in intellij
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
 
 vaadin {
     vaadin.version = vaadinVersion
-//    vaadinCompile.widgetset = 'AnkaraWidgetset' // name of the widgetset (see @Widgetset in the UI)
-//    vaadinCompile.outputDirectory = file('build/resources/main/')
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = gradleWrapperVersion
-}
-
 
 dependencies {
-//    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
-    compile 'org.springframework.boot:spring-boot-starter-web'
-
-    //    compile "org.codehaus.groovy:groovy:${groovyVersion}"
-//    compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
 
     compile("javax.inject:javax.inject:1")
     compile 'org.apache.commons:commons-lang3:3.3'
@@ -82,39 +74,51 @@ dependencies {
 //    compile('org.springframework.boot:spring-boot-starter-groovy-templates')
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-mail")
+    compile 'org.springframework.boot:spring-boot-starter-validation'
 
-    compile("org.springframework.boot:spring-boot-devtools")
-    runtime('mysql:mysql-connector-java')
-
-    // always exclude com.vaadin packages from deps
+//    compile("org.springframework.boot:spring-boot-devtools")
     compile("com.vaadin:vaadin-spring-boot-starter:${vaadinSpringVersion}")
-    compile("org.vaadin:viritin:${viritinVersion}") { exclude group: 'com.vaadin' }
-    testCompile "org.spockframework:spock-core:${spockVersion}"
 
+    runtime('mysql:mysql-connector-java')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 
     compile "org.vaadin.spring.extensions:vaadin-spring-ext-core:$vaadin4SpringVersion"
     compile "org.vaadin.spring.extensions:vaadin-spring-ext-boot:$vaadin4SpringVersion"
     compile "org.vaadin.spring.extensions:vaadin-spring-ext-security:$vaadin4SpringVersion"
     compile "org.vaadin.spring.addons:vaadin-spring-addon-eventbus:$vaadin4SpringVersion"
     compile "org.vaadin.spring.addons:vaadin-spring-addon-simple-mvp:$vaadin4SpringVersion"
-    // vaadin addons are put automatically into the widgetset
-    // compile('org.vaadin.addons:ckeditor-wrapper-for-vaadin:7.9.3') { exclude group:'com.vaadin' }
 
     compile "com.vaadin:vaadin-shared-deps:1.0.3"
     compile "com.vaadin:vaadin-push:$vaadinVersion"
 
+    compile "org.vaadin:viritin:${viritinVersion}"
     compile 'tm.kod:numberfield7:0.0.5'
     compile 'org.vaadin.addon:confirmdialog:3.2.0'
-//    compile 'org.vaadin.artur:spring-data-provider:1.0.0'// https://mvnrepository.com/artifact/org.vaadin.artur/spring-data-provider
-    compile group: 'org.vaadin.artur', name: 'spring-data-provider', version: '1.0.0'
-
-//    compile 'org.vaadin.addon:easyuploads:8.0.0'
+    compile 'org.vaadin.artur:spring-data-provider:1.0.0'
 
     compile "org.webjars:bootstrap:3.3.7"
 
     compile "org.flywaydb:flyway-core:4.1.1"
 
-//    compile group: 'org.projectlombok', name: 'lombok-maven', version: '1.16.18.0', ext: 'pom'
-    compileOnly "org.projectlombok:lombok:1.16.18"
+}
 
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
+    }
+}
+
+
+//eclipse {
+//    classpath {
+//        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+//        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+//    }
+//}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+    }
 }

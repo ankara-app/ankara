@@ -40,6 +40,7 @@ public class Item {
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
+    @NotNull
     private String description;
 
     @Column(precision = 48, scale = 2,nullable = false)

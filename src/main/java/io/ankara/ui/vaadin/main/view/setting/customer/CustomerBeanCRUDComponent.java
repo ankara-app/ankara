@@ -32,7 +32,7 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
 
     private Company company;
 
-    public CustomerBeanCRUDComponent(CustomerService customerService,  CustomersProvider customersProvider,CustomerForm customerForm) {
+    public CustomerBeanCRUDComponent(CustomerService customerService, CustomersProvider customersProvider, CustomerForm customerForm) {
         this.customerService = customerService;
         this.customerForm = customerForm;
         this.customersProvider = customersProvider;
@@ -53,8 +53,9 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
         table.addColumn(Customer::getEmail).setCaption("Email");
         table.addColumn(Customer::getAddress).setCaption("Address");
         table.addColumn(Customer::getDescription).setCaption("Description");
-        //TODO NOTIFY ABOUT THE EFFECT OF DELETING CUSTOMER
-//        removeItemButtonGenerator.setConfirmationMessage("Deleting a customer will also delete all records of INVOICES and ESTIMATES created for the customer");
+
+        setConfirmDelete(true);
+        setDeleteConfirmationMessage("Deleting a customer will also delete all records of INVOICES and ESTIMATES created for the customer");
 
         table.setDataProvider(customersProvider);
         super.build();

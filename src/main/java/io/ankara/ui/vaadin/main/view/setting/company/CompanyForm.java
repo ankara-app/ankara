@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.setting.company;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
@@ -45,7 +46,7 @@ public class CompanyForm extends FormLayout {
 
     private TextArea terms;
 
-    private Binder<Company> companyBinder = new Binder<>(Company.class);
+    private BeanValidationBinder<Company> companyBinder = new BeanValidationBinder<>(Company.class);
 
     private Window subWindow;
     private Company company;

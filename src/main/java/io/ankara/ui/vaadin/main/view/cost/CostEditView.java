@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.converter.LocalDateToDateConverter;
@@ -89,14 +90,14 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
     @Inject
     protected EventBus.UIEventBus eventBus;
 
-    private Binder<T> costBinder;
+    private BeanValidationBinder<T> costBinder;
 
     private FormLayout summaryLayout, customerLayout;
 
     private Cost cost;
 
     public CostEditView(Class<T> type) {
-        costBinder = new Binder(type);
+        costBinder = new BeanValidationBinder<>(type);
     }
 
     /**
@@ -175,6 +176,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
         setComponentAlignment(footer, Alignment.MIDDLE_RIGHT);
 
         costBinder.bindInstanceFields(this);
+        costBinder.setRequiredConfigurator(null);
     }
 
     private HorizontalLayout createFooter() {

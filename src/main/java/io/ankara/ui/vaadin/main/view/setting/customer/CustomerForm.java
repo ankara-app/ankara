@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.setting.customer;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
@@ -36,7 +37,7 @@ public class CustomerForm extends FormLayout {
 
     private TextArea description;
 
-    private Binder<Customer> customerBinder = new Binder<Customer>(Customer.class);
+    private BeanValidationBinder<Customer> customerBinder = new BeanValidationBinder<>(Customer.class);
     private Customer customer;
     private Window subWindow;
 

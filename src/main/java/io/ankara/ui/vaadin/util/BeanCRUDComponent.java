@@ -21,6 +21,9 @@ public abstract class BeanCRUDComponent<T> extends VerticalLayout {
     protected Button createButton;
     protected HorizontalLayout header;
 
+    private boolean confirmDelete;
+    private String deleteConfirmationMessage = "Are you sure?";
+
     public BeanCRUDComponent() {
         table = new Grid<>();
     }
@@ -67,6 +70,11 @@ public abstract class BeanCRUDComponent<T> extends VerticalLayout {
                 }
             };
 
+            if(confirmDelete) {
+                removeItemButton.setConfirm(true);
+                removeItemButton.setConfirmationMessage(deleteConfirmationMessage);
+            }
+
             return removeItemButton;
         }).setCaption("");
 
@@ -103,5 +111,21 @@ public abstract class BeanCRUDComponent<T> extends VerticalLayout {
 
     public HorizontalLayout getHeader() {
         return header;
+    }
+
+    public boolean isConfirmDelete() {
+        return confirmDelete;
+    }
+
+    public void setConfirmDelete(boolean confirmDelete) {
+        this.confirmDelete = confirmDelete;
+    }
+
+    public String getDeleteConfirmationMessage() {
+        return deleteConfirmationMessage;
+    }
+
+    public void setDeleteConfirmationMessage(String deleteConfirmationMessage) {
+        this.deleteConfirmationMessage = deleteConfirmationMessage;
     }
 }

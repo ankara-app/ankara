@@ -49,7 +49,8 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent<Company> {
 
         super.build();
 
-        //removeItemButtonGenerator.setConfirmationMessage("Deleting a company will also delete all records of CUSTOMERS , INVOICES and ESTIMATES created for the company");
+        setConfirmDelete(true);
+        setDeleteConfirmationMessage("Deleting a company will also delete all records of CUSTOMERS , INVOICES and ESTIMATES created for the company");
     }
 
     @Override

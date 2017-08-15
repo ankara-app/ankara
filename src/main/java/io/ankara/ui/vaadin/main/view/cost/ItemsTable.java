@@ -1,6 +1,6 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
-import com.vaadin.data.Binder;
+import com.vaadin.data.*;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
@@ -56,7 +56,7 @@ public class ItemsTable extends Grid<Integer> {
 
     private Cost cost;
 
-    private Map<Integer, Binder<Item>> itemBinders = new HashMap<>();
+    private Map<Integer, BeanValidationBinder<Item>> itemBinders = new HashMap<>();
     private Map<Integer, Label> itemAmountLabels = new HashMap<>();
 
     private Integer recentItemID = 0;
@@ -202,7 +202,11 @@ public class ItemsTable extends Grid<Integer> {
             return;
         }
 
-        Binder<Item> binder = new Binder<>(Item.class);
+        BeanValidationBinder<Item> binder = new BeanValidationBinder<>(Item.class);
+        binder.setRequiredConfigurator(null);
+
+        //during validation if some fields have errrors then ignore them and do not show on the UI with red colors
+        binder.setValidationStatusHandler(status -> {});
         binder.setBean(item);
 
         itemBinders.put(recentItemID, binder);
@@ -265,8 +269,8 @@ public class ItemsTable extends Grid<Integer> {
         LinkedList<Item> items = new LinkedList<>();
 
         for (Object itemID : itemBinders.keySet().stream().sorted().collect(Collectors.toList())) {
-            Binder<Item> binder = itemBinders.get(itemID);
-            if (binder.isValid())
+            BeanValidationBinder<Item> binder = itemBinders.get(itemID);
+            if (isValid(binder))
                 items.add(binder.getBean());
         }
 
@@ -274,7 +278,12 @@ public class ItemsTable extends Grid<Integer> {
 
     }
 
-    public Map<Integer, Binder<Item>> getItemBinders() {
+    private boolean isValid(BeanValidationBinder<Item> binder) {
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        return !errors.stream().findFirst().isPresent();
+    }
+
+    public Map<Integer, BeanValidationBinder<Item>> getItemBinders() {
         return itemBinders;
     }
 
