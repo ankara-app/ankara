@@ -21,7 +21,7 @@ public abstract class BeanCRUDComponent<T> extends VerticalLayout {
     protected Button createButton;
     protected HorizontalLayout header;
 
-    private boolean confirmDelete;
+    private boolean confirmDelete = true;
     private String deleteConfirmationMessage = "Are you sure?";
 
     public BeanCRUDComponent() {

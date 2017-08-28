@@ -50,7 +50,6 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent<ItemType>{
 
         table.addColumn(ItemType::getName).setCaption("Name");
         table.addColumn(ItemType::getDescription).setCaption("Description");
-        ;
         super.build();
     }
 
