@@ -94,19 +94,16 @@ public class CompanyForm extends FormLayout {
         save.setIcon(FontAwesome.SAVE);
         save.setWidth("200px");
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        save.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                try {
-                    companyBinder.writeBean(company);
-                    if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
-                        NotificationUtils.showSuccess("Company information saved successfully", null);
-                        if (subWindow != null)
-                            subWindow.close();
-                    }
-                } catch (ValidationException e) {
-                    Notification.show("Enter company information correctly", Notification.Type.WARNING_MESSAGE);
+        save.addClickListener(event -> {
+            try {
+                companyBinder.writeBean(company);
+                if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
+                    NotificationUtils.showSuccess("Company information saved successfully", null);
+                    if (subWindow != null)
+                        subWindow.close();
                 }
+            } catch (ValidationException e) {
+                Notification.show("Enter company information correctly", Notification.Type.WARNING_MESSAGE);
             }
         });
 

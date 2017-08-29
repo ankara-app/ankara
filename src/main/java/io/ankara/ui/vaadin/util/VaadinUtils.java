@@ -1,10 +1,14 @@
 package io.ankara.ui.vaadin.util;
 
+import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.Validator;
 import com.vaadin.data.ValueContext;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.components.grid.HeaderRow;
+import io.ankara.ui.vaadin.AnkaraTheme;
 
 /**
  * @author Boniface Chacha
@@ -24,5 +28,15 @@ public class VaadinUtils {
                 field.setComponentError(null);
             }
         });
+    }
+
+    public static TextField createFilteringTextField(HeaderRow headerRow, String propertyId, String placeHolder, HasValue.ValueChangeListener<String> listener) {
+        TextField filterField = new TextField();
+        filterField.setPlaceholder(placeHolder);
+        filterField.setWidth("100%");
+        filterField.addStyleNames(AnkaraTheme.TEXTFIELD_TINY,AnkaraTheme.TEXT_SMALL);
+        filterField.addValueChangeListener(listener);
+        headerRow.getCell(propertyId).setComponent(filterField);
+        return filterField;
     }
 }
