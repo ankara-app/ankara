@@ -162,7 +162,7 @@ public class ItemsTable extends Grid<Integer> {
             RemoveItemButton removeItemButton = new RemoveItemButton(key) {
                 @Override
                 public void removeItem(Object itemID) {
-                   removeCostItem((Integer) itemID);
+                    removeCostItem((Integer) itemID);
                 }
             };
             return removeItemButton;
@@ -214,14 +214,13 @@ public class ItemsTable extends Grid<Integer> {
         binder.setRequiredConfigurator(null);
 
         //during validation if some fields have errrors then ignore them and do not show on the UI with red colors
-        binder.setValidationStatusHandler(status -> {});
+        binder.setValidationStatusHandler(status -> {
+        });
         binder.setBean(item);
 
         itemBinders.put(recentItemID, binder);
 
-        //expand the table according to the items it contains up to when it reaches 10 (the limit is for performance issue)
-        if (itemBinders.size() <= 10)
-            setHeight(ROW_HEIGHT * itemBinders.size() + HEADER_ROW_HEIGHT, Unit.PIXELS);
+        setHeight(ROW_HEIGHT * itemBinders.size() + HEADER_ROW_HEIGHT, Unit.PIXELS);
         requestSummaryCalculation(recentItemID);
         getDataProvider().refreshAll();
     }
@@ -251,7 +250,7 @@ public class ItemsTable extends Grid<Integer> {
         this.cost = cost;
         loadCostItems();
 
-        if(cost != null && CollectionUtils.isEmpty(cost.getItems())){
+        if (cost != null && CollectionUtils.isEmpty(cost.getItems())) {
             initialiseCostItems(4);
         }
     }
