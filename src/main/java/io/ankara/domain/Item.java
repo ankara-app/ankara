@@ -1,6 +1,5 @@
 package io.ankara.domain;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
@@ -41,6 +40,7 @@ public class Item {
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
+    @NotNull
     private String description;
 
     @Column(precision = 48, scale = 2,nullable = false)

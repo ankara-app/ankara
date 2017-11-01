@@ -2,7 +2,6 @@ package io.ankara.service;
 
 import io.ankara.domain.Token;
 import io.ankara.domain.User;
-import org.springframework.scheduling.annotation.Async;
 
 /**
  * @author Boniface Chacha

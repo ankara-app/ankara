@@ -4,9 +4,13 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
+import io.ankara.domain.Invoice;
 import io.ankara.ui.vaadin.main.view.ViewHeader;
+import io.ankara.ui.vaadin.main.view.cost.CostsTable;
+import io.ankara.ui.vaadin.main.view.cost.CostsView;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -17,9 +21,8 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/11/16 2:33 AM
  */
-@UIScope
 @SpringView(name = InvoicesView.VIEW_NAME)
-public class InvoicesView extends CustomComponent implements View {
+public class InvoicesView extends CostsView<Invoice>{
     public static final String VIEW_NAME = "InvoicesView";
 
     @Inject
@@ -32,25 +35,23 @@ public class InvoicesView extends CustomComponent implements View {
     private ViewHeader viewHeader;
 
     @PostConstruct
-    private void build(){
-        setSizeFull();
-        VerticalLayout content = new VerticalLayout();
-        content.setSizeFull();
-        content.setSpacing(true);
-        setCompositionRoot(content);
+    protected void build(){
+        super.build();
+    }
 
-        invoicesHeader.setSearchContainer(invoicesTable.getContainerDataSource());
-        invoicesHeader.setWidth("50%");
-        content.addComponent(invoicesHeader);
+    @Override
+    protected CostsTable<Invoice> getCostsTable() {
+        return invoicesTable;
+    }
 
-//        invoicesTable.setSizeFull();
-        content.addComponent(invoicesTable);
-        content.setExpandRatio(invoicesTable,1);
+    @Override
+    protected Component getHeader() {
+        return invoicesHeader;
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        invoicesTable.reload();
+        super.enter(event);
         viewHeader.setValue("Invoices");
     }
 }

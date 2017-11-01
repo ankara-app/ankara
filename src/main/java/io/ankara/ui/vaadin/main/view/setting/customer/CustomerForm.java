@@ -1,10 +1,10 @@
 package io.ankara.ui.vaadin.main.view.setting.customer;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Customer;
@@ -37,8 +37,8 @@ public class CustomerForm extends FormLayout {
 
     private TextArea description;
 
-    private BeanFieldGroup fieldGroup;
-
+    private BeanValidationBinder<Customer> customerBinder = new BeanValidationBinder<>(Customer.class);
+    private Customer customer;
     private Window subWindow;
 
     @PostConstruct
@@ -49,20 +49,16 @@ public class CustomerForm extends FormLayout {
         addStyleName(ValoTheme.LAYOUT_CARD);
 
         name = new TextField("Name");
-        name.setNullRepresentation("");
         name.setWidth("100%");
 
         email = new TextField("Email");
-        email.setNullRepresentation("");
         email.setWidth("100%");
 
         address = new TextArea("Address");
-        address.setNullRepresentation("");
         address.setWidth("100%");
         address.setRows(4);
 
         description = new TextArea("Description");
-        description.setNullRepresentation("");
         description.setWidth("100%");
         description.setRows(4);
 
@@ -72,23 +68,24 @@ public class CustomerForm extends FormLayout {
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
         save.addClickListener(event -> {
             try {
-                fieldGroup.commit();
-                Customer customer = (Customer) fieldGroup.getItemDataSource().getBean();
+                customerBinder.writeBean(customer);
                 if (customerService.save(customer)) {
                     NotificationUtils.showSuccess("Customer information saved successfully", null);
                     if(subWindow != null)
                         subWindow.close();
                 }
-            } catch (FieldGroup.CommitException e) {
+            } catch (ValidationException e) {
                 Notification.show("Enter customer information correctly", Notification.Type.WARNING_MESSAGE);
             }
         });
         addComponents(name, email, address, description, save);
+        customerBinder.bindInstanceFields(this);
 
     }
 
     public void edit(Customer customer) {
-        fieldGroup = BeanFieldGroup.bindFieldsBuffered(customer, this);
+        this.customer = customer;
+        customerBinder.readBean(customer);
     }
 
 

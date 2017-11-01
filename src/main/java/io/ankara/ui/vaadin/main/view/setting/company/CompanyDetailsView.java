@@ -3,7 +3,6 @@ package io.ankara.ui.vaadin.main.view.setting.company;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.domain.Company;

@@ -28,7 +28,8 @@ public class MainHeader extends CustomComponent {
 
     @PostConstruct
     private void build(){
-        setSizeFull();
+        setWidth("100%");
+        setHeight("20px");
 
         HorizontalLayout content = new HorizontalLayout();
         content.setSizeFull();

@@ -6,6 +6,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.domain.Company;
+import io.ankara.domain.Customer;
+import io.ankara.domain.Item;
 import io.ankara.domain.ItemType;
 import io.ankara.service.ItemTypeService;
 import io.ankara.ui.vaadin.util.BeanCRUDComponent;
@@ -22,7 +24,7 @@ import java.util.Collection;
  */
 @UIScope
 @SpringComponent
-public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
+public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent<ItemType>{
 
     @Inject
     private ItemTypeService itemTypeService;
@@ -44,8 +46,11 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
         holder.setMargin(true);
         holder.setComponentAlignment(itemTypeForm, Alignment.MIDDLE_CENTER);
 
-        super.build(ItemType.class);
-        table.setVisibleColumns("name", "description","Remove");
+
+
+        table.addColumn(ItemType::getName).setCaption("Name");
+        table.addColumn(ItemType::getDescription).setCaption("Description");
+        super.build();
     }
 
     @Override
@@ -55,8 +60,8 @@ public class ItemTypeBeanCRUDComponent extends BeanCRUDComponent{
     }
 
     @Override
-    protected Collection loadBeans() {
-        return itemTypeService.getItemTypes(company);
+    public void reload() {
+        getTable().setItems(itemTypeService.getItemTypes(company));
     }
 
     @Override

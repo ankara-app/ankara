@@ -1,6 +1,8 @@
 package io.ankara.ui.vaadin.util;
 
-import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.Converter;
+import com.vaadin.data.Result;
+import com.vaadin.data.ValueContext;
 import io.ankara.domain.AppliedTax;
 import io.ankara.domain.Tax;
 
@@ -12,39 +14,29 @@ import java.util.*;
  * @email bonifacechacha@gmail.com
  * @date 9/1/16 4:05 PM
  */
-public class AppliedTaxesConverter implements Converter {
+public class AppliedTaxesConverter implements Converter<Set<Tax>,List<AppliedTax>> {
 
     @Override
-    public Object convertToModel(Object value, Class targetType, Locale locale) throws ConversionException {
-        Collection<Tax> taxes = (Collection<Tax>) value;
-        Collection<AppliedTax> appliedTaxes = new LinkedList<>();
+    public Result<List<AppliedTax>> convertToModel(Set<Tax> value, ValueContext context) {
+        Collection<Tax> taxes =  value;
+        List<AppliedTax> appliedTaxes = new LinkedList<>();
 
         for(Tax tax:taxes){
             appliedTaxes.add(new AppliedTax(tax));
         }
 
-        return appliedTaxes;
+        return Result.ok(appliedTaxes);
     }
 
     @Override
-    public Object convertToPresentation(Object value, Class targetType, Locale locale) throws ConversionException {
-        Collection<AppliedTax> appliedTaxes = (Collection<AppliedTax>) value;
-        Collection<Tax> taxes = new HashSet<>();
+    public Set<Tax> convertToPresentation(List<AppliedTax> value, ValueContext context) {
+        Collection<AppliedTax> appliedTaxes = value;
+        Set<Tax> taxes = new HashSet<>();
 
         for(AppliedTax appliedTax:appliedTaxes){
             taxes.add(appliedTax.getTax());
         }
 
         return taxes;
-    }
-
-    @Override
-    public Class getModelType() {
-        return List.class;
-    }
-
-    @Override
-    public Class getPresentationType() {
-        return Set.class;
     }
 }

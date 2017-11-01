@@ -9,6 +9,7 @@ import io.ankara.domain.User;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.util.NotificationUtils;
 import io.ankara.ui.vaadin.util.PasswordValidator;
+import io.ankara.ui.vaadin.util.VaadinUtils;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -38,11 +39,11 @@ public class PasswordChangeForm extends FormLayout {
         addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
         passwordField = new PasswordField("Enter new password");
-        passwordField.addValidator(new PasswordValidator());
+        VaadinUtils.addValidator(passwordField,new PasswordValidator());
         passwordField.setWidth("300px");
 
         checkPasswordField = new PasswordField("Confirm new passoword");
-        checkPasswordField.addValidator(new PasswordValidator());
+        VaadinUtils.addValidator(checkPasswordField,new PasswordValidator());
         passwordField.setWidth("300px");
 
         changePasswordButton = new Button("Change Password", FontAwesome.KEY);
@@ -66,8 +67,8 @@ public class PasswordChangeForm extends FormLayout {
     }
 
     private boolean isPasswordCorrect() {
-        return passwordField.isValid()
-                && checkPasswordField.isValid()
+        return passwordField.getErrorMessage()==null
+                && checkPasswordField.getErrorMessage() == null
                 && passwordField.getValue().equals(checkPasswordField.getValue());
     }
 }

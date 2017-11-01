@@ -1,7 +1,6 @@
 package io.ankara.repository;
 
 import io.ankara.domain.Token;
-import io.ankara.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

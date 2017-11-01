@@ -1,9 +1,7 @@
 package io.ankara.controller;
 
-import io.ankara.utils.GeneralUtils;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
-import io.ankara.service.PDFService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;

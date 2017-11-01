@@ -2,13 +2,10 @@ package io.ankara.service.impl;
 
 
 import io.ankara.service.PDFService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 
 /**

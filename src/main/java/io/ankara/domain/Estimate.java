@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 public class Estimate extends Cost {
 
     public Estimate() {
+        super();
     }
 
     public Estimate(User creator, Company company, String currency, String code) {

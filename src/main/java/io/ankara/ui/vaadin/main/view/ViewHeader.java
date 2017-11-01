@@ -16,6 +16,8 @@ import io.ankara.ui.vaadin.AnkaraTheme;
 public class ViewHeader extends Label {
 
     public ViewHeader() {
+        setWidth("100%");
+        setHeight("10px");
         addStyleName(AnkaraTheme.VIEW_HEADER);
     }
 }

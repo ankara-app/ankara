@@ -1,10 +1,9 @@
 package io.ankara.ui.vaadin.util;
 
-import com.vaadin.data.Container;
-import com.vaadin.server.FontAwesome;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
+import io.ankara.ui.vaadin.AnkaraTheme;
 import org.vaadin.dialogs.ConfirmDialog;
 
 /**
@@ -17,20 +16,20 @@ public abstract class RemoveItemButton extends Button {
 
     private Object itemID;
     private boolean confirm;
-    private String confirmationMessage = "Should this item be removed?";
+    private String confirmationMessage = "Are you sure?";
 
     public RemoveItemButton(Object itemID) {
         this(itemID, false);
     }
 
     public RemoveItemButton(Object itemID, boolean confirm) {
-        super("Remove", FontAwesome.REMOVE);
+        super("Remove", VaadinIcons.CLOSE_SMALL);
         this.itemID = itemID;
         this.confirm = confirm;
 
-        addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        addStyleName(ValoTheme.BUTTON_BORDERLESS);
-        addStyleName(ValoTheme.BUTTON_TINY);
+        addStyleName(AnkaraTheme.BUTTON_ICON_ONLY);
+        addStyleName(AnkaraTheme.BUTTON_BORDERLESS);
+        addStyleName(AnkaraTheme.BUTTON_TINY);
         addClickListener((ClickListener) event -> {
             if (itemID != null) {
                 if (isConfirm()) {

@@ -1,10 +1,10 @@
 package io.ankara.ui.vaadin.main.view.setting.company;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Company;
@@ -12,7 +12,7 @@ import io.ankara.service.CompanyService;
 import io.ankara.ui.vaadin.util.NotificationUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.vaadin.easyuploads.ImagePreviewField;
+//import org.vaadin.easyuploads.ImagePreviewField;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -30,7 +30,7 @@ public class CompanyForm extends FormLayout {
     @Inject
     private CompanyService companyService;
 
-    private ImagePreviewField picture;
+//    private ImagePreviewField picture;
 
     private TextField name;
 
@@ -46,9 +46,10 @@ public class CompanyForm extends FormLayout {
 
     private TextArea terms;
 
-    private BeanFieldGroup fieldGroup;
+    private BeanValidationBinder<Company> companyBinder = new BeanValidationBinder<>(Company.class);
 
     private Window subWindow;
+    private Company company;
 
     @PostConstruct
     private void build() {
@@ -57,70 +58,62 @@ public class CompanyForm extends FormLayout {
         addStyleName(ValoTheme.LAYOUT_WELL);
         addStyleName(ValoTheme.LAYOUT_CARD);
 
-        picture = new ImagePreviewField();
+//        picture = new ImagePreviewField();
 
         name = new TextField("Name");
-        name.setNullRepresentation("");
         name.setWidth("100%");
 
         email = new TextField("Email");
-        email.setNullRepresentation("");
         email.setWidth("100%");
 
         phone = new TextField("Phone");
-        phone.setNullRepresentation("");
         phone.setWidth("100%");
 
         fax = new TextField("Fax");
-        fax.setNullRepresentation("");
         fax.setWidth("100%");
 
         address = new TextArea("Address");
-        address.setNullRepresentation("");
         address.setWidth("100%");
         address.setRows(4);
 
         notes = new TextArea("Notes");
         notes.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
-        notes.setInputPrompt("Specify other notes ...");
+        notes.setDescription("Specify other notes ...");
         notes.setRows(6);
         notes.setWidth("100%");
-        notes.setNullRepresentation("");
 
         terms = new TextArea("Terms");
         terms.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
-        terms.setInputPrompt("Specify terms ...");
+        terms.setDescription("Specify terms ...");
         terms.setRows(6);
         terms.setWidth("100%");
-        terms.setNullRepresentation("");
+
+        companyBinder.bindInstanceFields(this);
 
         Button save = new Button("Save");
         save.setIcon(FontAwesome.SAVE);
         save.setWidth("200px");
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        save.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                try {
-                    fieldGroup.commit();
-                    Company company = (Company) fieldGroup.getItemDataSource().getBean();
-                    if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
-                        NotificationUtils.showSuccess("Company information saved successfully", null);
-                        if (subWindow != null)
-                            subWindow.close();
-                    }
-                } catch (FieldGroup.CommitException e) {
-                    Notification.show("Enter company information correctly", Notification.Type.WARNING_MESSAGE);
+        save.addClickListener(event -> {
+            try {
+                companyBinder.writeBean(company);
+                if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
+                    NotificationUtils.showSuccess("Company information saved successfully", null);
+                    if (subWindow != null)
+                        subWindow.close();
                 }
+            } catch (ValidationException e) {
+                Notification.show("Enter company information correctly", Notification.Type.WARNING_MESSAGE);
             }
         });
 
-        addComponents(picture,name, email, phone, fax, address,notes, terms, save);
+        addComponents(name, email, phone, fax, address,notes, terms, save);
 
     }
 
     public void edit(Company company) {
-        fieldGroup = BeanFieldGroup.bindFieldsBuffered(company, this);
+        this.company = company;
+        companyBinder.readBean(company);
     }
 
     public void setSubWindow(Window subWindow) {

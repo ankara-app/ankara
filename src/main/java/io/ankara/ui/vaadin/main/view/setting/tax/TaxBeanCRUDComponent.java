@@ -6,6 +6,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 import io.ankara.domain.Company;
+import io.ankara.domain.Customer;
 import io.ankara.domain.Tax;
 import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.util.BeanCRUDComponent;
@@ -22,7 +23,7 @@ import java.util.Collection;
  */
 @UIScope
 @SpringComponent
-public class TaxBeanCRUDComponent extends BeanCRUDComponent{
+public class TaxBeanCRUDComponent extends BeanCRUDComponent<Tax>{
 
     @Inject
     private TaxService taxService;
@@ -34,6 +35,7 @@ public class TaxBeanCRUDComponent extends BeanCRUDComponent{
 
     private Company company;
 
+
     @PostConstruct
     protected void build() {
         setSizeFull();
@@ -44,8 +46,11 @@ public class TaxBeanCRUDComponent extends BeanCRUDComponent{
         holder.setMargin(true);
         holder.setComponentAlignment(taxForm, Alignment.MIDDLE_CENTER);
 
-        super.build(Tax.class);
-        table.setVisibleColumns("name", "percentage", "description","Remove");
+        table.addColumn(Tax::getName).setCaption("Name");
+        table.addColumn(Tax::getPercentage).setCaption("Percentage");
+        table.addColumn(Tax::getDescription).setCaption("Description");
+
+        super.build();
     }
 
     @Override
@@ -55,8 +60,8 @@ public class TaxBeanCRUDComponent extends BeanCRUDComponent{
     }
 
     @Override
-    protected Collection loadBeans() {
-        return taxService.getTaxes(company);
+    public void reload() {
+        getTable().setItems(taxService.getTaxes(company));
     }
 
     @Override

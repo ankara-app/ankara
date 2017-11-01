@@ -22,17 +22,21 @@ import java.util.Collection;
  */
 @UIScope
 @SpringComponent
-public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
+public class CustomerBeanCRUDComponent extends BeanCRUDComponent<Customer> {
 
-    @Inject
     private CustomerService customerService;
-
-    @Inject
     private CustomerForm customerForm;
+    private CustomersProvider customersProvider;
 
     private VerticalLayout holder;
 
     private Company company;
+
+    public CustomerBeanCRUDComponent(CustomerService customerService, CustomersProvider customersProvider, CustomerForm customerForm) {
+        this.customerService = customerService;
+        this.customerForm = customerForm;
+        this.customersProvider = customersProvider;
+    }
 
     @PostConstruct
     protected void build() {
@@ -44,10 +48,17 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
         holder.setMargin(true);
         holder.setComponentAlignment(customerForm, Alignment.MIDDLE_CENTER);
 
-        super.build(Customer.class);
 
-        removeItemButtonGenerator.setConfirmationMessage("Deleting a customer will also delete all records of INVOICES and ESTIMATES created for the customer");
-        table.setVisibleColumns("name", "email", "address", "description","Remove");
+        table.addColumn(Customer::getName).setCaption("Name");
+        table.addColumn(Customer::getEmail).setCaption("Email");
+        table.addColumn(Customer::getAddress).setCaption("Address");
+        table.addColumn(Customer::getDescription).setCaption("Description");
+
+        setConfirmDelete(true);
+        setDeleteConfirmationMessage("Deleting a customer will also delete all records of INVOICES and ESTIMATES created for the customer");
+
+        table.setDataProvider(customersProvider);
+        super.build();
     }
 
     @Override
@@ -56,10 +67,6 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
         customerService.delete(customer);
     }
 
-    @Override
-    protected Collection loadBeans() {
-        return customerService.getCustomers(company);
-    }
 
     @Override
     protected Component getCreateComponent() {
@@ -79,6 +86,7 @@ public class CustomerBeanCRUDComponent extends BeanCRUDComponent {
 
     public void setCompany(Company company) {
         this.company = company;
+        customersProvider.setCompany(company);
         reload();
     }
 }

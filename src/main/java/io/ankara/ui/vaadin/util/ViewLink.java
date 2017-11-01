@@ -2,7 +2,6 @@ package io.ankara.ui.vaadin.util;
 
 import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Link;
-import io.ankara.ui.vaadin.welcome.RegistrationForm;
 
 /**
  * @author Boniface Chacha
