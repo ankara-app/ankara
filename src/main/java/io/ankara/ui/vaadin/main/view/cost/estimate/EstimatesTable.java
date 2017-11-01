@@ -44,12 +44,12 @@ public class EstimatesTable extends CostsTable<Estimate> {
     @PostConstruct
     protected void build() {
         super.build();
+    }
 
-        addItemClickListener(event -> {
-            Estimate estimate = event.getItem();
-            mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
-            eventBus.publish(EstimateView.TOPIC_SHOW, this, estimate);
-        });
+    @Override
+    protected void showCostView(Estimate estimate) {
+        mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
+        eventBus.publish(EstimateView.TOPIC_SHOW, this, estimate);
     }
 
     @Override

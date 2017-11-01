@@ -45,18 +45,12 @@ public class InvoicesTable extends CostsTable<Invoice> {
     @PostConstruct
     public void build() {
         super.build();
+    }
 
-//        addColumn(Invoice::getPurchaseOrder).setCaption("Purchase Order").setHidable(true).setHidden(true);
-//        addColumn(invoice-> DateUtils.formatDate(invoice.getDueDate())).setCaption("Due date").setHidable(true).setHidden(true);
-//
-
-        addItemClickListener(event -> {
-            Invoice invoice = event.getItem();
-            mainUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
-            eventBus.publish(InvoiceView.TOPIC_SHOW, this, invoice);
-        });
-
-
+    @Override
+    protected void showCostView(Invoice invoice) {
+        mainUI.getNavigator().navigateTo(InvoiceView.VIEW_NAME);
+        eventBus.publish(InvoiceView.TOPIC_SHOW, this, invoice);
     }
 
     @Override
