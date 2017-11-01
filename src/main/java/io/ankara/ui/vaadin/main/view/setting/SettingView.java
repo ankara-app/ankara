@@ -7,7 +7,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
-import io.ankara.ui.vaadin.main.view.ViewHeader;
+import io.ankara.ui.vaadin.main.ViewHeader;
 import io.ankara.ui.vaadin.main.view.setting.account.PasswordChangeForm;
 import io.ankara.ui.vaadin.main.view.setting.account.UserDetailsForm;
 import io.ankara.ui.vaadin.main.view.setting.company.CompaniesBeanCRUDComponent;

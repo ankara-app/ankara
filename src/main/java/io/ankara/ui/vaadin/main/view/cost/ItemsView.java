@@ -31,7 +31,6 @@ public class ItemsView extends VerticalLayout {
 
     @PostConstruct
     private void build() {
-//        setWidth("100%");
         setSizeFull();
         addComponent(itemsTable);
         setExpandRatio(itemsTable,1);

@@ -23,7 +23,6 @@ import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
-import io.ankara.ui.vaadin.main.view.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
 
 import javax.annotation.PostConstruct;
@@ -45,9 +44,6 @@ public class MainScreen extends CustomComponent {
     private MainHeader mainHeader;
 
     @Inject
-    private ViewHeader viewHeader;
-
-    @Inject
     private MainUI mainUI;
 
     @PostConstruct
@@ -65,7 +61,7 @@ public class MainScreen extends CustomComponent {
 //        content.setHeight("100%");
         content.setSizeFull();
 
-        content.addComponents(mainHeader,viewHeader);
+        content.addComponents(mainHeader);
 
         VerticalLayout viewContainer = new VerticalLayout();
 //        viewContainer.setWidth("100%");

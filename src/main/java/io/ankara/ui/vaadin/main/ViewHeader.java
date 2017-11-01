@@ -1,4 +1,4 @@
-package io.ankara.ui.vaadin.main.view;
+package io.ankara.ui.vaadin.main;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;

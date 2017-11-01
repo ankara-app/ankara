@@ -8,6 +8,7 @@ import io.ankara.domain.Estimate;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.service.UserService;
+import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.main.view.cost.CostsProvider;
 import io.ankara.ui.vaadin.main.view.cost.CostsTable;
@@ -35,6 +36,7 @@ public class InvoicesTable extends CostsTable<Invoice> {
     private InvoicesProvider invoicesProvider;
 
     public InvoicesTable(MainUI mainUI, EventBus.UIEventBus eventBus, InvoicesProvider invoicesProvider) {
+        super(Templates.INVOICE_ENTRY);
         this.mainUI = mainUI;
         this.eventBus = eventBus;
         this.invoicesProvider = invoicesProvider;
@@ -44,9 +46,9 @@ public class InvoicesTable extends CostsTable<Invoice> {
     public void build() {
         super.build();
 
-        addColumn(Invoice::getPurchaseOrder).setCaption("Purchase Order").setHidable(true).setHidden(true);
-        addColumn(invoice-> DateUtils.formatDate(invoice.getDueDate())).setCaption("Due date").setHidable(true).setHidden(true);
-
+//        addColumn(Invoice::getPurchaseOrder).setCaption("Purchase Order").setHidable(true).setHidden(true);
+//        addColumn(invoice-> DateUtils.formatDate(invoice.getDueDate())).setCaption("Due date").setHidable(true).setHidden(true);
+//
 
         addItemClickListener(event -> {
             Invoice invoice = event.getItem();

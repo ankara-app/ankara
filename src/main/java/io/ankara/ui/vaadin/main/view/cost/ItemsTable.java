@@ -77,9 +77,9 @@ public class ItemsTable extends Grid<Integer> {
             ComboBox<ItemType> typeBox = new ComboBox<>();
             typeBox.setWidth("100%");
             typeBox.setItems(itemTypeService.getItemTypes(cost.getCompany()));
-            typeBox.addValueChangeListener(event -> calculateSummaries(key));
 
             itemBinders.get(key).forField(typeBox).bind("type");
+            typeBox.addValueChangeListener(event -> calculateSummaries(key));
 
             return typeBox;
         }).setCaption("Type").setId("type").setWidth(200).setSortable(false);

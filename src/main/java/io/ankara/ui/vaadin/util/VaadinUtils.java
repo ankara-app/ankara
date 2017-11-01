@@ -4,12 +4,16 @@ import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.Validator;
 import com.vaadin.data.ValueContext;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.components.grid.HeaderRow;
 import io.ankara.ui.vaadin.AnkaraTheme;
+import org.vaadin.addons.searchbox.SearchBox;
 import org.vaadin.viritin.fields.MTextField;
+
+import java.util.function.Consumer;
 
 /**
  * @author Boniface Chacha
@@ -31,18 +35,19 @@ public class VaadinUtils {
         });
     }
 
-    public static MTextField addFilteringTextField(HeaderRow headerRow, String propertyId, String placeHolder, HasValue.ValueChangeListener<String> listener) {
-        MTextField filterField =  createFilteringTextField(placeHolder, listener);
+    public static SearchBox addFilteringTextField(HeaderRow headerRow, String propertyId, String placeHolder, Consumer<String> listener) {
+        SearchBox filterField =  createFilteringTextField(placeHolder, listener);
+        filterField.setWidth("100%");
         headerRow.getCell(propertyId).setComponent(filterField);
         return filterField;
     }
 
-    private static MTextField createFilteringTextField(String placeHolder, HasValue.ValueChangeListener<String> listener) {
-        MTextField filterField = new MTextField();
+    public static SearchBox createFilteringTextField(String placeHolder, Consumer<String>  listener) {
+        SearchBox filterField = new SearchBox(VaadinIcons.SEARCH, SearchBox.ButtonPosition.LEFT);
+        filterField.setButtonJoined(true);
+       filterField.setSearchMode(SearchBox.SearchMode.DEBOUNCE);
         filterField.setPlaceholder(placeHolder);
-        filterField.setWidth("100%");
-        filterField.addStyleNames(AnkaraTheme.TEXTFIELD_TINY,AnkaraTheme.TEXT_SMALL);
-        filterField.addValueChangeListener(listener);
+        filterField.addSearchListener(searchEvent -> listener.accept(searchEvent.getSearchTerm()));
         return filterField;
     }
 }

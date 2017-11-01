@@ -1,14 +1,12 @@
 package io.ankara.ui.vaadin.main.view.cost.estimate;
 
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.UIScope;
 import io.ankara.domain.Cost;
 import io.ankara.domain.Estimate;
 import io.ankara.service.EstimateService;
 import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.MainUI;
-import io.ankara.ui.vaadin.main.view.ViewHeader;
+import io.ankara.ui.vaadin.main.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.CostView;
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;

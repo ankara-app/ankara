@@ -21,10 +21,10 @@ import javax.inject.Inject;
 public class MainHeader extends CustomComponent {
 
     @Inject
-    private SetupMenu setupMenu;
+    private MainMenu mainMenu;
 
     @Inject
-    private MainMenu mainMenu;
+    private ViewHeader viewHeader;
 
     @PostConstruct
     private void build(){
@@ -32,15 +32,14 @@ public class MainHeader extends CustomComponent {
         setHeight("20px");
 
         HorizontalLayout content = new HorizontalLayout();
-        content.setSizeFull();
+        content.setWidth("100%");
         setCompositionRoot(content);
 
 
-        content.addComponent(mainMenu);
-        content.setExpandRatio(mainMenu,1);
+        content.addComponent(viewHeader);
+        content.setComponentAlignment(viewHeader,Alignment.TOP_LEFT);
 
-        setupMenu.setWidth(-1,Unit.PIXELS);
-        content.addComponent(setupMenu);
-        content.setComponentAlignment(setupMenu,Alignment.BOTTOM_RIGHT);
+        content.addComponent(mainMenu);
+        content.setComponentAlignment(mainMenu,Alignment.BOTTOM_RIGHT);
     }
 }

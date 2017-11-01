@@ -9,6 +9,7 @@ import com.vaadin.spring.annotation.ViewScope;
 import io.ankara.domain.Estimate;
 import io.ankara.service.EstimateService;
 import io.ankara.service.UserService;
+import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.MainUI;
 import io.ankara.ui.vaadin.main.view.cost.CostsProvider;
 import io.ankara.ui.vaadin.main.view.cost.CostsTable;
@@ -34,6 +35,7 @@ public class EstimatesTable extends CostsTable<Estimate> {
     private EstimatesProvider estimatesProvider;
 
     public EstimatesTable(MainUI mainUI, EventBus.UIEventBus eventBus, EstimatesProvider estimatesProvider) {
+        super(Templates.ESTIMATE_ENTRY);
         this.mainUI = mainUI;
         this.eventBus = eventBus;
         this.estimatesProvider = estimatesProvider;
