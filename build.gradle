@@ -2,15 +2,13 @@ buildscript {
     ext {
         groovyVersion = '2.4.12'
         gradleWrapperVersion = '4.0.1'
-        vaadinVersion = '8.1.5'
+        vaadinVersion = '8.2.0.alpha2'
         vaadinSpringVersion = '2.0.1'
         vaadin4SpringVersion = '2.0.0.RELEASE'
-        viritinVersion = '2.0.beta2'
+        viritinVersion = '2.0'
         codenarcVersion = '0.25.1'
         spockVersion = '1.0-groovy-2.4'
-        springBootVersion = '1.5.6.RELEASE'
-    }
-
+        springBootVersion = '1.5.8.RELEASE'
     repositories {
         mavenCentral()
         jcenter()
@@ -20,6 +18,8 @@ buildscript {
         flatDir {
             dirs 'libs'
         }
+
+    }
     }
 
     dependencies {

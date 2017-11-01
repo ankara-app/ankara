@@ -77,6 +77,7 @@ public class ItemsTable extends Grid<Integer> {
             ComboBox<ItemType> typeBox = new ComboBox<>();
             typeBox.setWidth("100%");
             typeBox.setItems(itemTypeService.getItemTypes(cost.getCompany()));
+            typeBox.addValueChangeListener(event -> calculateSummaries(key));
 
             itemBinders.get(key).forField(typeBox).bind("type");
 
@@ -89,6 +90,7 @@ public class ItemsTable extends Grid<Integer> {
             descriptionArea.setRows(3);
             descriptionArea.setWidth("100%");
             itemBinders.get(key).forField(descriptionArea).bind("description");
+            descriptionArea.addValueChangeListener(event -> calculateSummaries(key));
 
             return descriptionArea;
 
@@ -102,7 +104,10 @@ public class ItemsTable extends Grid<Integer> {
             quantityField.setWidth("100%");
             quantityField.addStyleName(AnkaraTheme.TEXTFIELD_TINY);
 
-            itemBinders.get(key).forField(quantityField).withConverter(new StringToBigDecimalConverter("Quantity must be a number")).bind("quantity");
+            itemBinders.get(key)
+                    .forField(quantityField)
+                    .withConverter(new StringToBigDecimalConverter("Quantity must be a number"))
+                    .bind("quantity");
             quantityField.addValueChangeListener(event -> calculateSummaries(key));
 
             return quantityField;
@@ -113,7 +118,10 @@ public class ItemsTable extends Grid<Integer> {
             NumberField priceField = new NumberField();
             priceField.setWidth("100%");
 
-            itemBinders.get(key).forField(priceField).withConverter(new StringToBigDecimalConverter("Price must be a number")).bind("price");
+            itemBinders.get(key)
+                    .forField(priceField)
+                    .withConverter(new StringToBigDecimalConverter("Price must be a number"))
+                    .bind("price");
             priceField.addValueChangeListener(event -> calculateSummaries(key));
 
             return priceField;

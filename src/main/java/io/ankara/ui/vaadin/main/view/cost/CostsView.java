@@ -1,17 +1,14 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
-import com.vaadin.data.HasValue;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.HeaderRow;
 import io.ankara.domain.Cost;
-import io.ankara.ui.vaadin.AnkaraTheme;
-import io.ankara.ui.vaadin.util.VaadinUtils;
-import static  io.ankara.ui.vaadin.util.VaadinUtils.createFilteringTextField;
+
+import static  io.ankara.ui.vaadin.util.VaadinUtils.addFilteringTextField;
 
 /**
  * @author Boniface Chacha
@@ -39,9 +36,11 @@ public abstract class CostsView<T extends Cost> extends CustomComponent implemen
         content.setExpandRatio(costsTable,1);
 
         HeaderRow headerRow = getCostsTable().appendHeaderRow();
-        createFilteringTextField(headerRow,"code","Filter by code", event -> getCostsTable().getCostProvider().setCodeFilter(event.getValue()));
-        createFilteringTextField(headerRow,"customer","Filter by customer name",event -> getCostsTable().getCostProvider().setCustomerNameFilter(event.getValue()));
-        createFilteringTextField(headerRow,"subject","Filter by subject",event -> getCostsTable().getCostProvider().setSubjectFilter(event.getValue()));
+
+
+        addFilteringTextField(headerRow,"code","Filter by code", event -> getCostsTable().getCostProvider().setCodeFilter(event.getValue()));
+        addFilteringTextField(headerRow,"customer","Filter by customer name", event -> getCostsTable().getCostProvider().setCustomerNameFilter(event.getValue()));
+        addFilteringTextField(headerRow,"subject","Filter by subject", event -> getCostsTable().getCostProvider().setSubjectFilter(event.getValue()));
 
     }
 

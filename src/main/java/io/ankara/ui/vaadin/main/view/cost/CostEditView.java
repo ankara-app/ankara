@@ -317,11 +317,11 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
         discountPercentageField = new TextField("Discount");
         discountPercentageField.setPlaceholder("Specify discount percentage (Optional) ...");
         discountPercentageField.setWidth("100%");
+        costBinder.forField(discountPercentageField).withConverter(new StringToBigDecimalConverter("Discount percentage should be a number")).bind("discountPercentage");
         discountPercentageField.addValueChangeListener(event -> {
             if (event.isUserOriginated())
                 calculateSummaries(null);
         });
-        costBinder.forField(discountPercentageField).withConverter(new StringToBigDecimalConverter("Discount percentage should be a number")).bind("discountPercentage");
 
         customerLayout = new FormLayout(customerSelectLayout, customerCreateLayout, discountPercentageField);
         customerLayout.setWidth("100%");
