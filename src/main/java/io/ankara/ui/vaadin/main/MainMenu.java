@@ -66,7 +66,7 @@ public class MainMenu extends CustomComponent {
             }
         });
         settings.addSeparator();
-        settings.addItem("Logout",VaadinIcons.EXIT, selectedItem -> vaadinSecurity.logout());
+        settings.addItem("Logout",VaadinIcons.SIGN_OUT, selectedItem -> vaadinSecurity.logout());
     }
 
     public MenuBar.MenuItem getSettings() {
