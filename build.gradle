@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.4.1.RELEASE'
+        springBootVersion = '1.4.7.RELEASE'
         groovyVersion = '2.4.7'
         vaadinVersion = '7.7.12'
         vaadinSpringVersion = '0.0.7.RELEASE'
@@ -17,7 +17,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath 'org.springframework:springloaded:1.2.7.RELEASE'
-        classpath("com.devsoap.plugin:gradle-vaadin-plugin:1.2.5") {
+        classpath("com.devsoap.plugin:gradle-vaadin-plugin:1.2.6") {
             exclude group: "org.eclipse.jetty", module: "jetty-servlets"
             exclude group: "org.eclipse.jetty", module: "jetty-server"
         }
