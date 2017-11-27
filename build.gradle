@@ -2,30 +2,30 @@ buildscript {
     ext {
         groovyVersion = '2.4.12'
         gradleWrapperVersion = '4.0.1'
-        vaadinVersion = '8.2.0.alpha2'
+        vaadinVersion = '8.2.0.beta1'
         vaadinSpringVersion = '2.0.1'
         vaadin4SpringVersion = '2.0.0.RELEASE'
-        viritinVersion = '2.0'
+        viritinVersion = '2.1'
         codenarcVersion = '0.25.1'
         spockVersion = '1.0-groovy-2.4'
         springBootVersion = '1.5.8.RELEASE'
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-        flatDir {
-            dirs 'libs'
-        }
+        repositories {
+            mavenCentral()
+            jcenter()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+            flatDir {
+                dirs 'libs'
+            }
 
-    }
+        }
     }
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath 'org.springframework:springloaded:1.2.7.RELEASE'
-        classpath ("com.devsoap.plugin:gradle-vaadin-plugin:1.2.5") {
+        classpath("com.devsoap.plugin:gradle-vaadin-plugin:1.2.5") {
             exclude group: "org.eclipse.jetty", module: "jetty-servlets"
             exclude group: "org.eclipse.jetty", module: "jetty-server"
         }
@@ -85,6 +85,7 @@ dependencies {
 //    compile("org.springframework.boot:spring-boot-devtools")
     compile("com.vaadin:vaadin-spring-boot-starter:${vaadinSpringVersion}")
 
+    compile group: 'org.hibernate', name: 'hibernate-java8', version: '5.2.10.Final'
     runtime('mysql:mysql-connector-java')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 

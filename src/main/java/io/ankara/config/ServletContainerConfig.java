@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration;
  * @email bonifacechacha@gmail.com
  * @date 9/17/17 9:42 AM
  */
-@Configuration
+//@Configuration
 public class ServletContainerConfig {
     //forcing spring boot to use Tomcat as a servlet container
-    @Bean
-    TomcatEmbeddedServletContainerFactory tomcat() {
-        return new TomcatEmbeddedServletContainerFactory();
-    }
+//    @Bean
+//    TomcatEmbeddedServletContainerFactory tomcat() {
+//        return new TomcatEmbeddedServletContainerFactory();
+//    }
 
 }

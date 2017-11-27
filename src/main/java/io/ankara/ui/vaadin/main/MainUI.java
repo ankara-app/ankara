@@ -2,6 +2,7 @@ package io.ankara.ui.vaadin.main;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ui.Transport;
@@ -23,6 +24,7 @@ import java.util.Locale;
 @SpringUI(path = "/app")
 @Theme(AnkaraTheme.THEME)
 @Push(transport = Transport.WEBSOCKET)
+@PushStateNavigation
 public class MainUI extends AnkaraUI {
 
     @Inject
