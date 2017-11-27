@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.vaadin.spring.security.annotation.EnableVaadinManagedSecurity;
 
 @EnableAsync
-@SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
+@SpringBootApplication
 public class AnkaraApplication {
 
 	public static void main(String[] args) {
