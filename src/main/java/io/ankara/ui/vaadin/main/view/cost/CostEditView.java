@@ -22,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.events.annotation.EventBusListenerTopic;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
