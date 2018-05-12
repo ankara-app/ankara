@@ -179,7 +179,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
 
         Component footer = createFooter();
         addComponent(footer);
-        setComponentAlignment(footer, Alignment.MIDDLE_RIGHT);
+        setComponentAlignment(footer, Alignment.MIDDLE_CENTER);
 
         costBinder.bindInstanceFields(this);
         costBinder.setRequiredConfigurator(null);
@@ -188,7 +188,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
     private HorizontalLayout createFooter() {
         Button save = new Button("Save", VaadinIcons.DISC);
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        save.setWidth("80%");
+        save.setWidth("100%");
         save.addClickListener((Button.ClickListener) event -> {
 
             if (costBinder.isValid()) {
@@ -198,6 +198,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
         });
 
         HorizontalLayout footer = new HorizontalLayout();
+        footer.setWidth("80%");
         footer.setSpacing(true);
         footer.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         footer.addComponents(save);

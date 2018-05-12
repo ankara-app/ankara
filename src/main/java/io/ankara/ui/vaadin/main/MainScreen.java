@@ -72,7 +72,7 @@ public class MainScreen extends CustomComponent {
         content.addComponent(viewContainer);
         content.setExpandRatio(viewContainer, 1);
 
-        content.addComponent(new MLabel("© 2018 GET ANKARA.").withStyleName(ValoTheme.LABEL_TINY,ValoTheme.LABEL_LIGHT,ValoTheme.LABEL_COLORED));
+        content.addComponent(new MLabel("© 2018 ANKARA").withStyleName(ValoTheme.LABEL_TINY,ValoTheme.LABEL_LIGHT,ValoTheme.LABEL_COLORED));
         root.addComponent(content);
         root.setComponentAlignment(content, Alignment.MIDDLE_CENTER);
 
