@@ -30,8 +30,8 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: "com.devsoap.plugin.vaadin"
 apply plugin: 'war'
 
-sourceCompatibility = 9
-targetCompatibility = 9
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 // make groovy plugin include java sources in joint compilation
 sourceSets.main.java.srcDirs = []
