@@ -78,7 +78,7 @@ public class InvoiceServiceBean implements InvoiceService {
 
     @Override
     public Invoice getInvoice(Long id) {
-        return invoiceRepository.findOne(id);
+        return invoiceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("There is no invoice with id "+id));
     }
 
     @Transactional

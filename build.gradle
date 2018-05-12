@@ -1,76 +1,84 @@
 buildscript {
     ext {
-        groovyVersion = '2.4.12'
-        gradleWrapperVersion = '4.0.1'
-        vaadinVersion = '8.2.0.beta1'
-        vaadinSpringVersion = '2.0.1'
-        vaadin4SpringVersion = '2.0.0.RELEASE'
-        viritinVersion = '2.1'
-        codenarcVersion = '0.25.1'
-        spockVersion = '1.0-groovy-2.4'
-        springBootVersion = '1.5.8.RELEASE'
-        repositories {
-            mavenCentral()
-            jcenter()
-            maven {
-                url "https://plugins.gradle.org/m2/"
-            }
-            flatDir {
-                dirs 'libs'
-            }
+        springBootVersion = '2.0.1.RELEASE'
+    }
+    repositories {
+        jcenter()
+        mavenCentral()
 
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+
+        maven {
+            url "https://maven.vaadin.com/vaadin-prereleases"
         }
     }
-
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath 'org.springframework:springloaded:1.2.7.RELEASE'
-        classpath("com.devsoap.plugin:gradle-vaadin-plugin:1.2.5") {
-            exclude group: "org.eclipse.jetty", module: "jetty-servlets"
-            exclude group: "org.eclipse.jetty", module: "jetty-server"
-        }
+//        classpath 'org.springframework:springloaded:1.2.7.RELEASE'
+        classpath('com.devsoap.plugin:gradle-vaadin-plugin:1.3.1')
     }
-
 }
-//
-//plugins {
-////    id 'org.springframework.boot' version '1.5.6.RELEASE'
-//    id 'com.devsoap.plugin.vaadin' version '1.2.1'
-//}
 
-apply plugin: 'java'
-//apply plugin: 'eclipse'
+//apply plugin: 'java'
+//apply plugin: 'eclipse-wtp'
+apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 apply plugin: "com.devsoap.plugin.vaadin"
 apply plugin: 'war'
 
-springBoot {
-    executable = true
-}
+sourceCompatibility = 9
+targetCompatibility = 9
 
-war {
-    baseName = 'ankara'
-    version = null
-}
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+// make groovy plugin include java sources in joint compilation
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDir 'src/main/java'
 
 repositories {
-    mavenCentral()
     jcenter()
+    mavenCentral()
     maven { url "https://jitpack.io" }
+}
+
+configurations {
+    providedRuntime
+}
+
+ext {
+    vaadinVersion = '8.4.1'
+    vaadin4SpringVersion = '2.0.0.RELEASE'
+    viritinVersion = '2.5'
+    apachePOIVersion = '3.9'
 }
 
 vaadin {
     vaadin.version = vaadinVersion
 }
 
+bootWar {
+    launchScript()
+}
+
+war {
+    baseName = 'dimension'
+    version = null
+}
+
 dependencies {
 
+    //to be removed after migration to spring boot 2
+    runtime("org.springframework.boot:spring-boot-properties-migrator")
+
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile('org.codehaus.groovy:groovy')
+
+    //java
     compile("javax.inject:javax.inject:1")
     compile 'org.apache.commons:commons-lang3:3.3'
+    compile group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
 
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-aop')
@@ -81,11 +89,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile 'org.springframework.boot:spring-boot-starter-validation'
+    compile('com.vaadin:vaadin-spring-boot-starter')
 
-//    compile("org.springframework.boot:spring-boot-devtools")
-    compile("com.vaadin:vaadin-spring-boot-starter:${vaadinSpringVersion}")
-
-    compile group: 'org.hibernate', name: 'hibernate-java8', version: '5.2.10.Final'
+    compile('org.hibernate:hibernate-java8')
     runtime('mysql:mysql-connector-java')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
@@ -101,38 +107,20 @@ dependencies {
     compile "org.vaadin:viritin:${viritinVersion}"
     compile 'tm.kod:numberfield7:0.0.5'
     compile 'org.vaadin.addon:confirmdialog:3.2.0'
-    compile 'org.vaadin.artur:spring-data-provider:1.0.0'
+    compile 'org.vaadin.artur:spring-data-provider:1.1.0'
     compile 'org.vaadin.addons:searchbox:0.1.1'
 
+
+    //bootstrap
     compile "org.webjars:bootstrap:3.3.7"
 
-    compile "org.flywaydb:flyway-core:4.1.1"
+    //flyway
+    compile('org.flywaydb:flyway-core')
 
 }
 
 dependencyManagement {
     imports {
-        mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
-    }
-}
-
-//
-//configurations {
-//    all*.exclude group: "org.eclipse.jetty", module: "jetty-servlets"
-//    all*.exclude group: "org.eclipse.jetty", module: "jetty-server"
-//    all*.exclude module: "slf4j-log4j12"
-//}
-
-//eclipse {
-//    classpath {
-//        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-//        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-//    }
-//}
-
-idea {
-    module {
-        inheritOutputDirs = false
-        outputDir = file("$buildDir/classes/main/")
+        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
     }
 }

@@ -96,7 +96,7 @@ public class EstimateServiceBean implements EstimateService {
 
     @Override
     public Estimate getEstimate(Long id) {
-        return estimateRepository.findOne(id);
+        return estimateRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("There is no estimate with id "+id));
     }
 
     @Override
