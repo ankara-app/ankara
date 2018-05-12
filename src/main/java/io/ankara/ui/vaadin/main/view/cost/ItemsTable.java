@@ -78,6 +78,7 @@ public class ItemsTable extends Grid<Integer> {
             typeBox.setWidth("100%");
             typeBox.setItems(itemTypeService.getItemTypes(cost.getCompany()));
 
+            itemBinders.get(key).removeBinding("type");
             itemBinders.get(key).forField(typeBox).bind("type");
             typeBox.addValueChangeListener(event -> calculateSummaries(key));
 
@@ -89,6 +90,9 @@ public class ItemsTable extends Grid<Integer> {
             TextArea descriptionArea = new TextArea();
             descriptionArea.setRows(3);
             descriptionArea.setWidth("100%");
+
+
+            itemBinders.get(key).removeBinding("description");
             itemBinders.get(key).forField(descriptionArea).bind("description");
             descriptionArea.addValueChangeListener(event -> calculateSummaries(key));
 
@@ -104,6 +108,8 @@ public class ItemsTable extends Grid<Integer> {
             quantityField.setWidth("100%");
             quantityField.addStyleName(AnkaraTheme.TEXTFIELD_TINY);
 
+
+            itemBinders.get(key).removeBinding("quantity");
             itemBinders.get(key)
                     .forField(quantityField)
                     .withConverter(new StringToBigDecimalConverter("Quantity must be a number"))
@@ -118,6 +124,8 @@ public class ItemsTable extends Grid<Integer> {
             NumberField priceField = new NumberField();
             priceField.setWidth("100%");
 
+
+            itemBinders.get(key).removeBinding("price");
             itemBinders.get(key)
                     .forField(priceField)
                     .withConverter(new StringToBigDecimalConverter("Price must be a number"))
@@ -151,6 +159,7 @@ public class ItemsTable extends Grid<Integer> {
             taxSelector.addStyleName(AnkaraTheme.TEXT_SMALL);
 //            taxSelector.setWidth("100px");
 
+            itemBinders.get(key).removeBinding("taxes");
             itemBinders.get(key).forField(taxSelector).withConverter(new AppliedTaxesConverter()).bind("taxes");
             taxSelector.addValueChangeListener(event -> requestSummaryCalculation(key));
             return taxSelector;
@@ -285,9 +294,9 @@ public class ItemsTable extends Grid<Integer> {
 
     }
 
-    private boolean isValid(BeanValidationBinder<Item> binder) {
+    private boolean isValid(Binder<Item> binder) {
         List<ValidationResult> errors = binder.validate().getValidationErrors();
-        return !errors.stream().findFirst().isPresent();
+        return errors.isEmpty();
     }
 
     public Map<Integer, BeanValidationBinder<Item>> getItemBinders() {

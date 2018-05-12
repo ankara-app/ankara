@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class Tax {
     public static final String VAT = "VAT";
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Version

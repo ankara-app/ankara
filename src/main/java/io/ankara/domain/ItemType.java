@@ -19,7 +19,7 @@ public class ItemType {
     public static final String SERVICE = "Service";
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Version

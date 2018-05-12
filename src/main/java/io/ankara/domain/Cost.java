@@ -108,6 +108,8 @@ public class Cost implements Serializable {
 
     public Cost() {
         this.discountPercentage = new BigDecimal("0.0");
+        issueDate = new Date();
+        this.items = new LinkedList<>();
     }
 
     public Cost(User creator, Company company, String currency, String code) {
@@ -116,9 +118,6 @@ public class Cost implements Serializable {
         this.company = company;
         this.currency = currency;
         this.code = code;
-
-        issueDate = new Date();
-        this.items = new LinkedList<>();
 
         if (company != null) {
             terms = company.getTerms();

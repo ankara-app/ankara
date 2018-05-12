@@ -7,6 +7,7 @@ import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.event.Action;
 import com.vaadin.event.FieldEvents;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
@@ -118,7 +119,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
 
         rebuildTaxSelector();
 
-        costBinder.readBean(cost);
+        costBinder.setBean(cost);
         itemsView.setCost(cost);
 
         calculateSummaries(null);
@@ -180,9 +181,9 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
     }
 
     private HorizontalLayout createFooter() {
-        Button save = new Button("Save", FontAwesome.FLOPPY_O);
+        Button save = new Button("Save", VaadinIcons.DISC);
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        save.setWidth("200px");
+        save.setWidth("80%");
         save.addClickListener((Button.ClickListener) event -> {
 
             if (costBinder.isValid()) {
@@ -193,7 +194,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
 
         HorizontalLayout footer = new HorizontalLayout();
         footer.setSpacing(true);
-        footer.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
+        footer.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         footer.addComponents(save);
 
         return footer;
@@ -201,7 +202,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
 
     public void loadCost() {
 
-        costBinder.writeBeanIfValid((T) cost);
+//        costBinder.writeBeanIfValid((T) cost);
 //        if (cost.getDiscountPercentage() == null)
 //            cost.setDiscountPercentage(BigDecimal.ZERO);
         cost.setItems(itemsTable.getValidItems());

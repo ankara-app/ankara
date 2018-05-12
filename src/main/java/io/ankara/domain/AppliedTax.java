@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Entity
 public class AppliedTax {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Version
