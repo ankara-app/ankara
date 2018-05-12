@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Boniface Chacha
@@ -66,6 +67,9 @@ public class Item {
 
         quantity = BigDecimal.ONE;
         price = BigDecimal.ZERO;
+
+        //assume the new item will also contain among the taxes of the cost applied
+        this.taxes = cost.getTaxes().stream().map(AppliedTax::new).collect(Collectors.toList());
     }
 
     public Item(Cost cost) {

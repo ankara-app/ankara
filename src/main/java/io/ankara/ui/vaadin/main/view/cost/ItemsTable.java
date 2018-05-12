@@ -223,8 +223,7 @@ public class ItemsTable extends Grid<Integer> {
         binder.setRequiredConfigurator(null);
 
         //during validation if some fields have errrors then ignore them and do not show on the UI with red colors
-        binder.setValidationStatusHandler(status -> {
-        });
+        binder.setValidationStatusHandler(status -> {});
         binder.setBean(item);
 
         itemBinders.put(recentItemID, binder);

@@ -78,6 +78,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
     protected Label amountSubtotal, amountDiscounted, amountDue;
 
     protected Map<Tax, Label> taxLabels = new HashMap<>();
+    protected Map<Tax, CheckBox> taxSelectors = new HashMap<>();
 
     @Inject
     protected CompanyService companyService;
@@ -143,6 +144,11 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
             taxLabels.get(tax).setValue(NumberUtils.formatMoney(cost.calculateTax(tax), cost.getCurrency()));
         }
 
+        //update tax selector on the view
+        taxSelectors.forEach((tax, selector) -> {
+            selector.setValue(cost.hasTax(tax));
+        });
+
         amountDue.setValue(NumberUtils.formatMoney(cost.getAmountDue(), cost.getCurrency()));
     }
 
@@ -201,10 +207,6 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
     }
 
     public void loadCost() {
-
-//        costBinder.writeBeanIfValid((T) cost);
-//        if (cost.getDiscountPercentage() == null)
-//            cost.setDiscountPercentage(BigDecimal.ZERO);
         cost.setItems(itemsTable.getValidItems());
     }
 
@@ -358,6 +360,8 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
             //,ark the selector if the cost has tax withinn already
             taxSelector.setValue(cost.getTaxes().contains(tax));
             taxSelector.addValueChangeListener(event -> {
+                //if event is not originating from user then it may be from the entries tax selector there for ignore
+                if (!event.isUserOriginated()) return;
 
                 itemsTable.setIgnoreSummaryCalculateRequest(true);
                 CheckBox source = (CheckBox) event.getComponent();
@@ -372,6 +376,7 @@ public abstract class CostEditView<T extends Cost> extends VerticalLayout implem
             });
 
             customerLayout.addComponent(taxSelector);
+            taxSelectors.put(tax,taxSelector);
         });
 
     }

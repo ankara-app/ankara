@@ -23,7 +23,9 @@ import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
+import org.vaadin.viritin.label.MLabel;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -47,12 +49,12 @@ public class MainScreen extends CustomComponent {
     private MainUI mainUI;
 
     @PostConstruct
-    private void build(){
+    private void build() {
         setSizeFull();
 
-        VerticalLayout root =new VerticalLayout();
+        VerticalLayout root = new VerticalLayout();
         root.setSizeFull();
-        root.setMargin(new MarginInfo(false,true,true,true));
+        root.setMargin(new MarginInfo(false, true, false, true));
         setCompositionRoot(root);
 
         VerticalLayout content = new VerticalLayout();
@@ -68,8 +70,9 @@ public class MainScreen extends CustomComponent {
         viewContainer.setSizeFull();
         viewContainer.setMargin(false);
         content.addComponent(viewContainer);
-        content.setExpandRatio(viewContainer,1);
+        content.setExpandRatio(viewContainer, 1);
 
+        content.addComponent(new MLabel("© 2018 GET ANKARA.").withStyleName(ValoTheme.LABEL_TINY,ValoTheme.LABEL_LIGHT,ValoTheme.LABEL_COLORED));
         root.addComponent(content);
         root.setComponentAlignment(content, Alignment.MIDDLE_CENTER);
 

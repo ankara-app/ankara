@@ -84,7 +84,7 @@ public class Cost implements Serializable {
     private Customer customer;
 
     @Min(value = 0)
-    @Column(precision = 48, scale = 2,nullable = false)
+    @Column(precision = 48, scale = 2, nullable = false)
     @NotNull
     private BigDecimal discountPercentage;
 
@@ -101,7 +101,7 @@ public class Cost implements Serializable {
      */
     private boolean submitted;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER,mappedBy = "cost")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "cost")
     @Fetch(FetchMode.SUBSELECT)
     @OrderBy("id")
     private List<Item> items;
@@ -309,7 +309,7 @@ public class Cost implements Serializable {
     public BigDecimal calculateTax(Tax tax) {
         BigDecimal total = new BigDecimal("0.0");
 
-        for(Item item:getItems()){
+        for (Item item : getItems()) {
             total = total.add(item.calculateTax(tax));
         }
         return total;
@@ -321,7 +321,7 @@ public class Cost implements Serializable {
 
     public BigDecimal getTotalTax() {
         BigDecimal total = new BigDecimal("0.0");
-        for(Tax tax:getTaxes()){
+        for (Tax tax : getTaxes()) {
             total = total.add(calculateTax(tax));
         }
         return total;
@@ -330,17 +330,17 @@ public class Cost implements Serializable {
     public Set<Tax> getTaxes() {
         HashSet<Tax> taxes = new HashSet<>();
 
-        for(Item item:items){
+        for (Item item : items) {
             taxes.addAll(item.getTaxes().stream().map(appliedTax -> appliedTax.getTax()).collect(Collectors.toSet()));
         }
 
         return taxes;
     }
 
-    public AppliedTax getAppliedTax(Tax tax){
-        for(Item item:items){
+    public AppliedTax getAppliedTax(Tax tax) {
+        for (Item item : items) {
             Optional<AppliedTax> appliedTax = item.getAppliedTax(tax);
-            if(appliedTax.isPresent())
+            if (appliedTax.isPresent())
                 return appliedTax.get();
         }
         return null;
@@ -348,5 +348,9 @@ public class Cost implements Serializable {
 
     public BigDecimal getTaxedTotal() {
         return getSubtotal().add(getTotalTax());
+    }
+
+    public boolean hasTax(Tax tax) {
+        return getTaxes().contains(tax);
     }
 }
