@@ -29,6 +29,7 @@ import org.vaadin.viritin.label.MLabel;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.time.Year;
 
 /**
  * Full-screen UI component that allows the user to navigate between views, and log out.
@@ -72,7 +73,7 @@ public class MainScreen extends CustomComponent {
         content.addComponent(viewContainer);
         content.setExpandRatio(viewContainer, 1);
 
-        content.addComponent(new MLabel("© 2018 ANKARA").withStyleName(ValoTheme.LABEL_TINY,ValoTheme.LABEL_LIGHT,ValoTheme.LABEL_COLORED));
+        content.addComponent(new MLabel("© 2016 - "+Year.now().getValue()+" ANKARA").withStyleName(ValoTheme.LABEL_TINY,ValoTheme.LABEL_LIGHT,ValoTheme.LABEL_COLORED));
         root.addComponent(content);
         root.setComponentAlignment(content, Alignment.MIDDLE_CENTER);
 

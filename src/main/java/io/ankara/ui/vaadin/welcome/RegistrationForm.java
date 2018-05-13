@@ -42,7 +42,7 @@ public class RegistrationForm extends FormLayout implements View {
 
     private PasswordField password;
 
-    private Binder<User> userBinder = new Binder<>();
+    private Binder<User> userBinder = new Binder<>(User.class);
 
     private Button register;
 

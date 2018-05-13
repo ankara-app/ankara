@@ -52,8 +52,7 @@ public class UserServiceBean implements UserService {
     @Override
     @Transactional
     public boolean create(User user) {
-        User existingUser = getUser(user.getEmail());
-        if (existingUser != null)
+        if (userRepository.findById(user.getEmail()).isPresent())
             throw new IllegalArgumentException("There is already another user registered with email " + user.getEmail());
 
         user.setTimeCreated(new Date());
