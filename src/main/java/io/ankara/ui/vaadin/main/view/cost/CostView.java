@@ -1,19 +1,15 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
 import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Cost;
 import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.util.OpenerButton;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.vaadin.spring.events.EventBus;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -24,14 +20,14 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/23/16 2:17 PM
  */
-public abstract class CostView extends CustomComponent implements View {
+public abstract class CostView<T extends Cost> extends CustomComponent implements View {
 
     private String template;
 
     private Panel contentPanel;
     private HorizontalLayout header;
     private Label templateLabel;
-    private Button edit,delete;
+    private Button edit,delete,copy;
     private OpenerButton pdf,print;
 
     @Inject
@@ -40,7 +36,7 @@ public abstract class CostView extends CustomComponent implements View {
     @Inject
     protected EventBus.UIEventBus eventBus;
 
-    protected Cost cost;
+    protected T cost;
 
     public CostView(String template) {
         this.template = template;
@@ -52,11 +48,15 @@ public abstract class CostView extends CustomComponent implements View {
 
         edit = new Button("Edit", FontAwesome.PENCIL);
         edit.addStyleName(AnkaraTheme.BUTTON_BORDERLESS_COLORED);
-        edit.addClickListener((Button.ClickListener) event -> edit(cost));
+        edit.addClickListener((Button.ClickListener) event -> edit());
+
+        copy = new Button("Copy", FontAwesome.COPY);
+        copy.addStyleName(AnkaraTheme.BUTTON_BORDERLESS_COLORED);
+        copy.addClickListener((Button.ClickListener) event -> copy());
 
         delete = new Button("Delete", FontAwesome.REMOVE);
         delete.addStyleName(AnkaraTheme.BUTTON_BORDERLESS_COLORED);
-        delete.addClickListener((Button.ClickListener) event -> delete(cost));
+        delete.addClickListener((Button.ClickListener) event -> delete());
 
         print = new OpenerButton("Print",FontAwesome.PRINT);
         print.addStyleName(AnkaraTheme.BUTTON_BORDERLESS_COLORED);
@@ -64,7 +64,7 @@ public abstract class CostView extends CustomComponent implements View {
         pdf = new OpenerButton("PDF",FontAwesome.FILE_PDF_O);
         pdf.addStyleName(AnkaraTheme.BUTTON_BORDERLESS_COLORED);
 
-        header = new HorizontalLayout(edit, delete, print,pdf);
+        header = new HorizontalLayout(edit,copy, delete, print,pdf);
 
         VerticalLayout content = new VerticalLayout();
         content.addStyleName(AnkaraTheme.LAYOUT_CARD);
@@ -84,11 +84,17 @@ public abstract class CostView extends CustomComponent implements View {
         setCompositionRoot(root);
     }
 
-    protected abstract void delete(Cost cost);
+    protected abstract void delete();
 
-    protected abstract void edit(Cost cost);
+    protected abstract void edit();
 
-    public void setCost(Cost cost) {
+    protected abstract void copy();
+
+    public T getCost() {
+        return cost;
+    }
+
+    public void setCost(T cost) {
         this.cost = cost;
 
         pdf.getOpener().setUrl(getPdfURL(cost));
@@ -107,9 +113,9 @@ public abstract class CostView extends CustomComponent implements View {
         }
     }
 
-    protected abstract String getPrintURL(Cost cost);
+    protected abstract String getPrintURL(T cost);
 
-    protected abstract String getPdfURL(Cost cost);
+    protected abstract String getPdfURL(T cost);
 
     @PostConstruct
     protected void init() {

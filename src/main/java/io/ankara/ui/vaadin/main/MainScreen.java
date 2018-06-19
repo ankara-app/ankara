@@ -24,6 +24,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import io.ankara.ui.vaadin.main.view.cost.estimate.EstimatesView;
 import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
 import org.vaadin.viritin.label.MLabel;
 
@@ -79,7 +80,7 @@ public class MainScreen extends CustomComponent {
 
         Navigator navigator = new Navigator(mainUI, viewContainer);
         navigator.addProvider(springViewProvider);
-        navigator.navigateTo(InvoicesView.VIEW_NAME);
+        navigator.navigateTo(EstimatesView.VIEW_NAME);
     }
 
 }

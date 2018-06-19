@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Cost implements Serializable {
+public abstract class Cost implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)

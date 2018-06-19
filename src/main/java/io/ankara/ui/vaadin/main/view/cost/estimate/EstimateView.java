@@ -1,8 +1,10 @@
 package io.ankara.ui.vaadin.main.view.cost.estimate;
 
 import com.vaadin.spring.annotation.SpringView;
-import io.ankara.domain.Cost;
 import io.ankara.domain.Estimate;
+import io.ankara.domain.Estimate;
+import io.ankara.domain.Invoice;
+import io.ankara.domain.User;
 import io.ankara.service.EstimateService;
 import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.MainUI;
@@ -21,7 +23,7 @@ import javax.inject.Inject;
  * @date 8/11/16 3:03 AM
  */
 @SpringView(name = EstimateView.VIEW_NAME)
-public class EstimateView extends CostView {
+public class EstimateView extends CostView<Estimate> {
     public static final String VIEW_NAME = "Estimate";
     public static final String TOPIC_SHOW = "Show Estimate";
 
@@ -33,6 +35,9 @@ public class EstimateView extends CostView {
 
     @Inject
     private EstimateService estimateService;
+
+    @Inject
+    private User user;
 
     public EstimateView() {
         super(Templates.ESTIMATE);
@@ -46,12 +51,12 @@ public class EstimateView extends CostView {
     }
 
     @Override
-    protected void delete(Cost cost) {
+    protected void delete() {
 
         String confirmationMessage = "Are you sure that you want this estimate to be completely removed?";
         ConfirmDialog.show(getUI(), "Please confirm ...", confirmationMessage, "Proceed", "Cancel", (ConfirmDialog.Listener) confirmDialog -> {
             if (confirmDialog.isConfirmed()) {
-                estimateService.delete((Estimate) cost);
+                estimateService.delete(getCost());
                 mainUI.getNavigator().navigateTo(EstimatesView.VIEW_NAME);
             }
         });
@@ -59,19 +64,32 @@ public class EstimateView extends CostView {
     }
 
     @Override
-    protected void edit(Cost cost) {
+    protected void edit() {
         mainUI.getNavigator().navigateTo(EstimateEditView.VIEW_NAME);
-        eventBus.publish(EstimateEditView.TOPIC_EDIT, this, estimateService.getEstimate(cost.getId()));
+        eventBus.publish(EstimateEditView.TOPIC_EDIT, this, estimateService.getEstimate(getCost().getId()));
     }
 
     @Override
-    protected String getPrintURL(Cost cost) {
-        return "/estimate/print/" + cost.getId();
+    protected void copy() {
+        mainUI.getNavigator().navigateTo(EstimateEditView.VIEW_NAME);
+        eventBus.publish(EstimateEditView.TOPIC_EDIT, this, getCopy());
+    }
+
+    private Estimate getCopy() {
+        Estimate estimate = getCost().clone();
+        estimate.setCreator(user);
+        estimate.setCode(estimateService.nextEstimateNumber(estimate.getCompany()));
+        return estimate;
     }
 
     @Override
-    protected String getPdfURL(Cost cost) {
-        return "/estimate/pdf/" + cost.getId();
+    protected String getPrintURL(Estimate estimate) {
+        return "/estimate/print/" + estimate.getId();
+    }
+
+    @Override
+    protected String getPdfURL(Estimate estimate) {
+        return "/estimate/pdf/" + estimate.getId();
     }
 
 }
