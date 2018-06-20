@@ -48,7 +48,7 @@ configurations {
 }
 
 ext {
-    vaadinVersion = '8.4.1'
+    vaadinVersion = '8.4.3'
     vaadin4SpringVersion = '2.0.0.RELEASE'
     viritinVersion = '2.5'
     apachePOIVersion = '3.9'
