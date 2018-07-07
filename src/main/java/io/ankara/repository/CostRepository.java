@@ -25,7 +25,7 @@ public interface CostRepository<T> extends JpaRepository<T, Long> {
 
     List<T> findAllByCustomerInOrderByTimeCreatedDesc(Collection<Customer> customers);
 
-    T findFirstByCompanyOrderByIdDesc(Company company);
+    T findFirstByCompanyOrderByTimeCreatedDesc(Company company);
 
     List<T> findAllByCreatorOrderByTimeCreatedDesc(User user);
 

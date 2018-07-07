@@ -42,7 +42,7 @@ public class EstimateServiceBean implements EstimateService {
     @Override
     public String nextEstimateNumber(Company company) {
         String prevCode;
-        Estimate recentEstimate = estimateRepository.findFirstByCompanyOrderByIdDesc(company);
+        Estimate recentEstimate = estimateRepository.findFirstByCompanyOrderByTimeCreatedDesc(company);
 
         if (recentEstimate == null)
             prevCode = "0000";

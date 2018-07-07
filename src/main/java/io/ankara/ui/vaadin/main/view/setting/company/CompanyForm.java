@@ -1,7 +1,6 @@
 package io.ankara.ui.vaadin.main.view.setting.company;
 
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -12,7 +11,7 @@ import io.ankara.service.CompanyService;
 import io.ankara.ui.vaadin.util.NotificationUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-//import org.vaadin.easyuploads.ImagePreviewField;
+import org.vaadin.easyuploads.ImagePreviewField;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -30,7 +29,7 @@ public class CompanyForm extends FormLayout {
     @Inject
     private CompanyService companyService;
 
-//    private ImagePreviewField picture;
+    private ImagePreviewField picture;
 
     private TextField name;
 
@@ -58,7 +57,7 @@ public class CompanyForm extends FormLayout {
         addStyleName(ValoTheme.LAYOUT_WELL);
         addStyleName(ValoTheme.LAYOUT_CARD);
 
-//        picture = new ImagePreviewField();
+        picture = new ImagePreviewField();
 
         name = new TextField("Name");
         name.setWidth("100%");
@@ -97,6 +96,10 @@ public class CompanyForm extends FormLayout {
         save.addClickListener(event -> {
             try {
                 companyBinder.writeBean(company);
+
+                Object picture = this.picture.getValue();
+                if(picture!=null) company.setPicture((byte[]) picture);
+
                 if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
                     NotificationUtils.showSuccess("Company information saved successfully", null);
                     if (subWindow != null)
@@ -107,7 +110,7 @@ public class CompanyForm extends FormLayout {
             }
         });
 
-        addComponents(name, email, phone, fax, address,notes, terms, save);
+        addComponents(picture,name, email, phone, fax, address,notes, terms, save);
 
     }
 

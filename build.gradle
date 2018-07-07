@@ -48,7 +48,7 @@ configurations {
 }
 
 ext {
-    vaadinVersion = '8.4.3'
+    vaadinVersion = '8.4.4'
     vaadin4SpringVersion = '2.0.0.RELEASE'
     viritinVersion = '2.5'
     apachePOIVersion = '3.9'
@@ -103,14 +103,17 @@ dependencies {
 
     compile "com.vaadin:vaadin-shared-deps:1.0.3"
     compile "com.vaadin:vaadin-push:$vaadinVersion"
-
+    compile "com.vaadin:vaadin-compatibility-server:$vaadinVersion"
+    compile "com.vaadin:vaadin-compatibility-client-compiled:$vaadinVersion"
+    compile "com.vaadin:vaadin-compatibility-client:$vaadinVersion"
+    compile "com.vaadin:vaadin-compatibility-shared:$vaadinVersion"
     compile "org.vaadin:viritin:${viritinVersion}"
     compile 'tm.kod:numberfield7:0.0.5'
     compile 'org.vaadin.addon:confirmdialog:3.2.0'
     compile 'org.vaadin.artur:spring-data-provider:1.1.0'
     compile 'org.vaadin.addons:searchbox:0.1.1'
-
-
+//    compile 'org.vaadin.addon:easyuploads:8.0.0'
+    implementation 'com.github.parttio:easyuploads:master-SNAPSHOT'
     //bootstrap
     compile "org.webjars:bootstrap:3.3.7"
 

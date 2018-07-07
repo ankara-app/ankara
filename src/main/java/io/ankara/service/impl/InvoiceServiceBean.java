@@ -39,7 +39,7 @@ public class InvoiceServiceBean implements InvoiceService {
 
     public String nextInvoiceNumber(Company company) {
         String prevCode;
-        Invoice recentInvoice = invoiceRepository.findFirstByCompanyOrderByIdDesc(company);
+        Invoice recentInvoice = invoiceRepository.findFirstByCompanyOrderByTimeCreatedDesc(company);
 
         if (recentInvoice == null)
             prevCode = "0000";

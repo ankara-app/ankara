@@ -2,6 +2,7 @@ package io.ankara.ui.vaadin.main;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
@@ -21,6 +22,7 @@ import java.util.Locale;
  * @email bonifacechacha@gmail.com
  * @date 8/10/16 9:43 PM
  */
+@Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
 @SpringUI(path = "/app")
 @Theme(AnkaraTheme.THEME)
 @Push(transport = Transport.WEBSOCKET)
