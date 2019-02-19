@@ -62,7 +62,7 @@ bootWar {
     launchScript()
 }
 
-war {
+jar {
     baseName = 'dimension'
     version = null
 }
