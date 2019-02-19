@@ -112,8 +112,8 @@ dependencies {
     compile 'org.vaadin.addon:confirmdialog:3.2.0'
     compile 'org.vaadin.artur:spring-data-provider:1.1.0'
     compile 'org.vaadin.addons:searchbox:0.1.1'
-//    compile 'org.vaadin.addon:easyuploads:8.0.0'
-    implementation 'com.github.parttio:easyuploads:master-SNAPSHOT'
+    compile 'org.vaadin.addon:easyuploads:9.0.0'
+//    implementation 'com.github.parttio:easyuploads:master-SNAPSHOT'
     //bootstrap
     compile "org.webjars:bootstrap:3.3.7"
 
