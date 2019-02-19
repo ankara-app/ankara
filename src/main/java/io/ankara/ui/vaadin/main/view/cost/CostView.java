@@ -63,6 +63,8 @@ public abstract class CostView<T extends Cost> extends CustomComponent implement
 
         pdf = new OpenerButton("PDF",FontAwesome.FILE_PDF_O);
         pdf.addStyleName(AnkaraTheme.BUTTON_BORDERLESS_COLORED);
+        //for now this function is disabled since it is not supported in heroku
+        pdf.setVisible(false);
 
         header = new HorizontalLayout(edit,copy, delete, print,pdf);
 
