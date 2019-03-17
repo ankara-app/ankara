@@ -1,5 +1,6 @@
 package io.ankara.ui.vaadin.main.view.setting.company;
 
+import com.cloudinary.Cloudinary;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
@@ -8,13 +9,18 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.domain.Company;
 import io.ankara.service.CompanyService;
+import io.ankara.ui.vaadin.util.CloudinaryPictureUploader;
 import io.ankara.ui.vaadin.util.NotificationUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.vaadin.easyuploads.ImagePreviewField;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.Files;
 
 /**
  * @author Boniface Chacha
@@ -29,7 +35,8 @@ public class CompanyForm extends FormLayout {
     @Inject
     private CompanyService companyService;
 
-    private ImagePreviewField picture;
+    @Inject
+    private CloudinaryPictureUploader picture;
 
     private TextField name;
 
@@ -56,8 +63,6 @@ public class CompanyForm extends FormLayout {
         addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         addStyleName(ValoTheme.LAYOUT_WELL);
         addStyleName(ValoTheme.LAYOUT_CARD);
-
-        picture = new ImagePreviewField();
 
         name = new TextField("Name");
         name.setWidth("100%");
@@ -97,8 +102,10 @@ public class CompanyForm extends FormLayout {
             try {
                 companyBinder.writeBean(company);
 
-                Object picture = this.picture.getValue();
-                if(picture!=null) company.setPicture((byte[]) picture);
+                String picture = this.picture.getLastUrl();
+                if (picture != null) {
+                    company.setPictureUrl(picture);
+                }
 
                 if (company.getId() == null ? companyService.create(company) : companyService.save(company)) {
                     NotificationUtils.showSuccess("Company information saved successfully", null);
@@ -110,7 +117,7 @@ public class CompanyForm extends FormLayout {
             }
         });
 
-        addComponents(picture,name, email, phone, fax, address,notes, terms, save);
+        addComponents(picture, name, email, phone, fax, address, notes, terms, save);
 
     }
 

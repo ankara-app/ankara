@@ -120,6 +120,10 @@ dependencies {
     //flyway
     compile('org.flywaydb:flyway-core')
 
+    // cloudinary-http44
+    compile group: 'com.cloudinary', name: 'cloudinary-http44', version: '1.22.1'
+
+
 }
 
 dependencyManagement {
