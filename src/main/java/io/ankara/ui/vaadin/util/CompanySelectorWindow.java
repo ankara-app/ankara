@@ -1,6 +1,5 @@
 package io.ankara.ui.vaadin.util;
 
-import com.vaadin.data.Property;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -32,7 +31,7 @@ public class CompanySelectorWindow extends Window {
     @Inject
     private CompanyService companyService;
 
-    private ComboBox companySelector;
+    private ComboBox<Company> companySelector;
 
     private Consumer<Company> companyConsumer;
 
@@ -45,11 +44,10 @@ public class CompanySelectorWindow extends Window {
         setHeight("20%");
         setIcon(FontAwesome.BUILDING);
 
-        companySelector = new ComboBox("Company");
-        companySelector.setNullSelectionAllowed(false);
+        companySelector = new ComboBox<>("Company");
         companySelector.setWidth("100%");
-        companySelector.addValueChangeListener((Property.ValueChangeListener) event -> {
-            Company company = (Company) event.getProperty().getValue();
+        companySelector.addValueChangeListener( event -> {
+            Company company = event.getValue();
             if (company != null) {
                 companyConsumer.accept(company);
                 companyConsumer = null;
@@ -67,8 +65,7 @@ public class CompanySelectorWindow extends Window {
     public void show(Consumer<Company> companyConsumer) {
         this.companyConsumer = companyConsumer;
 
-        companySelector.removeAllItems();
-        companySelector.addItems(companyService.getCurrentUserCompanies());
+        companySelector.setItems(companyService.getCurrentUserCompanies());
 
         mainUI.addWindow(this);
     }

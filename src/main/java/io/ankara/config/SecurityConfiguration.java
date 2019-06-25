@@ -7,6 +7,7 @@ package io.ankara.config;
  * @date 9/8/16.
  */
 
+import io.ankara.domain.User;
 import io.ankara.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
+import org.vaadin.spring.annotation.PrototypeScope;
 import org.vaadin.spring.http.HttpService;
 import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
 import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
@@ -117,5 +119,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     VaadinAuthenticationSuccessHandler vaadinAuthenticationSuccessHandler(HttpService httpService,
                                                                           VaadinRedirectStrategy vaadinRedirectStrategy) {
         return new VaadinUrlAuthenticationSuccessHandler(httpService, vaadinRedirectStrategy, "/app");
+    }
+
+    @Bean
+    @PrototypeScope
+    User currentUser(){
+        return userService.getCurrentUser();
     }
 }

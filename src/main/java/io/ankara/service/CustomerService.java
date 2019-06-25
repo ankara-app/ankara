@@ -2,6 +2,8 @@ package io.ankara.service;
 
 import io.ankara.domain.Company;
 import io.ankara.domain.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,4 +27,8 @@ public interface CustomerService {
     Customer getCustomer(String name, Company company);
 
     Customer create(String name, Company company);
+
+    Page<Customer> getCustomers(Company company, Pageable pageable);
+
+    Long countCustomers(Company company);
 }

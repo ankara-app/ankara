@@ -1,17 +1,17 @@
 package io.ankara.domain;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Boniface Chacha
@@ -20,10 +20,10 @@ import java.util.Set;
  * @date 8/11/16 5:39 PM
  */
 @Entity
-public class Item {
+public class Item implements Cloneable{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Version
@@ -41,6 +41,7 @@ public class Item {
 
     @Column(columnDefinition = "longtext not null")
     @NotBlank
+    @NotNull
     private String description;
 
     @Column(precision = 48, scale = 2,nullable = false)
@@ -66,6 +67,9 @@ public class Item {
 
         quantity = BigDecimal.ONE;
         price = BigDecimal.ZERO;
+
+        //assume the new item will also contain among the taxes of the cost applied
+        this.taxes = cost.getTaxes().stream().map(AppliedTax::new).collect(Collectors.toList());
     }
 
     public Item(Cost cost) {
@@ -196,5 +200,23 @@ public class Item {
             taxes = new LinkedList<>();
 
         taxes.add(new AppliedTax(tax));
+    }
+
+    @Override
+    protected Item clone()  {
+       Item item = new Item();
+       item.setDescription(description);
+       item.setPrice(price);
+       item.setQuantity(quantity);
+       item.setType(type);
+       item.setTaxes(getTaxes().stream().map(AppliedTax::clone).collect(Collectors.toList()));
+
+       return item;
+    }
+
+    public Item clone(Cost cost) {
+        Item item = clone();
+        item.setCost(cost);
+        return item;
     }
 }

@@ -1,6 +1,5 @@
 package io.ankara.ui.vaadin.welcome;
 
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
@@ -8,13 +7,10 @@ import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.vaadin.spring.annotation.PrototypeScope;
-import org.vaadin.spring.security.shared.VaadinSharedSecurity;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.VerticalLayout;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

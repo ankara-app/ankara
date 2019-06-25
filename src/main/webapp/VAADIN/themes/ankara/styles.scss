@@ -1,5 +1,6 @@
 @import "variables";
 @import "../valo/valo";
+@import "../valo/valo.scss";
 @import "cost";
 
 .ankara {
@@ -16,7 +17,17 @@
 
 .view-header{
    color: #4c70ba;
-   margin-left: 40px;
+   margin-left: 10px;
    font-size: 18px;
    font-weight: bold;
+}
+
+.items_grid td {
+   height: 80px !important; /* define row height */
+   border: none;
+}
+
+.search-boxes-holders  .v-spacing {
+   width: 60px;
+   height: 10px;
 }

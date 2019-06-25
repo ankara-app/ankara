@@ -4,7 +4,7 @@ import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -14,6 +14,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.util.NotificationUtils;
+import io.ankara.ui.vaadin.util.VaadinUtils;
 import org.vaadin.viritin.fields.EmailField;
 
 import javax.inject.Inject;
@@ -45,10 +46,9 @@ public class ConfirmEmailView extends FormLayout implements View {
                 "Once received click the cofirmation link to activate your account</h3>", ContentMode.HTML);
 
         emailField = new EmailField("Email");
-        emailField.addValidator(new EmailValidator("Enter your email correctly"));
-        emailField.setRequired(true);
+        VaadinUtils.addValidator(emailField,new EmailValidator("Enter your email correctly"));
         emailField.setWidth("300px");
-        emailField.setInputPrompt("Enter your email");
+        emailField.setDescription("Enter your email");
 
         Button resend = new Button("Resend confirmation email");
         resend.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -58,7 +58,7 @@ public class ConfirmEmailView extends FormLayout implements View {
     }
 
     private void resendConfirmation() {
-        if(emailField.isValid()){
+        if(emailField.getErrorMessage() == null){
             String email = emailField.getValue();
             try{
               if(userService.requestVerification(email)){

@@ -5,7 +5,6 @@ import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.AbstractTextField;
-import com.vaadin.ui.TextField;
 
 /**
  * @author Boniface Chacha

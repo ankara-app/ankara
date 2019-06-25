@@ -1,14 +1,14 @@
 package io.ankara.service.impl;
 
-import io.ankara.utils.GeneralUtils;
 import io.ankara.domain.Token;
 import io.ankara.domain.User;
 import io.ankara.service.MailService;
+import io.ankara.utils.GeneralUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.inject.Inject;
 
@@ -67,6 +67,8 @@ public class MailServiceBean implements MailService {
 
     @Override
     public void sendErrorsEmail(Throwable throwable) {
+        throwable.printStackTrace();
+
         mailSender.sendEmail(
                 errorsEmail,
                 ExceptionUtils.getRootCauseMessage(throwable),

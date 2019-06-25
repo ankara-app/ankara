@@ -1,14 +1,12 @@
 package io.ankara;
 
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.CustomizedSystemMessages;
-import com.vaadin.server.SystemMessages;
-import com.vaadin.server.SystemMessagesInfo;
 import com.vaadin.server.SystemMessagesProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.vaadin.spring.security.annotation.EnableVaadinManagedSecurity;
 
 @EnableAsync
 @SpringBootApplication

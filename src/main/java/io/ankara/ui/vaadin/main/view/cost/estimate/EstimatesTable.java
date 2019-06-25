@@ -1,20 +1,23 @@
 package io.ankara.ui.vaadin.main.view.cost.estimate;
 
-import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Table;
+import com.vaadin.spring.annotation.ViewScope;
 import io.ankara.domain.Estimate;
 import io.ankara.service.EstimateService;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.Templates;
 import io.ankara.ui.vaadin.main.MainUI;
-import io.ankara.ui.vaadin.main.view.cost.estimate.EstimateView;
-import io.ankara.ui.vaadin.util.TableDecorator;
+import io.ankara.ui.vaadin.main.view.cost.CostsProvider;
+import io.ankara.ui.vaadin.main.view.cost.CostsTable;
 import org.vaadin.spring.events.EventBus;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.stream.Stream;
 
 /**
  * @author Boniface Chacha
@@ -22,56 +25,37 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 9/16/16.
  */
-@UIScope
 @SpringComponent
-public class EstimatesTable extends Table {
+@ViewScope
+public class EstimatesTable extends CostsTable<Estimate> {
 
-    @Inject
-    private EstimateService estimateService;
-
-    @Inject
-    private UserService userService;
-
-    @Inject
     private MainUI mainUI;
-
-    @Inject
     private EventBus.UIEventBus eventBus;
 
-    @Inject
-    private TableDecorator tableDecorator;
+    private EstimatesProvider estimatesProvider;
 
-    @PostConstruct
-    private void build() {
-        setColumnHeaderMode(ColumnHeaderMode.HIDDEN);
-        setHeight("500px");
-        setWidth("100%");
-
-        BeanItemContainer container = new BeanItemContainer<>(Estimate.class);
-        setContainerDataSource(container);
-
-        addItemClickListener(event -> {
-            Estimate estimate = (Estimate) event.getItemId();
-            mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
-            eventBus.publish(EstimateView.TOPIC_SHOW, this, estimate);
-        });
-
-        tableDecorator.decorate(this, Templates.ESTIMATE_ENTRY, "Estimate");
-
+    public EstimatesTable(MainUI mainUI, EventBus.UIEventBus eventBus, EstimatesProvider estimatesProvider) {
+        super(Templates.ESTIMATE_ENTRY);
+        this.mainUI = mainUI;
+        this.eventBus = eventBus;
+        this.estimatesProvider = estimatesProvider;
     }
 
-    public void reload() {
-        BeanItemContainer container = getContainerDataSource();
-        container.removeAllItems();
-        container.addAll(estimateService.getEstimates(userService.getCurrentUser()));
-
-//        int size = container.size();
-//        setPageLength(size > 10 ? 10 : size < 5 ? 5 : 10);
-//        setPageLength(10);
+    @PostConstruct
+    protected void build() {
+        super.build();
     }
 
     @Override
-    public BeanItemContainer getContainerDataSource() {
-        return (BeanItemContainer) super.getContainerDataSource();
+    protected void showCostView(Estimate estimate) {
+        mainUI.getNavigator().navigateTo(EstimateView.VIEW_NAME);
+        eventBus.publish(EstimateView.TOPIC_SHOW, this, estimate);
     }
+
+    @Override
+    protected CostsProvider<Estimate> getCostProvider() {
+        return estimatesProvider;
+    }
+
+
 }

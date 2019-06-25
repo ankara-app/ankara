@@ -9,6 +9,8 @@ import io.ankara.service.CompanyService;
 import io.ankara.service.CustomerService;
 import io.ankara.service.EstimateService;
 import io.ankara.service.InvoiceService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +55,7 @@ public class CustomerServiceBean implements CustomerService {
 
     @Override
     public Collection<Customer> getCustomers(Company company) {
-        return customerRepository.findByCompany(company);
+        return customerRepository.findAllByCompany(company);
     }
 
     @Override
@@ -91,5 +93,15 @@ public class CustomerServiceBean implements CustomerService {
         Customer customer = new Customer(name, company);
         save(customer);
         return customer;
+    }
+
+    @Override
+    public Page<Customer> getCustomers(Company company, Pageable pageable) {
+        return customerRepository.findAllByCompany(company,pageable);
+    }
+
+    @Override
+    public Long countCustomers(Company company) {
+        return customerRepository.countByCompany(company);
     }
 }

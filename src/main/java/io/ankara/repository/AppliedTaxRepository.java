@@ -4,7 +4,6 @@ import io.ankara.domain.AppliedTax;
 import io.ankara.domain.Tax;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

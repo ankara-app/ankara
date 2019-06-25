@@ -21,7 +21,7 @@ import java.util.Collection;
  */
 @UIScope
 @SpringComponent
-public class CompaniesBeanCRUDComponent extends BeanCRUDComponent {
+public class CompaniesBeanCRUDComponent extends BeanCRUDComponent<Company> {
 
     @Inject
     private CompanyService companyService;
@@ -32,13 +32,25 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent {
     @Inject
     private CompanyDetailsView detailsView;
 
+
+
     @PostConstruct
     protected void build() {
         setSizeFull();
-        super.build(Company.class);
 
-        removeItemButtonGenerator.setConfirmationMessage("Deleting a company will also delete all records of CUSTOMERS , INVOICES and ESTIMATES created for the company");
-        table.setVisibleColumns("name", "email", "phone", "fax", "address","Remove");
+        table.addColumn(Company::getName).setCaption("Name");
+
+        table.addColumn(Company::getEmail).setCaption("Email");
+
+        table.addColumn(Company::getPhone).setCaption("Phone");
+
+        table.addColumn(Company::getFax).setCaption("Fax");
+        table.addColumn(Company::getAddress).setCaption("Address");
+
+        super.build();
+
+        setConfirmDelete(true);
+        setDeleteConfirmationMessage("Deleting a company will also delete all records of CUSTOMERS , INVOICES and ESTIMATES created for the company");
     }
 
     @Override
@@ -48,8 +60,8 @@ public class CompaniesBeanCRUDComponent extends BeanCRUDComponent {
     }
 
     @Override
-    protected Collection loadBeans() {
-        return companyService.getCurrentUserCompanies();
+    public void reload() {
+        getTable().setItems(companyService.getCurrentUserCompanies());
     }
 
     @Override

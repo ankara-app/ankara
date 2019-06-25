@@ -10,6 +10,8 @@ import io.ankara.service.EstimateService;
 import io.ankara.service.PDFService;
 import io.ankara.utils.FormattedID;
 import io.ankara.utils.GeneralUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +42,7 @@ public class EstimateServiceBean implements EstimateService {
     @Override
     public String nextEstimateNumber(Company company) {
         String prevCode;
-        Estimate recentEstimate = estimateRepository.findFirstByCompanyOrderByIdDesc(company);
+        Estimate recentEstimate = estimateRepository.findFirstByCompanyOrderByTimeCreatedDesc(company);
 
         if (recentEstimate == null)
             prevCode = "0000";
@@ -73,8 +75,28 @@ public class EstimateServiceBean implements EstimateService {
     }
 
     @Override
+    public Long countEstimates(User user, String codeFilter, String customerNameFilter, String subjectFilter) {
+        return countEstimates(companyService.getCompanies(user), codeFilter, customerNameFilter, subjectFilter);
+    }
+
+    @Override
+    public Page<Estimate> getEstimates(User currentUser, String codeFilter, String customerNameFilter, String subjectFilter, Pageable pageable) {
+        return getEstimates(companyService.getCurrentUserCompanies(), codeFilter, customerNameFilter, subjectFilter,pageable);
+    }
+
+    @Override
+    public Page<Estimate> getEstimates(Collection<Company> companies, String codeFilter, String customerNameFilter, String subjectFilter, Pageable pageable) {
+        return estimateRepository.findAllByCompanyInAndCodeContainingIgnoreCaseAndCustomerNameContainingIgnoreCaseAndSubjectContainingIgnoreCase(companies,codeFilter,customerNameFilter,subjectFilter,pageable);
+    }
+
+    @Override
+    public Long countEstimates(Collection<Company> companies, String codeFilter, String customerNameFilter, String subjectFilter) {
+        return estimateRepository.countByCompanyInAndCodeContainingIgnoreCaseAndCustomerNameContainingIgnoreCaseAndSubjectContainingIgnoreCase(companies, codeFilter, customerNameFilter, subjectFilter);
+    }
+
+    @Override
     public Estimate getEstimate(Long id) {
-        return estimateRepository.findOne(id);
+        return estimateRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("There is no estimate with id "+id));
     }
 
     @Override
@@ -87,9 +109,9 @@ public class EstimateServiceBean implements EstimateService {
     @Override
     public File generatePDF(Estimate estimate) throws IOException, InterruptedException {
         String genPDFFilePath = System.getProperty("java.io.tmpdir") + File.separator + estimate.getClass().getCanonicalName() + estimate.getId() + ".pdf";
-        String estimateURL = GeneralUtils.getApplicationAddress()+"/estimate/"+estimate.getId();
+        String estimateURL = GeneralUtils.getApplicationAddress() + "/estimate/" + estimate.getId();
 
-        return pdfService.generatePDF(estimateURL,genPDFFilePath);
+        return pdfService.generatePDF(estimateURL, genPDFFilePath);
     }
 
 }

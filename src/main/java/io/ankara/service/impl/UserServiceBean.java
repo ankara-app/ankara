@@ -52,8 +52,7 @@ public class UserServiceBean implements UserService {
     @Override
     @Transactional
     public boolean create(User user) {
-        User existingUser = getUser(user.getEmail());
-        if (existingUser != null)
+        if (userRepository.findById(user.getEmail()).isPresent())
             throw new IllegalArgumentException("There is already another user registered with email " + user.getEmail());
 
         user.setTimeCreated(new Date());
@@ -91,7 +90,7 @@ public class UserServiceBean implements UserService {
         if (authentication == null) return null;
 
         User user = (User) authentication.getPrincipal();
-        return userRepository.findOne(user.getEmail());
+        return getUser(user.getEmail());
     }
 
     public boolean isCurrentUserAuthenticated() {
@@ -111,8 +110,7 @@ public class UserServiceBean implements UserService {
 
     @Override
     public User getUser(String userEmail) {
-        User user = userRepository.findOne(userEmail);
-        return user;
+        return userRepository.findById(userEmail).orElseThrow(() -> new IllegalArgumentException("There is no user with email "+userEmail));
     }
 
     @Override

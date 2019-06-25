@@ -30,7 +30,7 @@ public class TokenServiceBean implements TokenService {
 
     @Override
     public Token getToken(String tokenID) {
-        return tokenRepository.findOne(tokenID);
+        return tokenRepository.findById(tokenID).orElseThrow(() -> new IllegalArgumentException("There is no token with id "+tokenID));
     }
 
     @Transactional

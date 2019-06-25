@@ -1,9 +1,13 @@
 package io.ankara.ui.vaadin.main.view.cost;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Binder;
+import com.vaadin.data.HasValue;
+import com.vaadin.data.converter.LocalDateToDateConverter;
+import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.event.Action;
 import com.vaadin.event.FieldEvents;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
@@ -11,13 +15,16 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.ankara.Topics;
-import io.ankara.domain.*;
+import io.ankara.domain.AppliedTax;
+import io.ankara.domain.Cost;
+import io.ankara.domain.Customer;
+import io.ankara.domain.Tax;
 import io.ankara.service.CompanyService;
 import io.ankara.service.CustomerService;
 import io.ankara.service.TaxService;
 import io.ankara.ui.vaadin.AnkaraTheme;
-import io.ankara.utils.NumberUtils;
 import io.ankara.ui.vaadin.util.TextFieldUtils;
+import io.ankara.utils.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -41,20 +48,19 @@ import java.util.stream.Collectors;
 //TODO THE COST. BUT AFTER A CERTAIN STATE SAY SUBMITTED/SENT TO CUSTOMER STATE OF COST/INVOICE THE FORM SHOULD NO LONGER ALLOW EDITING BY SELCTING CUSTOMER OR COMPANY
 //TODO INSTEAD IT SHOULD ONLY ALLOW EDITING THE ACTUAL DETAILS OF THE COST AS THEY WERE OBTAINED FROM THE CUSTOMER AND COMPANY
 
-@SpringComponent
-public abstract class CostEditView extends VerticalLayout implements View {
+public abstract class CostEditView<T extends Cost> extends VerticalLayout implements View {
 
     protected TextField code;
 
-    protected ComboBox currency;
+    protected ComboBox<String> currency;
 
-    protected ComboBox customer;
+    protected ComboBox<Customer> customer;
 
     protected TextField customerName;
 
     protected TextArea subject;
 
-    private DateField issueDate;
+    private DateField issueDateField;
 
     @Inject
     protected ItemsView itemsView;
@@ -62,7 +68,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
     @Inject
     protected ItemsTable itemsTable;
 
-    protected TextField discountPercentage;
+    protected TextField discountPercentageField;
 
     protected TextArea notes;
 
@@ -71,6 +77,7 @@ public abstract class CostEditView extends VerticalLayout implements View {
     protected Label amountSubtotal, amountDiscounted, amountDue;
 
     protected Map<Tax, Label> taxLabels = new HashMap<>();
+    protected Map<Tax, CheckBox> taxSelectors = new HashMap<>();
 
     @Inject
     protected CompanyService companyService;
@@ -84,18 +91,22 @@ public abstract class CostEditView extends VerticalLayout implements View {
     @Inject
     protected EventBus.UIEventBus eventBus;
 
-    private BeanFieldGroup fieldGroup;
+    private BeanValidationBinder<T> costBinder;
 
     private FormLayout summaryLayout, customerLayout;
 
     private Cost cost;
+
+    public CostEditView(Class<T> type) {
+        costBinder = new BeanValidationBinder<>(type);
+    }
 
     /**
      * Edit cost instance with the company already set
      *
      * @param cost
      */
-    public void editCost(Cost cost) {
+    public void editCost(T cost) {
         if (cost.getCompany() == null)
             throw new IllegalArgumentException("Cost must have company attibute already set");
 
@@ -103,18 +114,19 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
         loadCustomerSelector();
 
-        itemsView.setCost(cost);
         rebuildTaxLabels();
 
-        fieldGroup = BeanFieldGroup.bindFieldsUnbuffered(cost, this);
 
         rebuildTaxSelector();
+
+        costBinder.setBean(cost);
+        itemsView.setCost(cost);
+
         calculateSummaries(null);
     }
 
     private void loadCustomerSelector() {
-        customer.removeAllItems();
-        customer.addItems(customerService.getCustomers(cost.getCompany()));
+        customer.setItems(customerService.getCustomers(cost.getCompany()));
     }
 
     @EventBusListenerTopic(topic = Topics.TOPIC_COST_CALCULATE_SUMMARIES)
@@ -125,19 +137,25 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
         amountSubtotal.setValue(NumberUtils.formatMoney(cost.getSubtotal(), cost.getCurrency()));
         amountDiscounted.setValue(NumberUtils.formatMoney(cost.getDiscount(), cost.getCurrency()));
+        amountDiscounted.setCaption("Discount (" + cost.getDiscountPercentage() + "%)");
 
         for (Tax tax : taxLabels.keySet()) {
             taxLabels.get(tax).setValue(NumberUtils.formatMoney(cost.calculateTax(tax), cost.getCurrency()));
         }
+
+        //update tax selector on the view
+        taxSelectors.forEach((tax, selector) -> {
+            selector.setValue(cost.hasTax(tax));
+        });
 
         amountDue.setValue(NumberUtils.formatMoney(cost.getAmountDue(), cost.getCurrency()));
     }
 
     @PostConstruct
     private void build() {
-//        setSizeFull();
+        setSizeFull();
         setSpacing(true);
-        setMargin(new MarginInfo(false, false, true, false));
+        setMargin(false);
 
         VerticalLayout formLayout = new VerticalLayout();
         formLayout.setMargin(true);
@@ -155,55 +173,59 @@ public abstract class CostEditView extends VerticalLayout implements View {
         formLayout.addComponent(createTermsForm());
 
         Panel form = new Panel(formLayout);
-//        form.setSizeFull();
+        form.setSizeFull();
         addComponent(form);
         setExpandRatio(form, 1);
 
         Component footer = createFooter();
         addComponent(footer);
-        setComponentAlignment(footer, Alignment.MIDDLE_RIGHT);
+        setComponentAlignment(footer, Alignment.MIDDLE_CENTER);
+
+        costBinder.bindInstanceFields(this);
+        costBinder.setRequiredConfigurator(null);
     }
 
     private HorizontalLayout createFooter() {
-        Button save = new Button("Save", FontAwesome.FLOPPY_O);
+        Button save = new Button("Save", VaadinIcons.DISC);
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        save.setWidth("200px");
+        save.setWidth("100%");
         save.addClickListener((Button.ClickListener) event -> {
 
-            if (fieldGroup.isValid()) {
+            if (costBinder.isValid()) {
                 loadCost();
                 doSave(cost);
             } else Notification.show("Enter required details correctly", Notification.Type.WARNING_MESSAGE);
         });
 
         HorizontalLayout footer = new HorizontalLayout();
+        footer.setWidth("80%");
         footer.setSpacing(true);
-        footer.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
+        footer.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         footer.addComponents(save);
 
         return footer;
     }
 
     public void loadCost() {
-        if (cost.getDiscountPercentage() == null)
-            cost.setDiscountPercentage(BigDecimal.ZERO);
-
         cost.setItems(itemsTable.getValidItems());
     }
 
     private FormLayout createSummaryLayout() {
 
         amountSubtotal = new Label();
-        amountSubtotal.addStyleName("text-right");
+        amountSubtotal.addStyleName(AnkaraTheme.TEXT_RIGHT);
         amountSubtotal.setCaption("Subtotal");
+        amountSubtotal.setWidth("100%");
 
         amountDiscounted = new Label();
-        amountDiscounted.addStyleName("text-right");
+        amountDiscounted.addStyleName(AnkaraTheme.TEXT_RIGHT);
         amountDiscounted.setCaption("Discount");
+        amountDiscounted.setWidth("100%");
 
         amountDue = new Label();
-        amountDue.addStyleName("text-right");
+        amountDue.addStyleName(AnkaraTheme.TEXT_RIGHT);
         amountDue.setCaption("Amount Due");
+        amountDue.setWidth("100%");
 
         FormLayout summaryForm = new FormLayout(amountSubtotal, amountDiscounted, amountDue);
         summaryForm.setWidth("400px");
@@ -223,16 +245,14 @@ public abstract class CostEditView extends VerticalLayout implements View {
     }
 
     private Collection<String> getCurrencies() {
-        return Arrays.asList("TZS","KES","UGX", "USD", "EUR");
+        return Arrays.asList("TZS", "KES", "UGX", "USD", "EUR");
     }
 
     protected Layout createSubjectForm() {
         subject = new TextArea("Subject");
-        subject.setInputPrompt("Enter subject ...");
+        subject.setPlaceholder("Enter subject ...");
         subject.setRows(2);
         subject.setWidth("100%");
-        subject.setNullRepresentation("");
-        subject.setValidationVisible(false);
 
         VerticalLayout subjectLayout = new VerticalLayout(subject);
         subjectLayout.setWidth("100%");
@@ -244,9 +264,8 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
 
         customerName = new TextField();
-        customerName.setInputPrompt("Enter new customer name ...");
+        customerName.setPlaceholder("Enter new customer name ...");
         customerName.setWidth("100%");
-        customerName.setNullRepresentation("");
 
         Button saveCustomerButton = new Button("Save");
         saveCustomerButton.setDescription("Click to save new customer or press enter");
@@ -276,12 +295,11 @@ public abstract class CostEditView extends VerticalLayout implements View {
             saveNewCustomer();
         });
 
-        customer = new ComboBox();
-        customer.setInputPrompt("Select customer ...");
+        customer = new ComboBox<>();
+        customer.setPlaceholder("Select customer ...");
         customer.addStyleName(ValoTheme.COMBOBOX_BORDERLESS);
         customer.setWidth("100%");
-        customer.setNullSelectionAllowed(false);
-        customer.setValidationVisible(false);
+        customer.setEmptySelectionAllowed(true);
 
         Button addCustomerButton = new Button("Add");
         addCustomerButton.setDescription("Click to add new customer");
@@ -293,22 +311,22 @@ public abstract class CostEditView extends VerticalLayout implements View {
             customerCreateLayout.setVisible(true);
             customerName.focus();
         });
+
         HorizontalLayout customerSelectLayout = new HorizontalLayout(customer, addCustomerButton);
         customerSelectLayout.setCaption("Customer");
         customerSelectLayout.setExpandRatio(customer, 1);
         customerSelectLayout.setWidth("100%");
 
-        discountPercentage = new TextField("Discount");
-        discountPercentage.setInputPrompt("Specify discount percentage (Optional) ...");
-        discountPercentage.setWidth("100%");
-        discountPercentage.setNullRepresentation("");
-        discountPercentage.addValueChangeListener((Property.ValueChangeListener) event -> {
-            amountDiscounted.setCaption("Discount (" + cost.getDiscountPercentage() + "%)");
-            calculateSummaries(null);
+        discountPercentageField = new TextField("Discount");
+        discountPercentageField.setPlaceholder("Specify discount percentage (Optional) ...");
+        discountPercentageField.setWidth("100%");
+        costBinder.forField(discountPercentageField).withConverter(new StringToBigDecimalConverter("Discount percentage should be a number")).bind("discountPercentage");
+        discountPercentageField.addValueChangeListener(event -> {
+            if (event.isUserOriginated())
+                calculateSummaries(null);
         });
 
-
-        customerLayout = new FormLayout(customerSelectLayout, customerCreateLayout, discountPercentage);
+        customerLayout = new FormLayout(customerSelectLayout, customerCreateLayout, discountPercentageField);
         customerLayout.setWidth("100%");
         customerLayout.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         return customerLayout;
@@ -341,64 +359,69 @@ public abstract class CostEditView extends VerticalLayout implements View {
             CheckBox taxSelector = new CheckBox(tax.toString());
             //,ark the selector if the cost has tax withinn already
             taxSelector.setValue(cost.getTaxes().contains(tax));
-            taxSelector.addValueChangeListener((Property.ValueChangeListener) event -> {
+            taxSelector.addValueChangeListener(event -> {
+                //if event is not originating from user then it may be from the entries tax selector there for ignore
+                if (!event.isUserOriginated()) return;
 
                 itemsTable.setIgnoreSummaryCalculateRequest(true);
-                CheckBox source = (CheckBox) event.getProperty();
+                CheckBox source = (CheckBox) event.getComponent();
                 if (source.getValue())
                     batchSelect(tax);
                 else batchUnSelect(tax);
 
-                calculateSummaries(null);
+                if (event.isUserOriginated())
+                    calculateSummaries(null);
                 itemsTable.setIgnoreSummaryCalculateRequest(false);
+
             });
 
             customerLayout.addComponent(taxSelector);
+            taxSelectors.put(tax,taxSelector);
         });
 
     }
 
     private void batchUnSelect(Tax tax) {
 
-        itemsTable.getItemsFieldGroup().values().forEach(itemBeanFieldGroup -> {
-            Property taxProperty = itemBeanFieldGroup.getItemDataSource().getItemProperty("taxes");
-            Collection<AppliedTax> value = (Collection) taxProperty.getValue();
+        itemsTable.getItemBinders().values().forEach(itemBeanFieldGroup -> {
+            Collection<AppliedTax> appliedTaxes = itemBeanFieldGroup.getBean().getTaxes();
 
-            List<AppliedTax> appliedTaxes = value.stream().filter(appliedTax -> {
-                return !appliedTax.getTax().equals(tax);
-            }).collect(Collectors.toList());
+            List<AppliedTax> filteredTaxes = appliedTaxes.stream()
+                    .filter(appliedTax -> !appliedTax.getTax().equals(tax))
+                    .collect(Collectors.toList());
 
-            taxProperty.setValue(appliedTaxes);
+            itemBeanFieldGroup.getBean().setTaxes(filteredTaxes);
         });
+
+        itemsTable.getDataProvider().refreshAll();
     }
 
     private void batchSelect(Tax tax) {
 
-        itemsTable.getItemsFieldGroup().values().forEach(itemBeanFieldGroup -> {
-            Property taxProperty = itemBeanFieldGroup.getItemDataSource().getItemProperty("taxes");
-            Collection<AppliedTax> value = (Collection) taxProperty.getValue();
+        itemsTable.getItemBinders().values().forEach(itemBeanFieldGroup -> {
+            Collection<AppliedTax> appliedTaxes = itemBeanFieldGroup.getBean().getTaxes();
 
-            if (value.stream().noneMatch(appliedTax -> appliedTax.getTax().equals(tax))) {
-                List<AppliedTax> appliedTaxes = new LinkedList((Collection) taxProperty.getValue());
-                appliedTaxes.add(new AppliedTax(tax));
-                taxProperty.setValue(appliedTaxes);
+            if (appliedTaxes.stream().noneMatch(appliedTax -> appliedTax.getTax().equals(tax))) {
+                List<AppliedTax> toApplyTaxes = new LinkedList(appliedTaxes);
+                toApplyTaxes.add(new AppliedTax(tax));
+                itemBeanFieldGroup.getBean().setTaxes(toApplyTaxes);
             }
 
         });
 
+        itemsTable.getDataProvider().refreshAll();
+
     }
 
     private void rebuildTaxLabels() {
-        loadCost();
-
-        taxLabels.values().forEach(label -> summaryLayout.removeComponent(label));
 
         Collection<Tax> companyTaxes = taxService.getTaxes(cost.getCompany());
 
         companyTaxes.forEach(tax -> {
             Label taxLabel = new Label();
-            taxLabel.addStyleName("text-right");
+            taxLabel.addStyleName(AnkaraTheme.TEXT_RIGHT);
             taxLabel.setCaption(createTaxCaption(tax));
+            taxLabel.setWidth("100%");
 
             taxLabels.put(tax, taxLabel);
 
@@ -412,23 +435,24 @@ public abstract class CostEditView extends VerticalLayout implements View {
 
     protected FormLayout createCostDetailsForm() {
         code = new TextField("Reference");
-        code.setInputPrompt("Enter reference ...");
+        code.setPlaceholder("Enter reference ...");
         code.setWidth("100%");
-        code.setNullRepresentation("");
 
-        currency = new ComboBox("Currency", getCurrencies());
-        currency.setInputPrompt("Specify currency ...");
+        currency = new ComboBox<String>("Currency", getCurrencies());
+        currency.setPlaceholder("Specify currency ...");
         currency.setWidth("100%");
-        currency.setNullSelectionAllowed(false);
-        currency.addValueChangeListener((Property.ValueChangeListener) event -> {
-            calculateSummaries(null);
+        currency.setEmptySelectionAllowed(false);
+        currency.addValueChangeListener(event -> {
+            if (event.isUserOriginated())
+                calculateSummaries(null);
         });
 
-        issueDate = new DateField("Issue Date");
-        issueDate.setDescription("Specify invoice issue date");
-        issueDate.setWidth("100%");
+        issueDateField = new DateField("Issue Date");
+        issueDateField.setDescription("Specify invoice issue date");
+        issueDateField.setWidth("100%");
+        costBinder.forField(issueDateField).withConverter(new LocalDateToDateConverter()).bind("issueDate");
 
-        FormLayout basicsForm = new FormLayout(code, currency,issueDate);
+        FormLayout basicsForm = new FormLayout(code, currency, issueDateField);
         basicsForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         basicsForm.setWidth("100%");
         return basicsForm;
@@ -437,17 +461,15 @@ public abstract class CostEditView extends VerticalLayout implements View {
     protected HorizontalLayout createTermsForm() {
         notes = new TextArea("Notes");
         notes.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
-        notes.setInputPrompt("Specify other notes ...");
+        notes.setPlaceholder("Specify other notes ...");
         notes.setRows(6);
         notes.setWidth("100%");
-        notes.setNullRepresentation("");
 
         terms = new TextArea("Terms");
         terms.addStyleName(ValoTheme.TEXTAREA_BORDERLESS);
-        terms.setInputPrompt("Specify terms ...");
+        terms.setPlaceholder("Specify terms ...");
         terms.setRows(6);
         terms.setWidth("100%");
-        terms.setNullRepresentation("");
 
         HorizontalLayout termsLayout = new HorizontalLayout(notes, terms);
         termsLayout.setWidth("100%");
@@ -479,8 +501,16 @@ public abstract class CostEditView extends VerticalLayout implements View {
         return itemsTable;
     }
 
-    public TextField getDiscountPercentage() {
-        return discountPercentage;
+    public TextField getCustomerName() {
+        return customerName;
+    }
+
+    public DateField getIssueDateField() {
+        return issueDateField;
+    }
+
+    public TextField getDiscountPercentageField() {
+        return discountPercentageField;
     }
 
     public TextArea getNotes() {
@@ -499,8 +529,8 @@ public abstract class CostEditView extends VerticalLayout implements View {
         return amountDue;
     }
 
-    public BeanFieldGroup getFieldGroup() {
-        return fieldGroup;
+    public Binder<T> getCostBinder() {
+        return costBinder;
     }
 
     @PostConstruct

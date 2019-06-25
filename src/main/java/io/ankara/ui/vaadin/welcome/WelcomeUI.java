@@ -16,19 +16,11 @@
 package io.ankara.ui.vaadin.welcome;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.ViewDisplay;
-import com.vaadin.server.ErrorEvent;
-import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.*;
 import io.ankara.service.UserService;
 import io.ankara.ui.vaadin.AnkaraTheme;
 import io.ankara.ui.vaadin.AnkaraUI;
-import io.ankara.ui.vaadin.main.view.cost.invoice.InvoicesView;
 import org.springframework.context.ApplicationContext;
 
 import javax.inject.Inject;

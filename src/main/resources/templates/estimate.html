@@ -4,10 +4,9 @@
 <body>
 <div th:fragment="estimate_content" class="container-fluid">
     <div class="row top10">
-        <div class="col-xs-6"
-             th:with="photoEncoded=${T(com.sun.org.apache.xml.internal.security.utils.Base64).encode(cost.company.picture)}">
+        <div class="col-xs-6">
             <img class="logo  img-rounded" src="/image/logo.png"
-                 th:src="|data:image/png;base64,${photoEncoded}|" th:if="${cost.company.picture}"/>
+                 th:src="${cost.company.pictureUrl}" th:if="${cost.company.pictureUrl}"/>
         </div>
         <div class="col-xs-6">
             <div class="row">
@@ -148,9 +147,7 @@
                     <td>
                         <span th:text="${item.type.name}">Goods</span>
                     </td>
-                    <td>
-                        <span th:text="${item.description}">One</span>
-                    </td>
+                    <td class="long-text"><span th:text="${item.description}">One</span></td>
                     <td class="text-right">
                         <span th:text="${item.quantity.stripTrailingZeros().toPlainString()}">1</span>
                     </td>

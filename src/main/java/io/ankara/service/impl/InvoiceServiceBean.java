@@ -7,6 +7,8 @@ import io.ankara.service.InvoiceService;
 import io.ankara.service.PDFService;
 import io.ankara.utils.FormattedID;
 import io.ankara.utils.GeneralUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +39,7 @@ public class InvoiceServiceBean implements InvoiceService {
 
     public String nextInvoiceNumber(Company company) {
         String prevCode;
-        Invoice recentInvoice = invoiceRepository.findFirstByCompanyOrderByIdDesc(company);
+        Invoice recentInvoice = invoiceRepository.findFirstByCompanyOrderByTimeCreatedDesc(company);
 
         if (recentInvoice == null)
             prevCode = "0000";
@@ -76,7 +78,7 @@ public class InvoiceServiceBean implements InvoiceService {
 
     @Override
     public Invoice getInvoice(Long id) {
-        return invoiceRepository.findOne(id);
+        return invoiceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("There is no invoice with id "+id));
     }
 
     @Transactional
@@ -92,4 +94,25 @@ public class InvoiceServiceBean implements InvoiceService {
 
         return pdfService.generatePDF(invoiceURL,genPDFFilePath);
     }
+
+    @Override
+    public Long countInvoices(User user, String codeFilter, String customerNameFilter, String subjectFilter) {
+        return countInvoices(companyService.getCompanies(user), codeFilter, customerNameFilter, subjectFilter);
+    }
+
+    @Override
+    public Page<Invoice> getInvoices(User currentUser, String codeFilter, String customerNameFilter, String subjectFilter, Pageable pageable) {
+        return getInvoices(companyService.getCurrentUserCompanies(), codeFilter, customerNameFilter, subjectFilter,pageable);
+    }
+
+    @Override
+    public Page<Invoice> getInvoices(Collection<Company> companies, String codeFilter, String customerNameFilter, String subjectFilter, Pageable pageable) {
+        return invoiceRepository.findAllByCompanyInAndCodeContainingIgnoreCaseAndCustomerNameContainingIgnoreCaseAndSubjectContainingIgnoreCase(companies, codeFilter, customerNameFilter, subjectFilter,pageable);
+    }
+
+    @Override
+    public Long countInvoices(Collection<Company> companies, String codeFilter, String customerNameFilter, String subjectFilter) {
+        return invoiceRepository.countByCompanyInAndCodeContainingIgnoreCaseAndCustomerNameContainingIgnoreCaseAndSubjectContainingIgnoreCase(companies, codeFilter, customerNameFilter, subjectFilter);
+    }
+
 }

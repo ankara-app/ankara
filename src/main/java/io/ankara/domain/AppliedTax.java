@@ -11,9 +11,9 @@ import java.math.BigDecimal;
  * Created by bonifacechacha on 8/31/16.
  */
 @Entity
-public class AppliedTax {
+public class AppliedTax implements Cloneable{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Version
@@ -91,5 +91,10 @@ public class AppliedTax {
     @Override
     public String toString() {
         return new StringBuilder().append(tax.getName()).append(" (").append(percentage.stripTrailingZeros().toPlainString()).append("%)").toString();
+    }
+
+    @Override
+    public AppliedTax clone(){
+        return new AppliedTax(tax,new BigDecimal(percentage.toString()));
     }
 }

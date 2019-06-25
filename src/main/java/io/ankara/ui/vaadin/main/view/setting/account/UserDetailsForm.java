@@ -1,7 +1,8 @@
 package io.ankara.ui.vaadin.main.view.setting.account;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -38,25 +39,28 @@ public class UserDetailsForm extends FormLayout {
 
         fullName = new TextField("Your name");
         fullName.setWidth("300px");
-        fullName.setInputPrompt("What is your name?");
+        fullName.setPlaceholder("What is your name?");
 
 
         User user = userService.getCurrentUser();
 
-        BeanFieldGroup fieldGroup = BeanFieldGroup.bindFieldsBuffered(user, this);
+        BeanValidationBinder<User> userBinder = new BeanValidationBinder<>(User.class);
+        userBinder.bindInstanceFields(this);
+
+        userBinder.readBean(user);
 
         Button save = new Button("Save", FontAwesome.USER);
         save.setWidth("200px");
         save.addStyleName(ValoTheme.BUTTON_PRIMARY);
         save.addClickListener(event -> {
             try {
-                fieldGroup.commit();
+                userBinder.writeBean(user);
                 if (userService.save(user)) {
                     NotificationUtils.showSuccess("Your details are saved successfully", null);
                     getUI().getPage().reload();
                 }
 
-            } catch (FieldGroup.CommitException e) {
+            } catch (ValidationException e) {
                 Notification.show("Please enter information correctly", Notification.Type.WARNING_MESSAGE);
             }
         });

@@ -1,19 +1,17 @@
 package io.ankara.ui.vaadin.main.view.cost.invoice;
 
 
+import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import io.ankara.domain.Cost;
 import io.ankara.domain.Invoice;
 import io.ankara.service.InvoiceService;
 import io.ankara.ui.vaadin.main.MainUI;
-import io.ankara.ui.vaadin.main.view.ViewHeader;
+import io.ankara.ui.vaadin.main.ViewHeader;
 import io.ankara.ui.vaadin.main.view.cost.CostEditView;
 import io.ankara.ui.vaadin.util.NotificationUtils;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -27,16 +25,15 @@ import javax.inject.Inject;
  * @email bonifacechacha@gmail.com
  * @date 8/11/16 7:59 PM
  */
-@UIScope
+
 @SpringView(name = InvoiceEditView.VIEW_NAME)
-@SpringComponent
 public class InvoiceEditView extends CostEditView {
     public static final String VIEW_NAME = "InvoiceForm";
     public static final String TOPIC_EDIT = "Create Invoice";
 
     private TextField purchaseOrder;
 
-    private DateField dueDate;
+    private DateField dueDateField;
 
     @Inject
     private InvoiceService invoiceService;
@@ -46,6 +43,10 @@ public class InvoiceEditView extends CostEditView {
 
     @Inject
     private ViewHeader viewHeader;
+
+    public InvoiceEditView() {
+        super(Invoice.class);
+    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -64,15 +65,18 @@ public class InvoiceEditView extends CostEditView {
         FormLayout costDetailsLayout =  super.createCostDetailsForm();
 
         purchaseOrder = new TextField("PO Number");
-        purchaseOrder.setInputPrompt("Enter PO Number");
+        purchaseOrder.setPlaceholder("Enter PO Number");
         purchaseOrder.setWidth("100%");
-        purchaseOrder.setNullRepresentation("");
 
-        dueDate = new DateField("Due Date");
-        dueDate.setDescription("Specify invoice due date");
-        dueDate.setWidth("100%");
+        dueDateField = new DateField("Due Date");
+        dueDateField.setPlaceholder("Specify invoice due date");
+        dueDateField.setWidth("100%");
+        getCostBinder()
+                .forField(dueDateField)
+                .withConverter(new LocalDateToDateConverter())
+                .bind("dueDate");
 
-        costDetailsLayout.addComponents(dueDate,purchaseOrder);
+        costDetailsLayout.addComponents(dueDateField,purchaseOrder);
         return costDetailsLayout;
     }
 

@@ -2,11 +2,9 @@ package io.ankara.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,7 +20,7 @@ import java.util.Set;
 public class Company {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Version
@@ -52,8 +50,7 @@ public class Company {
     @Column(columnDefinition = "longtext")
     private String description;
 
-    @Lob
-    private byte[] picture;
+    private String pictureUrl;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
@@ -143,14 +140,6 @@ public class Company {
         this.description = description;
     }
 
-    public byte[] getPicture() {
-        return picture;
-    }
-
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
-
     public Set<User> getUsers() {
         return users;
     }
@@ -197,6 +186,14 @@ public class Company {
 
     public void setItemTypes(Set<ItemType> itemTypes) {
         this.itemTypes = itemTypes;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     @Override
