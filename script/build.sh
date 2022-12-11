@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd ~/Projects/ankara/ankara
-gradle clean
-gradle vaadinThemeCompile
-gradle assemble
+cd ~/projects/ankara/dev/ankara
+./gradlew clean
+./gradlew vaadinThemeCompile
+./gradlew assemble

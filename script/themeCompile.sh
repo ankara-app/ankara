@@ -1,1 +1,1 @@
-gradle clean vaadinThemeCompile
+./gradlew clean vaadinThemeCompile
