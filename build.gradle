@@ -119,7 +119,7 @@ dependencies {
     compile 'org.vaadin.addon:easyuploads:9.0.0'
 //    implementation 'com.github.parttio:easyuploads:master-SNAPSHOT'
     //bootstrap
-//    compile "org.webjars:bootstrap:3.3.7"
+    compile "org.webjars:bootstrap:3.3.7"
 
     //flyway
     compile('org.flywaydb:flyway-core')
