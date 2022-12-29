@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
-RUN addgroup -S ankara && adduser -S ankara -G ankara
-USER ankara:ankara
 ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} ankara.jar
-ENTRYPOINT ["java","-jar","/ankara.jar"]
+ARG APP_DIR=/opt/ankara
+COPY ${JAR_FILE} $APP_DIR/ankara.jar
+WORKDIR $APP_DIR
+ENTRYPOINT ["sh", "-c","java ${JAVA_OPTS} -jar ./ankara.jar"]

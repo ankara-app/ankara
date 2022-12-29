@@ -1,0 +1,5 @@
+#build docker image
+docker build --no-cache -t bonifacechacha/ankara .
+
+#run docker container
+docker run --network=host -p 8080:8080 -e JAVA_OPTS=-Dspring.datasource.url='jdbc:mysql://host.docker.internal:3306/ankara' bonifacechacha/ankara
